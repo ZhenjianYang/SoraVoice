@@ -35,6 +35,10 @@ typedef int __cdecl EdVoiceAPIType();
 extern "C"
 #endif
 HRESULT WINAPI HOOKED_API PARAMS_DCL {
+#if _DEBUG
+    MessageBox(0, "Pause", "Pause", 0);
+#endif // _DEBUG
+
     static HookedAPIType* api_ori = NULL;
     static int tried = 0;
 
