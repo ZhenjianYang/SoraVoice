@@ -1,0 +1,3 @@
+[submodule "extlibs/vorbis"]
+	path = extlibs/vorbis
+	url = https://github.com/xiph/vorbis.git
