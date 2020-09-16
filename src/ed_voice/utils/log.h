@@ -51,4 +51,4 @@
 #endif // !LOG_NOLOG
 #endif //!LOG
 
-#endif // UTILS_LOG_H_
+#endif // __UTILS_LOG_H__
