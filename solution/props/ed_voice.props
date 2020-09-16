@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <ProjectSrcDir>$(SrcDir)ed_voice\</ProjectSrcDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(ProjectSrcDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="ProjectSrcDir">
+      <Value>$(ProjectSrcDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
