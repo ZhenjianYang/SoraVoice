@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <SrcDir>$(SolutionDir)..\src\</SrcDir>
+    <ExtlibsHome>$(SolutionDir)..\extlibs\</ExtlibsHome>
+    <ExtIncDirs>$(ExtlibsHome)include</ExtIncDirs>
+    <ExtLibsDirs>$(ExtlibsHome)lib</ExtLibsDirs>
+    <ExtBinsDirs>$(ExtlibsHome)bin</ExtBinsDirs>
+    <ExtLibs>
+    </ExtLibs>
+    <DefDir>$(SrcDir)def\</DefDir>
+    <ExtlibsDir>$(SolutionDir)..\extlibs\</ExtlibsDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\Int\</IntDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="SrcDir">
+      <Value>$(SrcDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ExtlibsDir">
+      <Value>$(ExtlibsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DefDir">
+      <Value>$(DefDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+</Project>
