@@ -14,7 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)\Int\</IntDir>
+    <IntDir>$(OutDir)\Int\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemGroup>
     <BuildMacro Include="SrcDir">
