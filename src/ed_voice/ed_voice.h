@@ -1,5 +1,5 @@
-#ifndef ED_VOICE_H_
-#define ED_VOICE_H_
+#ifndef __ED_VOICE_H__
+#define __ED_VOICE_H__
 
 #ifndef EXTERNC
 #ifdef __cplusplus
@@ -13,4 +13,4 @@ EXTERNC int __cdecl StartUp();
 
 #undef EXTERNC
 
-#endif // !ED_VOICE_H_
+#endif // __ED_VOICE_H__
