@@ -35,35 +35,35 @@ typedef int __cdecl EdVoiceAPIType();
 extern "C"
 #endif
 HRESULT WINAPI HOOKED_API PARAMS_DCL {
-	static HookedAPIType* api_ori = NULL;
-	static int tried = 0;
+    static HookedAPIType* api_ori = NULL;
+    static int tried = 0;
 
-	if (!api_ori) {
-		HMODULE dll = LoadLibraryA(NAME_OLD_DLL);
-		if (!dll) {
-			char buff[MAX_PATH_LEN + 1];
-			ExpandEnvironmentStringsA(SYS_PATH_DLL, buff, sizeof(buff));
-			dll = LoadLibraryA(buff);
-		}
-		if (dll) {
-			api_ori = (HookedAPIType*)GetProcAddress(dll, STR_HOOKAPI_NAME);
-			if (!api_ori) {
-				FreeLibrary(dll);
-			}
-		}
-	}
-	HRESULT rst = api_ori ? api_ori PARAMS_CALL : (HRESULT)ERR_CODE;
+    if (!api_ori) {
+        HMODULE dll = LoadLibraryA(NAME_OLD_DLL);
+        if (!dll) {
+            char buff[MAX_PATH_LEN + 1];
+            ExpandEnvironmentStringsA(SYS_PATH_DLL, buff, sizeof(buff));
+            dll = LoadLibraryA(buff);
+        }
+        if (dll) {
+            api_ori = (HookedAPIType*)GetProcAddress(dll, STR_HOOKAPI_NAME);
+            if (!api_ori) {
+                FreeLibrary(dll);
+            }
+        }
+    }
+    HRESULT rst = api_ori ? api_ori PARAMS_CALL : (HRESULT)ERR_CODE;
 
-	if (!tried) {
-		tried = 1;
-		HMODULE dll = LoadLibraryA(STR_ED_VOICE_DLL);
-		if (dll) {
-			EdVoiceAPIType* start_up = (EdVoiceAPIType*)GetProcAddress(dll, STR_STARTUP);
-			if (!start_up || start_up()) {
-				FreeLibrary(dll);
-			}
-		}
-	}
+    if (!tried) {
+        tried = 1;
+        HMODULE dll = LoadLibraryA(STR_ED_VOICE_DLL);
+        if (dll) {
+            EdVoiceAPIType* start_up = (EdVoiceAPIType*)GetProcAddress(dll, STR_STARTUP);
+            if (!start_up || start_up()) {
+                FreeLibrary(dll);
+            }
+        }
+    }
 
-	return rst;
+    return rst;
 }
