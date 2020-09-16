@@ -10,6 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\hooked_dll\hooked_dll.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{a4779f25-d635-4280-986a-5a1246c61b3f}</ProjectGuid>
     <RootNamespace>hooked_dsound</RootNamespace>
