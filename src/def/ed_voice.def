@@ -1,6 +1,6 @@
 LIBRARY "ed_voice.dll"
 EXPORTS
-Start @1
-End @2
-Init @3
-Uninit @4
+Init @1
+Uninit @2
+Start @3
+End @4
