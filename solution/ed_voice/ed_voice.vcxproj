@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
