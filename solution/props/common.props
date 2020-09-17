@@ -14,6 +14,7 @@
     <gtestIncDir>$(gtestDir)include</gtestIncDir>
     <gmockDir>$(GoogleTestDir)googlemock\</gmockDir>
     <gmockIncDir>$(gmockDir)include\</gmockIncDir>
+    <TestOutDir>$(SolutionDir)..\bin\test\$(Configuration)\</TestOutDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
@@ -56,6 +57,9 @@
     </BuildMacro>
     <BuildMacro Include="gmockIncDir">
       <Value>$(gmockIncDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TestOutDir">
+      <Value>$(TestOutDir)</Value>
     </BuildMacro>
   </ItemGroup>
   <ItemDefinitionGroup>
