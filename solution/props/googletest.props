@@ -8,6 +8,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(LibOutDir)</OutDir>
+    <IntDir>$(LibOutDir)$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile />
