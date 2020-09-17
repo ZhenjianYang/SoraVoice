@@ -11,11 +11,12 @@
     </ExtLibs>
     <DefDir>$(SrcDir)def\</DefDir>
     <ExtlibsDir>$(SolutionDir)..\extlibs\</ExtlibsDir>
+    <LibOutDir>$(SolutionDir)..\bin\lib\$(Configuration)\</LibOutDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)\Int\$(ProjectName)\</IntDir>
-    <IncludePath>$(ExtlibsDir)vorbis\include\;$(IncludePath)</IncludePath>
+    <IntDir>$(OutDir)$(ProjectName)\</IntDir>
+    <_PropertySheetDisplayName>common</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
     <BuildMacro Include="SrcDir">
@@ -27,6 +28,9 @@
     <BuildMacro Include="DefDir">
       <Value>$(DefDir)</Value>
     </BuildMacro>
+    <BuildMacro Include="LibOutDir">
+      <Value>$(LibOutDir)</Value>
+    </BuildMacro>
   </ItemGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -35,6 +39,7 @@
       <SDLCheck>true</SDLCheck>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link />
   </ItemDefinitionGroup>

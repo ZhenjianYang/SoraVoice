@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <ProjectSrcDir>$(SrcDir)ed_voice\</ProjectSrcDir>
+    <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
   </PropertyGroup>
   <PropertyGroup>
-    <IncludePath>$(ProjectSrcDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(EdVoiceSrcDir);$(ExtlibsDir)vorbis\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup>
-    <BuildMacro Include="ProjectSrcDir">
-      <Value>$(ProjectSrcDir)</Value>
+    <BuildMacro Include="EdVoiceSrcDir">
+      <Value>$(EdVoiceSrcDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
