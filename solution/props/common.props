@@ -3,15 +3,17 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <SrcDir>$(SolutionDir)..\src\</SrcDir>
-    <ExtlibsHome>$(SolutionDir)..\extlibs\</ExtlibsHome>
-    <ExtIncDirs>$(ExtlibsHome)include</ExtIncDirs>
-    <ExtLibsDirs>$(ExtlibsHome)lib</ExtLibsDirs>
-    <ExtBinsDirs>$(ExtlibsHome)bin</ExtBinsDirs>
-    <ExtLibs>
-    </ExtLibs>
     <DefDir>$(SrcDir)def\</DefDir>
     <ExtlibsDir>$(SolutionDir)..\extlibs\</ExtlibsDir>
     <LibOutDir>$(SolutionDir)..\bin\lib\$(Configuration)\</LibOutDir>
+    <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
+    <VorbisDir>$(ExtlibsDir)vorbis\</VorbisDir>
+    <VorbisIncDir>$(VorbisDir)include</VorbisIncDir>
+    <GoogleTestDir>$(ExtlibsDir)googletest\</GoogleTestDir>
+    <gtestDir>$(GoogleTestDir)googletest\</gtestDir>
+    <gtestIncDir>$(gtestDir)include</gtestIncDir>
+    <gmockDir>$(GoogleTestDir)googlemock\</gmockDir>
+    <gmockIncDir>$(gmockDir)include\</gmockIncDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
@@ -30,6 +32,30 @@
     </BuildMacro>
     <BuildMacro Include="LibOutDir">
       <Value>$(LibOutDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="EdVoiceSrcDir">
+      <Value>$(EdVoiceSrcDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VorbisDir">
+      <Value>$(VorbisDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VorbisIncDir">
+      <Value>$(VorbisIncDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GoogleTestDir">
+      <Value>$(GoogleTestDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gtestDir">
+      <Value>$(gtestDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gtestIncDir">
+      <Value>$(gtestIncDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gmockDir">
+      <Value>$(gmockDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gmockIncDir">
+      <Value>$(gmockIncDir)</Value>
     </BuildMacro>
   </ItemGroup>
   <ItemDefinitionGroup>

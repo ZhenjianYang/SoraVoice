@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros">
-    <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
-  </PropertyGroup>
   <PropertyGroup>
-    <IncludePath>$(EdVoiceSrcDir);$(ExtlibsDir)vorbis\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(VorbisIncDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <ItemDefinitionGroup />
-  <ItemGroup>
-    <BuildMacro Include="EdVoiceSrcDir">
-      <Value>$(EdVoiceSrcDir)</Value>
-    </BuildMacro>
-  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(EdVoiceSrcDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>
