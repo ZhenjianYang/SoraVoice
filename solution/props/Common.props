@@ -15,7 +15,7 @@
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)\Int\$(ProjectName)\</IntDir>
-    <IncludePath>$(ExtlibsDir)abseil-cpp\;$(ExtlibsDir)vorbis\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ExtlibsDir)vorbis\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
     <BuildMacro Include="SrcDir">
