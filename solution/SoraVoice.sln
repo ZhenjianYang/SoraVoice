@@ -9,15 +9,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hooked_dsound", "hooked_dso
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hooked_dinput8", "hooked_dinput8\hooked_dinput8.vcxproj", "{11A75E7C-ADDB-4E25-9309-043FAF0163A5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gtest", "gtest", "{2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "googletest", "googletest", "{2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "gtest\gtest.vcxproj", "{22AF8098-12C6-3CC3-8C11-D52E1126D839}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "googletest\gtest.vcxproj", "{22AF8098-12C6-3CC3-8C11-D52E1126D839}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest_main", "gtest\gtest_main.vcxproj", "{7E2234E7-0D19-3399-9DA1-25FFAA639031}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest_main", "googletest\gtest_main.vcxproj", "{7E2234E7-0D19-3399-9DA1-25FFAA639031}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock", "gtest\gmock.vcxproj", "{57121921-2348-34AE-9AE1-6B4EF0BD9052}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock", "googletest\gmock.vcxproj", "{57121921-2348-34AE-9AE1-6B4EF0BD9052}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_main", "gtest\gmock_main.vcxproj", "{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_main", "googletest\gmock_main.vcxproj", "{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
