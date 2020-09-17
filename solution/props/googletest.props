@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <GoogleTestDir>$(ExtlibsDir)googletest\</GoogleTestDir>
+    <gtestDir>$(GoogleTestDir)googletest\</gtestDir>
+    <gmockDir>$(GoogleTestDir)googlemock\</gmockDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(LibOutDir)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile />
+    <ClCompile>
+      <PreprocessorDefinitions>STRICT;WIN32_LEAN_AND_MEAN;GTEST_HAS_PTHREAD=0;_HAS_EXCEPTIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings>4251;4275;4702</DisableSpecificWarnings>
+      <AdditionalOptions>%(AdditionalOptions) -J</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="GoogleTestDir">
+      <Value>$(GoogleTestDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gtestDir">
+      <Value>$(gtestDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="gmockDir">
+      <Value>$(gmockDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

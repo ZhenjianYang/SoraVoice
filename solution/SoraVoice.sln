@@ -9,6 +9,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hooked_dsound", "hooked_dso
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hooked_dinput8", "hooked_dinput8\hooked_dinput8.vcxproj", "{11A75E7C-ADDB-4E25-9309-043FAF0163A5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gtest", "gtest", "{2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "gtest\gtest.vcxproj", "{22AF8098-12C6-3CC3-8C11-D52E1126D839}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest_main", "gtest\gtest_main.vcxproj", "{7E2234E7-0D19-3399-9DA1-25FFAA639031}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock", "gtest\gmock.vcxproj", "{57121921-2348-34AE-9AE1-6B4EF0BD9052}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_main", "gtest\gmock_main.vcxproj", "{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -27,9 +37,27 @@ Global
 		{11A75E7C-ADDB-4E25-9309-043FAF0163A5}.Debug|x86.Build.0 = Debug|Win32
 		{11A75E7C-ADDB-4E25-9309-043FAF0163A5}.Release|x86.ActiveCfg = Release|Win32
 		{11A75E7C-ADDB-4E25-9309-043FAF0163A5}.Release|x86.Build.0 = Release|Win32
+		{22AF8098-12C6-3CC3-8C11-D52E1126D839}.Debug|x86.ActiveCfg = Debug|Win32
+		{22AF8098-12C6-3CC3-8C11-D52E1126D839}.Debug|x86.Build.0 = Debug|Win32
+		{22AF8098-12C6-3CC3-8C11-D52E1126D839}.Release|x86.ActiveCfg = Debug|Win32
+		{7E2234E7-0D19-3399-9DA1-25FFAA639031}.Debug|x86.ActiveCfg = Debug|Win32
+		{7E2234E7-0D19-3399-9DA1-25FFAA639031}.Debug|x86.Build.0 = Debug|Win32
+		{7E2234E7-0D19-3399-9DA1-25FFAA639031}.Release|x86.ActiveCfg = Debug|Win32
+		{57121921-2348-34AE-9AE1-6B4EF0BD9052}.Debug|x86.ActiveCfg = Debug|Win32
+		{57121921-2348-34AE-9AE1-6B4EF0BD9052}.Debug|x86.Build.0 = Debug|Win32
+		{57121921-2348-34AE-9AE1-6B4EF0BD9052}.Release|x86.ActiveCfg = Debug|Win32
+		{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}.Debug|x86.ActiveCfg = Debug|Win32
+		{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}.Debug|x86.Build.0 = Debug|Win32
+		{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}.Release|x86.ActiveCfg = Debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{22AF8098-12C6-3CC3-8C11-D52E1126D839} = {2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}
+		{7E2234E7-0D19-3399-9DA1-25FFAA639031} = {2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}
+		{57121921-2348-34AE-9AE1-6B4EF0BD9052} = {2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}
+		{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE} = {2A6C04B4-3F9B-4E24-B346-D2089AFDDC6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49DA3844-77D1-457C-B7B4-474AC8196A8A}
