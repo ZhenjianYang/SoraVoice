@@ -22,17 +22,20 @@ int __cdecl StartUp() {
     }
 
     auto startup = startup::StartUp::GetInstance();
-    if (!(succeeded = startup->Search())) {
+    succeeded = startup->Search();
+    if (!succeeded) {
         LOG("Start Up Failed: Search Failed");
         return kSearchFailed;
     }
 
-    if (!(succeeded = startup->Inject())) {
+    succeeded = startup->Inject();
+    if (!succeeded) {
         LOG("Start Up Failed: Inject Failed");
         return kInjectFailed;
     }
 
-    if (!(succeeded = startup->Start())) {
+    succeeded = startup->Start();
+    if (!succeeded) {
         LOG("Start Up Failed: Start Failed");
         return kStartFailed;
     }
