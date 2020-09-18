@@ -48,7 +48,7 @@
         LOG_TO_STDOUT(format, ##__VA_ARGS__);\
     }
 
-#endif // !LOG_NOLOG
-#endif //!LOG
+#endif  // !LOG_NOLOG
+#endif  //!LOG
 
-#endif // __UTILS_LOG_H__
+#endif  // __UTILS_LOG_H__

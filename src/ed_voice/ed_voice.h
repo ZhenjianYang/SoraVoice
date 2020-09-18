@@ -6,11 +6,11 @@
 #define EXTERNC extern "C"
 #else
 #define EXTERNC 
-#endif // __cplusplus
-#endif // !EXTERNC
+#endif  // __cplusplus
+#endif  // !EXTERNC
 
 EXTERNC int __cdecl StartUp();
 
 #undef EXTERNC
 
-#endif // __ED_VOICE_H__
+#endif  // __ED_VOICE_H__

@@ -1,7 +1,7 @@
 #include "ed_voice.h"
 
-#include <startup/startup.h>
-#include <utils/log.h>
+#include "startup/startup.h"
+#include "utils/log.h"
 
 namespace {
 enum StartUpErrorCode {

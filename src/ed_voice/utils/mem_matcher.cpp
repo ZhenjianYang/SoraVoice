@@ -3,7 +3,7 @@
 #include <cassert>
 #include <string>
 
-#include <utils/str.h>
+#include "utils/str.h"
 
 namespace {
     constexpr std::byte kZero{ 0x00 };
