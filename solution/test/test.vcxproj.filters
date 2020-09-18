@@ -9,5 +9,11 @@
     <ClCompile Include="..\..\src\test\utils\str_test.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\utils\mem_matcher_test.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
