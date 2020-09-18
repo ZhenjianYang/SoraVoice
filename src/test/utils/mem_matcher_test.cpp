@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <vector>
+
 #include "utils/mem_matcher.h"
 
 namespace {
-    using ::utils::MemMatcher;
+using ::utils::MemMatcher;
 }  // namespace
 
 TEST(MemMatcherTest, IsSameMatcher) {
@@ -53,9 +55,8 @@ TEST(MemMatcherTest, IsSameMatcher) {
 }
 
 
-TEST(MemMatcherTest, DifferentContainers) {
-    const char array[] = "ABCDEF";
-    const std::string container = "ABCDEF";
+TEST(MemMatcherTest, InputIsArray) {
+    const char array[] = { 'A', 'B', 'C', 'D', 'E', 'F' };
     auto matcher = MemMatcher::StringMatcher("ABCD");
 
     EXPECT_TRUE(matcher.Match(array));
@@ -67,6 +68,14 @@ TEST(MemMatcherTest, DifferentContainers) {
     EXPECT_FALSE(matcher.Match(array + 1, 4));
     EXPECT_FALSE(matcher.Match(array + 1));
 
+    EXPECT_TRUE(MemMatcher::StringMatcher("ABCDEF").Match(array));
+    EXPECT_FALSE(MemMatcher::StringMatcher("ABCDEF?").Match(array));
+}
+
+TEST(MemMatcherTest, InputIsContainer) {
+    const std::vector<char> container{ 'A', 'B', 'C', 'D', 'E', 'F' };
+    auto matcher = MemMatcher::StringMatcher("ABCD");
+
     EXPECT_TRUE(matcher.Match(container));
     EXPECT_TRUE(matcher.Match(container.begin()));
     EXPECT_TRUE(matcher.Match(container.begin(), container.end()));
@@ -77,6 +86,9 @@ TEST(MemMatcherTest, DifferentContainers) {
     EXPECT_FALSE(matcher.Match(container.begin() + 1, container.begin() + 1 + 4));
     EXPECT_FALSE(matcher.Match(container.begin() + 1, 4));
     EXPECT_FALSE(matcher.Match(container.begin() + 1));
+
+    EXPECT_TRUE(MemMatcher::StringMatcher("ABCDEF").Match(container));
+    EXPECT_FALSE(MemMatcher::StringMatcher("ABCDEF?").Match(container));
 }
 
 TEST(MemMatcherTest, StringMatcher) {
