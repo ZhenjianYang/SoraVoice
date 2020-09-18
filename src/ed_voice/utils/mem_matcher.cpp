@@ -6,52 +6,54 @@
 #include "utils/str.h"
 
 namespace {
-    constexpr std::byte kZero{ 0x00 };
-    constexpr std::byte kAllBits{ 0xFF };
-    constexpr std::byte kHi4Bits{ 0xF0 };
-    constexpr std::byte kLo4Bits{ 0x0F };
+    constexpr int kZero{ 0x00 };
+    constexpr int kAllBits{ 0xFF };
+    constexpr int kHi4Bits{ 0xF0 };
+    constexpr int kLo4Bits{ 0x0F };
 }  // namespace
 
 utils::MemMatcher::MemMatcher(std::string_view pattern, Type type) {
     if (type == Type::String) {
         for (char ch : pattern) {
             if (ch == '?') {
-                pattern_.emplace_back(static_cast<std::byte>(ch), kZero);
+                pattern_.emplace_back(kZero, kZero);
             } else {
-                pattern_.emplace_back(static_cast<std::byte>(ch), kAllBits);
+                pattern_.emplace_back(static_cast<int>(ch), kAllBits);
             }
         }
     } else {
         std::vector<std::string> bytes = utils::StrSplit(pattern, ' ');
         for (const std::string& byte : bytes) {
             assert(byte.length() == 2);
-            std::byte mask { kAllBits };
-            std::byte value{ kZero };
+            int mask { kAllBits };
+            int value{ kZero };
             if (byte[0] == '?') {
                 mask &= kLo4Bits;
             } else {
-                assert(byte[0] >= '0' && byte[0] <= '9');
-                value |= std::byte{ byte[0] - '0' } << 4;
+                if (byte[0] >= '0' && byte[0] <= '9') {
+                    value |= static_cast<int>(byte[0] - '0') << 4;
+                } else if (byte[0] >= 'A' && byte[0] <= 'F') {
+                    value |= static_cast<int>(byte[0] - 'A' + 0x0A) << 4;
+                } else if (byte[0] >= 'a' && byte[0] <= 'f') {
+                    value |= static_cast<int>(byte[0] - 'a' + 0x0A) << 4;
+                } else {
+                    assert(false);  // shold not go here
+                }
             }
             if (byte[1] == '?') {
                 mask &= kHi4Bits;
             } else {
-                assert(byte[1] >= '0' && byte[1] <= '9');
-                value |= std::byte{ byte[1] - '0' } << 4;
+                if (byte[1] >= '0' && byte[1] <= '9') {
+                    value |= static_cast<int>(byte[1] - '0');
+                } else if (byte[1] >= 'A' && byte[1] <= 'F') {
+                    value |= static_cast<int>(byte[1] - 'A' + 0x0A);
+                } else if (byte[1] >= 'a' && byte[1] <= 'f') {
+                    value |= static_cast<int>(byte[1] - 'a' + 0x0A);
+                } else {
+                    assert(false);  // shold not go here
+                }
             }
             pattern_.emplace_back(value, mask);
         }
     }
-}
-
-bool utils::MemMatcher::Match(const std::byte* buff, size_t length) {
-    if (length < pattern_.size()) {
-        return false;
-    }
-    for (size_t i = 0; i <= pattern_.size(); i++) {
-        if (((pattern_[i].first ^ buff[i]) & pattern_[i].second) != kZero){
-            return false;
-        }
-    }
-    return true;
 }
