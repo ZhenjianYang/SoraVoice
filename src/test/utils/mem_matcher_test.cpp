@@ -4,7 +4,6 @@
 #include "utils/mem_matcher.h"
 
 namespace {
-    using ::testing::ElementsAre;
     using ::utils::MemMatcher;
 }  // namespace
 
