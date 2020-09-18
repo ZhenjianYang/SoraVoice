@@ -1,12 +1,9 @@
-#include <string>
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include "utils/str.h"
 
 namespace {
-using std::string;
 using ::testing::ElementsAre;
 using ::utils::StrSplit;
 }  // namespace
