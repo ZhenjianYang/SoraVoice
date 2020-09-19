@@ -62,8 +62,9 @@ public:
         return this->pattern_ == other.pattern_;
     }
 
+    using InternalValueType = int;
 private:
-    std::vector<std::pair<int, int>> pattern_;
+    std::vector<std::pair<InternalValueType, InternalValueType>> pattern_;
 };  // MemMatcher
 }  // namespace utils
 

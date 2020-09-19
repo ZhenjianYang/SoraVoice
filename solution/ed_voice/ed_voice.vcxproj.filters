@@ -31,6 +31,9 @@
     <ClInclude Include="..\..\src\ed_voice\utils\str.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\utils\mem_scanner.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -40,6 +43,9 @@
       <Filter>src\startup</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\utils\mem_scanner.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>

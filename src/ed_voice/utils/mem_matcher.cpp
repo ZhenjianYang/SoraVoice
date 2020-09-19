@@ -6,10 +6,11 @@
 #include "utils/str.h"
 
 namespace {
-    constexpr int kZero{ 0x00 };
-    constexpr int kAllBits{ 0xFF };
-    constexpr int kHi4Bits{ 0xF0 };
-    constexpr int kLo4Bits{ 0x0F };
+constexpr ::utils::MemMatcher::InternalValueType kZero = 0;
+constexpr ::utils::MemMatcher::InternalValueType kAllBits = 0xFF;
+constexpr ::utils::MemMatcher::InternalValueType kHalfByte = 0xF;
+constexpr std::size_t kBitsHalfByte = 4;
+constexpr std::size_t kNumHalfBytes = 2;
 }  // namespace
 
 utils::MemMatcher::MemMatcher(std::string_view pattern, Type type) {
@@ -24,33 +25,23 @@ utils::MemMatcher::MemMatcher(std::string_view pattern, Type type) {
     } else {
         std::vector<std::string> bytes = utils::StrSplit(pattern, ' ');
         for (const std::string& byte : bytes) {
-            assert(byte.length() == 2);
-            int mask { kAllBits };
-            int value{ kZero };
-            if (byte[0] == '?') {
-                mask &= kLo4Bits;
-            } else {
-                if (byte[0] >= '0' && byte[0] <= '9') {
-                    value |= static_cast<int>(byte[0] - '0') << 4;
-                } else if (byte[0] >= 'A' && byte[0] <= 'F') {
-                    value |= static_cast<int>(byte[0] - 'A' + 0x0A) << 4;
-                } else if (byte[0] >= 'a' && byte[0] <= 'f') {
-                    value |= static_cast<int>(byte[0] - 'a' + 0x0A) << 4;
-                } else {
-                    assert(false);  // shold not go here
-                }
-            }
-            if (byte[1] == '?') {
-                mask &= kHi4Bits;
-            } else {
-                if (byte[1] >= '0' && byte[1] <= '9') {
-                    value |= static_cast<int>(byte[1] - '0');
-                } else if (byte[1] >= 'A' && byte[1] <= 'F') {
-                    value |= static_cast<int>(byte[1] - 'A' + 0x0A);
-                } else if (byte[1] >= 'a' && byte[1] <= 'f') {
-                    value |= static_cast<int>(byte[1] - 'a' + 0x0A);
-                } else {
-                    assert(false);  // shold not go here
+            assert(byte.length() == kNumHalfBytes);
+            InternalValueType mask  = kZero;
+            InternalValueType value = kZero;
+            for (char half : byte) {
+                mask  <<= kBitsHalfByte;
+                value <<= kBitsHalfByte;
+                if (half != '?') {
+                    mask |= kHalfByte;
+                    if (half >= '0' && half <= '9') {
+                        value |= static_cast<InternalValueType>(half - '0');
+                    } else if (half >= 'A' && half <= 'F') {
+                        value |= static_cast<InternalValueType>(half - 'A' + 0x0A);
+                    } else if (half >= 'a' && half <= 'f') {
+                        value |= static_cast<InternalValueType>(half - 'a' + 0x0A);
+                    } else {
+                        assert(false);  // shold not go here
+                    }
                 }
             }
             pattern_.emplace_back(value, mask);
