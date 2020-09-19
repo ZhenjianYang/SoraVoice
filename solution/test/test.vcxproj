@@ -9,6 +9,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />
     <ClCompile Include="..\..\src\test\utils\mem_matcher_test.cpp" />
+    <ClCompile Include="..\..\src\test\utils\mem_scanner_test.cpp" />
     <ClCompile Include="..\..\src\test\utils\str_test.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

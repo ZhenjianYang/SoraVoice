@@ -45,8 +45,5 @@
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\utils\mem_scanner.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
