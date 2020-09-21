@@ -15,9 +15,6 @@ constexpr uint32_t kTag_data = 0x61746164;
 
 class Wav : public Decoder {
 public:
-    static constexpr char Attr[] = "wav";
-    static Decoder* const wav;
-
     bool Open(const char* file_name) override;
     std::size_t Read(BuffByte* buff, std::size_t samples_count) override;
     void Close() override;

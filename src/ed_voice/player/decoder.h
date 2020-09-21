@@ -50,4 +50,4 @@ protected:
     static bool InitOgg();
 };  // Decoder
 }  // namespace player
-#endif // __PLAYER_DECODER_H__
+#endif  // __PLAYER_DECODER_H__
