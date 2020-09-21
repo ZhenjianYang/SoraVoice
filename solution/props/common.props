@@ -8,7 +8,9 @@
     <LibOutDir>$(SolutionDir)..\bin\lib\$(Configuration)\</LibOutDir>
     <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
     <VorbisDir>$(ExtlibsDir)vorbis\</VorbisDir>
-    <VorbisIncDir>$(VorbisDir)include</VorbisIncDir>
+    <VorbisIncDir>$(VorbisDir)include\</VorbisIncDir>
+    <OggDir>$(ExtlibsDir)ogg\</OggDir>
+    <OggIncDir>$(OggDir)include\</OggIncDir>
     <GoogleTestDir>$(ExtlibsDir)googletest\</GoogleTestDir>
     <gtestDir>$(GoogleTestDir)googletest\</gtestDir>
     <gtestIncDir>$(gtestDir)include</gtestIncDir>
@@ -42,6 +44,12 @@
     </BuildMacro>
     <BuildMacro Include="VorbisIncDir">
       <Value>$(VorbisIncDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OggDir">
+      <Value>$(OggDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="OggIncDir">
+      <Value>$(OggIncDir)</Value>
     </BuildMacro>
     <BuildMacro Include="GoogleTestDir">
       <Value>$(GoogleTestDir)</Value>

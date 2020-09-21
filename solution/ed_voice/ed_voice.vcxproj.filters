@@ -17,6 +17,9 @@
     <Filter Include="src\base">
       <UniqueIdentifier>{3816c044-c3de-4858-a2b0-9c922c918842}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\player">
+      <UniqueIdentifier>{e52b7d3d-adc0-41fb-84d6-ab85704d8125}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h">
@@ -64,6 +67,12 @@
     <ClInclude Include="..\..\src\ed_voice\utils\section_info.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\decoder.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\utils\load_ogg_apis.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -86,6 +95,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp">
       <Filter>src\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\decoder_wav.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
