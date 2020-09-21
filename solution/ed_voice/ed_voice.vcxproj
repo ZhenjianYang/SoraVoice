@@ -12,6 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
+    <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
+    <ClInclude Include="..\..\src\ed_voice\global\global.h" />
+    <ClInclude Include="..\..\src\ed_voice\global\signals.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\startup.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
@@ -21,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />
   </ItemGroup>

@@ -11,6 +11,9 @@
     <Filter Include="src\startup">
       <UniqueIdentifier>{403daa8a-e827-4197-9947-3c9f00eedf6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\global">
+      <UniqueIdentifier>{d2a02250-48f4-4b4f-9b2b-046fd1f1f6f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h">
@@ -34,6 +37,15 @@
     <ClInclude Include="..\..\src\ed_voice\utils\mem_scanner.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\global\global.h">
+      <Filter>src\global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\global\addresses.h">
+      <Filter>src\global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\global\signals.h">
+      <Filter>src\global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -44,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\global\global.cpp">
+      <Filter>src\global</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
