@@ -6,9 +6,7 @@
 namespace {
 enum StartUpErrorCode {
     kSucceeded = 0,
-    kSearchFailed,
-    kInjectFailed,
-    kStartFailed
+    kFailed = -1
 };
 }  // namesapce
 
@@ -21,23 +19,10 @@ int __cdecl StartUp() {
         return kSucceeded;
     }
 
-    auto startup = startup::StartUp::GetInstance();
-    succeeded = startup->Search();
+    succeeded = startup::StartUp();
     if (!succeeded) {
-        LOG("Start Up Failed: Search Failed");
-        return kSearchFailed;
-    }
-
-    succeeded = startup->Inject();
-    if (!succeeded) {
-        LOG("Start Up Failed: Inject Failed");
-        return kInjectFailed;
-    }
-
-    succeeded = startup->Start();
-    if (!succeeded) {
-        LOG("Start Up Failed: Start Failed");
-        return kStartFailed;
+        LOG("Start Up Failed.");
+        return kFailed;
     }
 
     LOG("Start Up Succeeded.");

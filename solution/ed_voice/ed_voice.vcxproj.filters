@@ -55,6 +55,12 @@
     <ClInclude Include="..\..\src\ed_voice\utils\module_info.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\startup\scan_group.h">
+      <Filter>src\startup</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h">
+      <Filter>src\startup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -71,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\module_info.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp">
+      <Filter>src\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp">
+      <Filter>src\startup</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

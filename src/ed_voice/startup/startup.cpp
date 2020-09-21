@@ -1,28 +1,42 @@
 #include "startup.h"
 
+#include "startup/scan_group.h"
+#include "utils/log.h"
+
 namespace startup {
-class StartUpImpl : public StartUp {
+bool StartUp() {
+    LOG("Generated Scan Groups...");
+    auto groups = startup::ScanGroup::GetScanGroups();
+    LOG("%d groups generated.", groups.size());
 
-public:
-    bool Search() override;
-    bool Inject() override;
-    bool Start() override;
-};  // StartUpImpl
+    for (std::size_t i = 0; i < groups.size(); i++) {
+        LOG("Group #%d,%s", i, groups[i]->Name().c_str());
+        if (!groups[i]->IsValid()) {
+            LOG("Not valid, skipped.");
+            continue;
+        }
 
-std::unique_ptr<StartUp> StartUp::GetInstance() {
-    return std::make_unique<StartUpImpl>();
-}
+        LOG("Group #%d,%s: Scanning...", i, groups[i]->Name().c_str());
+        if (!groups[i]->Scan()) {
+            LOG("Group #%d,%s: Scan Failed", i, groups[i]->Name().c_str());
+            continue;
+        }
+        LOG("Group #%d,%s: Scan Succeeded!", i, groups[i]->Name().c_str());
+        LOG("Game Title: %s", groups[i]->GameTitle().c_str());
+        LOG("Game Built Date: %s", groups[i]->GameBuiltDate().c_str());
 
-bool StartUpImpl::Search() {
+        LOG("Group #%d,%s: Injecting...", i, groups[i]->Name().c_str());
+        if (!groups[i]->Inject()) {
+            LOG("Group #%d,%s: Inject Failed", i, groups[i]->Name().c_str());
+            break;
+        }
+        LOG("Group #%d,%s: Inject Succeeded!", i, groups[i]->Name().c_str());
+
+        LOG("SoraVoice Starting...");
+        LOG("SoraVoice Started!");
+        return true;
+    }
+
     return false;
 }
-
-bool StartUpImpl::Inject() {
-    return false;
-}
-
-bool StartUpImpl::Start() {
-    return false;
-}
-
 }  // namespace startup
