@@ -1,6 +1,6 @@
 #include "startup/scan_group_common.h"
 
-#include "utils/module_info.h"
+#include "utils/section_info.h"
 
 namespace startup {
 std::unique_ptr<ScanGroup> GetScanGroupTits(const std::vector<utils::SectionInfo>&) {

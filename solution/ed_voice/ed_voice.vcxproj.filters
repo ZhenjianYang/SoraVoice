@@ -61,6 +61,9 @@
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h">
       <Filter>src\startup</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\utils\section_info.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">

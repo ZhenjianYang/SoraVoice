@@ -18,7 +18,7 @@ bool utils::GetCurrentModuleInformation(byte* *base, std::size_t *size) {
     return true;
 }
 
-std::vector<SectionInfo> utils::GetSections(byte* base) {
+std::vector<SectionInfo> utils::GetSectionsInfo(byte* base) {
     std::vector<SectionInfo> secs;
 
 	IMAGE_NT_HEADERS* nt_header = ImageNtHeader(base);

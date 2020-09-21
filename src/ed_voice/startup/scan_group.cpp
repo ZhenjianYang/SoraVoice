@@ -19,7 +19,7 @@ std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
     LOG("Exe module Info: Base = 0x%08X, Size = 0x%06X", (unsigned)base, size);
 
     LOG("Get sections information...");
-    auto secs = utils::GetSections(base);
+    auto secs = utils::GetSectionsInfo(base);
     LOG("%d section(s).", secs.size());
     for (std::size_t i = 0; i < secs.size(); i++) {
         LOG("\n"

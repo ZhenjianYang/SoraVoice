@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\mem_matcher.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_scanner.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\module_info.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\section_info.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
