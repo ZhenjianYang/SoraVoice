@@ -5,4 +5,4 @@ namespace utils {
 bool LoadOggApis(void* *ov_open_callbacks, void* *ov_info, void* *ov_read, void* *ov_clear, void* *ov_pcm_total);
 }  // namespace utils
 
-#endif // __UTILS_LOAD_OGG_APIS_H__
+#endif  // __UTILS_LOAD_OGG_APIS_H__

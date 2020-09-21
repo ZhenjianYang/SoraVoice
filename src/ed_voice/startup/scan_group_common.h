@@ -61,4 +61,4 @@ private:
 };  // ScanGroupCommon
 }  // namespace startup
 
-#endif // __STARTUP_SCAN_GROUP_COMMON_H__
+#endif  // __STARTUP_SCAN_GROUP_COMMON_H__

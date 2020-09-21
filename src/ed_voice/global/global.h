@@ -16,4 +16,4 @@ extern "C"
 #endif // __cplusplus
 extern Global global;
 
-#endif // __GLOBAL_GLOBAL_H__
+#endif  // __GLOBAL_GLOBAL_H__

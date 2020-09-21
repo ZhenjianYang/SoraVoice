@@ -44,7 +44,7 @@ public:
     static bool Ready() {
         return ready_;
     }
-};
+};  // Ogg
 
 bool Ogg::Open(const char* file_name) {
     FILE* file = fopen(file_name, "rb");

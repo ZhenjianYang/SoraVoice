@@ -5,4 +5,4 @@ typedef struct Signals {
 
 } Signals;
 
-#endif // __GLOBAL_SIGNALS_H__
+#endif  // __GLOBAL_SIGNALS_H__

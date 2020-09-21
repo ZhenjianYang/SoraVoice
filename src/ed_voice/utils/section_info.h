@@ -14,4 +14,4 @@ struct SectionInfo {
 };
 }  // namespace utils
 
-#endif // __UTILS_SECTION_INFO_H__
+#endif  // __UTILS_SECTION_INFO_H__

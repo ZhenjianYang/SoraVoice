@@ -22,4 +22,4 @@ public:
 };  // ScanGroup
 }  // namespace startup
 
-#endif // __STARTUP_SCAN_GROUP_H__
+#endif  // __STARTUP_SCAN_GROUP_H__

@@ -5,4 +5,4 @@ typedef struct Addresses {
 
 } Addresses;
 
-#endif // __GLOBAL_ADDRESSES_H__
+#endif  // __GLOBAL_ADDRESSES_H__

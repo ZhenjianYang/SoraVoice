@@ -14,4 +14,4 @@ std::vector<SectionInfo> GetSectionsInfo(byte* base);
 
 }  // namespace utils
 
-#endif // __UTILS_MODULE_INFO_H__
+#endif  // __UTILS_MODULE_INFO_H__
