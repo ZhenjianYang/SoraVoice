@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
     <ClInclude Include="..\..\src\ed_voice\global\global.h" />
@@ -20,6 +21,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_matcher.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_scanner.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\module_info.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +29,7 @@
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\utils\module_info.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{720642e1-0cc3-46a0-812e-6dec5119391f}</ProjectGuid>
