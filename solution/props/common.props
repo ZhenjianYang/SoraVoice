@@ -78,7 +78,6 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link />
   </ItemDefinitionGroup>

@@ -12,6 +12,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>gmock_main.lib;ed_voice.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
