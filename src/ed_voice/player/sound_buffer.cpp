@@ -33,15 +33,17 @@ public:
                std::size_t start, std::size_t samples, std::size_t sample_size)
         : pDS_buffer8_{ pds_buffer }, start_{ start }, samples_{ samples },
           sample_size_{ sample_size } {
-        auto lock = pDS_buffer8_->Lock(start_, samples_ * sample_size_,
-                                      &pap1_, &ab1_, &pap2_, &ab2_, NULL);
+        auto lock = pDS_buffer8_->Lock(start_ * sample_size_, samples_ * sample_size_,
+                                       &pap1_, &ab1_, &pap2_, &ab2_, NULL);
         if (lock == DS_OK && pap2_ == NULL && samples_ * sample_size == ab1_) {
             is_valid_ = true;
+        } else {
+            is_valid_ = false;
         }
     }
     ~BufferImpl() override {
         if (pap1_) {
-            pDS_buffer8_->Unlock(&pap1_, ab1_, &pap2_, ab2_);
+            pDS_buffer8_->Unlock(pap1_, ab1_, pap2_, ab2_);
         }
     }
 
@@ -103,16 +105,6 @@ public:
         }
         return DS_OK == pDS_buffer8_->SetVolume(GetDSVolume(volume));
     }
-    bool AddNewBufferEvent(utils::RawEvent event) const override {
-        std::vector<std::size_t> pos;
-        for (std::size_t i = 0; i < GetBuffersNum(); i++) {
-            pos.push_back(i * GetSamplesSingleBuffer() + 1);
-        }
-        return AddPositionsEvent(event, pos);
-    }
-    bool AddPositionEvent(utils::RawEvent event, std::size_t pos) const override {
-        return AddPositionsEvent(event, { pos });
-    }
     bool AddPositionsEvent(utils::RawEvent event,
                            const std::vector<std::size_t>& pos) const override {
         LPDIRECTSOUNDNOTIFY8 pDS_notify;
@@ -135,7 +127,7 @@ public:
         : pDS_{ reinterpret_cast<IDirectSound*>(pDS) }, num_buffer_{ kBufferNum },
           samples_single_buffer_{ kSamplesSingleBuffer }, wave_format_{ wave_format }{
         WAVEFORMATEX wave_format_ex{};
-        wave_format_ex.wFormatTag = wave_format_.format_tag;
+        wave_format_ex.wFormatTag = WAVE_FORMAT_PCM;
         wave_format_ex.nChannels = wave_format_.channels;
         wave_format_ex.nSamplesPerSec = wave_format_.samples_per_sec;
         wave_format_ex.wBitsPerSample = wave_format_.bits_per_sample;

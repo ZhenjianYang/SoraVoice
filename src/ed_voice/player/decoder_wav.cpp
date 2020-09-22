@@ -70,11 +70,6 @@ bool Wav::Open(const char* file_name) {
         return false;
     }
     wave_format_ = head.wave_format;
-    if ((wave_format_.bits_per_sample + 7) / 8 != wave_format_.block_align
-        || wave_format_.avg_bytes_per_sec != wave_format_.block_align * wave_format_.samples_per_sec) {
-        ifs_.close();
-        return false;
-    }
 
     samples_total_ = head.size_data / wave_format_.block_align;
     samples_read_ = 0;
@@ -86,6 +81,9 @@ std::size_t Wav::Read(BuffByte* buff, std::size_t samples_count) {
         return 0;
     }
     std::fill_n(buff, samples_count * wave_format_.block_align, BuffByte{ 0 });
+    if (samples_total_ <= samples_read_) {
+        return 0;
+    }
 
     std::size_t read = std::min(samples_total_ - samples_read_, samples_count);
     ifs_.read(reinterpret_cast<char*>(buff), read * static_cast<std::streamsize>(wave_format_.block_align));

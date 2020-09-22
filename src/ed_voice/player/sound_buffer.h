@@ -26,8 +26,6 @@ public:
     virtual bool Play() const = 0;
     virtual bool Stop() const = 0;
     virtual bool SetVolume(int volume) const = 0;
-    virtual bool AddNewBufferEvent(utils::RawEvent event) const = 0;
-    virtual bool AddPositionEvent(utils::RawEvent event, std::size_t pos) const = 0;
     virtual bool AddPositionsEvent(utils::RawEvent event,
                                    const std::vector<std::size_t>& pos) const = 0;
 

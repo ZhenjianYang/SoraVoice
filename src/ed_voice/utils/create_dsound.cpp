@@ -5,17 +5,12 @@
 
 namespace {
 constexpr char kSTR_dsound_dll[] = "dsound.dll";
-constexpr char kSTR_DirectSoundCreate[] = "DirectSoundCreate";
+constexpr char kSTR_DirectSoundCreate[] = "DirectSoundCreate8";
 using CallDSCreate = decltype(DirectSoundCreate);
 }  // namespace
 
-bool utils::CreateDSound(void** ppDS) {
-    if (!ppDS) {
-        return false;
-    }
-
-    HWND hwnd = GetActiveWindow();
-    if (!hwnd) {
+bool utils::CreateDSound(void** ppDS, void* hwnd) {
+    if (!ppDS || !hwnd) {
         return false;
     }
 
@@ -28,7 +23,7 @@ bool utils::CreateDSound(void** ppDS) {
     if (pDirectSoundCreate) {
         IDirectSound* pDS = NULL;
         if (DS_OK == pDirectSoundCreate(NULL, &pDS, NULL)) {
-            if (DS_OK == pDS->SetCooperativeLevel(hwnd, DSSCL_PRIORITY)) {
+            if (DS_OK == pDS->SetCooperativeLevel(reinterpret_cast<HWND>(hwnd), DSSCL_PRIORITY)) {
                 *ppDS = pDS;
                 return true;
             }

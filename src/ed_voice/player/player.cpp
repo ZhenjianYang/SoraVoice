@@ -8,6 +8,7 @@
 #include "player/sound_buffer.h"
 #include "utils/events.h"
 #include "utils/create_dsound.h"
+#include "utils/log.h"
 
 namespace {
 using player::kVolumeMax;
@@ -27,7 +28,11 @@ constexpr std::size_t kEventsNum = 6;
 constexpr std::size_t kNotEnd = ~0U;
 
 static std::unique_ptr<Decoder> GetDecoderByFilename(std::string_view file_name) {
-    std::string attr = std::string(file_name.substr(file_name.rfind('.')));
+    auto pos = file_name.rfind('.');
+    if (pos == std::string::npos) {
+        return nullptr;
+    }
+    std::string attr = std::string(file_name.substr(pos));
     for (char& ch : attr) {
         ch = static_cast<char>(std::tolower(ch));
     }
@@ -84,6 +89,7 @@ public:
             std::scoped_lock lock(mtx_pd_new_);
             pd_new_[new_data->play_id] = std::move(new_data);
         }
+        events_->Set(kEventIndexNewPlay);
         return new_id;
     }
     bool StopAll() override {
@@ -198,22 +204,50 @@ void PlayerImpl::EventWorkerNewPlay() {
     std::scoped_lock lock(mtx_pd_new_);
     for (auto& kv : pd_new_) {
         auto& pd = kv.second;
+        LOG("New PlayID: %d, FileName: %s", pd->play_id, pd->file_name.c_str());
         auto new_play = std::make_unique<PlayData>(pd->play_id, pd->callback);
         new_play->decoder = GetDecoderByFilename(pd->file_name);
         if (!new_play->decoder || !new_play->decoder->Open(pd->file_name.c_str())) {
+            LOG("Open file failed!");
             auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
             callbacks.push_back(std::move(ended));
             continue;
         }
+        LOG("Sound File Info:\n"
+            "    Filename       : %s\n"
+            "    Channels       : %d\n"
+            "    SamplesPerSec  : %d\n"
+            "    AvgBytesPerSec : %d\n"
+            "    BlockAlign     : %d\n"
+            "    BitsPerSample  : %d\n"
+            "    TotalSamples   : %d\n"
+            "    LengthInSeconds: %.3f",
+            pd->file_name.c_str(), new_play->decoder->GetWaveFormat().channels,
+            new_play->decoder->GetWaveFormat().samples_per_sec, new_play->decoder->GetWaveFormat().avg_bytes_per_sec,
+            new_play->decoder->GetWaveFormat().block_align, new_play->decoder->GetWaveFormat().bits_per_sample,
+            new_play->decoder->SamplesTotal(),
+            static_cast<double>(new_play->decoder->SamplesTotal()) / new_play->decoder->GetWaveFormat().samples_per_sec);
+
         new_play->buffer = SoundBuffer::CreateSoundBuffer(pDS_, new_play->decoder->GetWaveFormat());
         if (!new_play->buffer) {
+            LOG("Create sound buffer failed!");
             auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
             callbacks.push_back(std::move(ended));
             continue;
         }
+        LOG("Sound Buffer Created:\n"
+            "    Num of Buffers    : %d\n"
+            "    Samples per buffer: %d\n"
+            "    Total Samples     : %d",
+            new_play->buffer->GetBuffersNum(), new_play->buffer->GetSamplesSingleBuffer(),
+            new_play->buffer->GetSamplesAllBuffers());
+
         std::size_t end_pos = new_play->decoder->SamplesTotal() % new_play->buffer->GetSamplesAllBuffers();
-        new_play->buffer->AddNewBufferEvent(events_->GetRawEvent(kEventIndexReadOrEnd));
-        new_play->buffer->AddPositionEvent(events_->GetRawEvent(kEventIndexReadOrEnd), end_pos);
+        std::vector<std::size_t> pos{ end_pos };
+        for (std::size_t i = 0; i < new_play->buffer->GetBuffersNum(); i++) {
+            pos.push_back(i * new_play->buffer->GetSamplesSingleBuffer() + 2);
+        }
+        new_play->buffer->AddPositionsEvent(events_->GetRawEvent(kEventIndexReadOrEnd), pos);
         new_play->buffer_index = new_play->buffer->GetBuffersNum() - 1;
         {
             std::scoped_lock lock_volume(mtx_volumn_);
@@ -226,6 +260,7 @@ void PlayerImpl::EventWorkerNewPlay() {
         for (auto& play : plays) {
             pd_playing_[play->play_id] = std::move(play);
         }
+        events_->Set(kEventIndexReadOrEnd);
     }
     if (!callbacks.empty()) {
         std::scoped_lock lock_callback(mtx_pd_callback_);
@@ -240,6 +275,7 @@ void PlayerImpl::EventWorkerReadOrEnd() {
     std::vector<std::unique_ptr<CallbackData>> callbacks;
     {
         std::scoped_lock lock(mtx_pd_playing_);
+        std::vector<decltype(pd_playing_.begin())> to_erase;
         for (auto it = pd_playing_.begin(); it != pd_playing_.end(); ++it) {
             auto& pd = it->second;
             auto pos = pd->buffer->GetPosition();
@@ -249,8 +285,7 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                 if (pos >= pd->end_pos || pos / buff_size != pd->end_pos / buff_size) {
                     auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::PlayEnd, pd->callback);
                     callbacks.push_back(std::move(ended));
-
-                    pd_playing_.erase(it);
+                    to_erase.push_back(it);
                 }
             } else if (pos / buff_size == pd->buffer_index || !pd->playing) {
                 if (pd->end_pos != kNotEnd) {
@@ -265,7 +300,7 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                 if (!write_buffer) {
                     auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
                     callbacks.push_back(std::move(ended));
-                    pd_playing_.erase(it);
+                    to_erase.push_back(it);
                 } else {
                     auto read = pd->decoder->Read(write_buffer->Get(), buff_size);
                     if (read < buff_size) {
@@ -276,6 +311,11 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                         pd->buffer->Play();
                     }
                 }
+            }
+        }
+        if (!to_erase.empty()) {
+            for (auto it : to_erase) {
+                pd_playing_.erase(it);
             }
         }
     }
@@ -332,18 +372,18 @@ void PlayerImpl::EventWorkerSetVolumn() {
 }
 }  // namespace
 
-std::unique_ptr<player::Player> player::Player::GetPlayer(void** ppDS) {
+std::unique_ptr<player::Player> player::Player::GetPlayer(void** ppDS, void* hwnd) {
     if (!ppDS) {
         return nullptr;
     }
     if (!*ppDS) {
-        if (!utils::CreateDSound(ppDS)) {
+        if (!utils::CreateDSound(ppDS, hwnd)) {
             return nullptr;
         }
     }
     if (!player::Decoder::InitAllDecoders()) {
         return nullptr;
     }
-    auto player = std::make_unique<PlayerImpl>(ppDS);
+    auto player = std::make_unique<PlayerImpl>(*ppDS);
     return player->IsValid() ? std::move(player) : nullptr;
 }

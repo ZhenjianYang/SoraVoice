@@ -4,7 +4,7 @@
 
 namespace {
 constexpr const char* kVorbisfileDlls[] = { "vorbisfile.dll" , "libvorbisfile.dll" };
-constexpr const char* kDllDirs[] = { "dll/", "voice/" };
+constexpr const char* kDllDirs[] = { "dll/", "voice/dll", NULL };
 constexpr char kSTR_ov_open_callbacks[] = "ov_open_callbacks";
 constexpr char kSTR_ov_info[] = "ov_info";
 constexpr char kSTR_ov_read[] = "ov_read";

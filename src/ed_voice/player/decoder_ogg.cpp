@@ -79,12 +79,20 @@ std::size_t Ogg::Read(BuffByte* buff, std::size_t samples_count) {
         return 0;
     }
     std::fill_n(buff, samples_count * wave_format_.block_align, BuffByte{ 0 });
+    if (samples_total_ <= samples_read_) {
+        return 0;
+    }
 
-    std::size_t read = std::min(samples_total_ - samples_read_, samples_count);
-    int bytes = static_cast<int>(read * wave_format_.block_align);
+    std::size_t request = std::min(samples_total_ - samples_read_, samples_count);
+    constexpr int block = 4096;
+    std::size_t read = 0;
     int bitstream = 0;
-    ov_read(&ov_file, reinterpret_cast<char*>(buff), bytes, 0, 2, 1, &bitstream);
-
+    while (read < request) {
+        int block_bytes = std::min(static_cast<int>(request - read) * wave_format_.block_align, block);
+        int bytes_read = ov_read(&ov_file, reinterpret_cast<char*>(buff), block_bytes, 0, 2, 1, &bitstream);
+        read += bytes_read / wave_format_.block_align;
+        buff += bytes_read;
+    }
     samples_read_ += read;
     return read;
 }
