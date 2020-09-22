@@ -17,10 +17,14 @@
     <ClInclude Include="..\..\src\ed_voice\global\global.h" />
     <ClInclude Include="..\..\src\ed_voice\global\signals.h" />
     <ClInclude Include="..\..\src\ed_voice\player\decoder.h" />
+    <ClInclude Include="..\..\src\ed_voice\player\player.h" />
+    <ClInclude Include="..\..\src\ed_voice\player\player_base.h" />
+    <ClInclude Include="..\..\src\ed_voice\player\sound_buffer.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\startup.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\events.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\load_ogg_apis.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_matcher.h" />
@@ -34,9 +38,12 @@
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_wav.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\player\player.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\player\sound_buffer.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\utils\events.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\module_info.cpp" />

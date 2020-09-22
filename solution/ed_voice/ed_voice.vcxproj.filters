@@ -73,6 +73,18 @@
     <ClInclude Include="..\..\src\ed_voice\utils\load_ogg_apis.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\player.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\sound_buffer.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\player_base.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\utils\events.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -103,6 +115,15 @@
       <Filter>src\player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\player.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\sound_buffer.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\utils\events.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>

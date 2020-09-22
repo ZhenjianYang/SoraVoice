@@ -3,7 +3,9 @@
 #include <fstream>
 
 namespace {
+using player::BuffByte;
 using player::Decoder;
+using player::WaveFormat;
 using std::int32_t;
 using std::uint32_t;
 using std::uint16_t;
