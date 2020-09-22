@@ -338,7 +338,7 @@ std::unique_ptr<player::Player> player::Player::GetPlayer(void** ppDS) {
     }
     if (!*ppDS) {
         if (!utils::CreateDSound(ppDS)) {
-            return false;
+            return nullptr;
         }
     }
     if (!player::Decoder::InitAllDecoders()) {
