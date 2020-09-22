@@ -24,6 +24,7 @@ bool utils::LoadOggApis(void** ov_open_callbacks, void** ov_info, void** ov_read
             }
         }
     }
+    SetDllDirectoryA(NULL);
 
     *ov_open_callbacks = nullptr;
     *ov_info = nullptr;
