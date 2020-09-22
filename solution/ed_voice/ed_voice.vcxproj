@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\startup.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\create_dsound.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\events.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\load_ogg_apis.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\utils\create_dsound.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\events.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />

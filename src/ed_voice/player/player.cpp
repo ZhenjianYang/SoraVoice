@@ -7,6 +7,7 @@
 #include "player/decoder.h"
 #include "player/sound_buffer.h"
 #include "utils/events.h"
+#include "utils/create_dsound.h"
 
 namespace {
 using player::kVolumeMax;
@@ -332,6 +333,14 @@ void PlayerImpl::EventWorkerSetVolumn() {
 }  // namespace
 
 std::unique_ptr<player::Player> player::Player::GetPlayer(void** ppDS) {
+    if (!ppDS) {
+        return nullptr;
+    }
+    if (!*ppDS) {
+        if (!utils::CreateDSound(ppDS)) {
+            return false;
+        }
+    }
     if (!player::Decoder::InitAllDecoders()) {
         return nullptr;
     }

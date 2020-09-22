@@ -85,6 +85,9 @@
     <ClInclude Include="..\..\src\ed_voice\utils\events.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\utils\create_dsound.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -124,6 +127,9 @@
       <Filter>src\player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\events.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\utils\create_dsound.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
