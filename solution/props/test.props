@@ -5,15 +5,13 @@
   <PropertyGroup>
     <IncludePath>$(gtestIncDir);$(gmockIncDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(LibOutDir);$(LibraryPath)</LibraryPath>
-    <OutDir>$(TestOutDir)</OutDir>
-    <IntDir>$(TestOutDir)$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(EdVoiceSrcDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>gtest.lib;gtest_main.lib;gmock.lib;gmock_main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gmock_main.lib;ed_voice.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

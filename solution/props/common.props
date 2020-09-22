@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)$(ProjectName)\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros">
     <SrcDir>$(SolutionDir)..\src\</SrcDir>
     <DefDir>$(SrcDir)def\</DefDir>
     <ExtlibsDir>$(SolutionDir)..\extlibs\</ExtlibsDir>
-    <LibOutDir>$(SolutionDir)..\bin\lib\$(Configuration)\</LibOutDir>
+    <LibOutDir>$(OutDir)\</LibOutDir>
     <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
     <VorbisDir>$(ExtlibsDir)vorbis\</VorbisDir>
     <VorbisIncDir>$(VorbisDir)include\</VorbisIncDir>
@@ -17,11 +21,6 @@
     <gmockDir>$(GoogleTestDir)googlemock\</gmockDir>
     <gmockIncDir>$(gmockDir)include\</gmockIncDir>
     <TestOutDir>$(SolutionDir)..\bin\test\$(Configuration)\</TestOutDir>
-  </PropertyGroup>
-  <PropertyGroup>
-    <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <_PropertySheetDisplayName>common</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
     <BuildMacro Include="SrcDir">
@@ -79,6 +78,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link />
   </ItemDefinitionGroup>
