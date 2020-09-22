@@ -23,6 +23,9 @@ bool utils::LoadOggApis(void** ov_open_callbacks, void** ov_info, void** ov_read
                 break;
             }
         }
+        if (ogg_dll) {
+            break;
+        }
     }
     SetDllDirectoryA(NULL);
 
