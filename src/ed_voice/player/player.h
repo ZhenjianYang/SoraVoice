@@ -32,7 +32,7 @@ public:
 
     virtual ~Player() = default;
 
-    static std::unique_ptr<Player> GetPlayer(void** ppDS, void* hwnd);
+    static std::unique_ptr<Player> GetPlayer(void* pDS8);
 };  // Player
 }  //player
 

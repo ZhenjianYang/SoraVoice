@@ -123,8 +123,8 @@ public:
         return SUCCEEDED(hr);
     }
 
-    SoundBufferImpl(void* pDS, const WaveFormat& wave_format)
-        : pDS_{ reinterpret_cast<IDirectSound*>(pDS) }, num_buffer_{ kBufferNum },
+    SoundBufferImpl(void* pDS8, const WaveFormat& wave_format)
+        : pDS8_{ reinterpret_cast<IDirectSound8*>(pDS8) }, num_buffer_{ kBufferNum },
           samples_single_buffer_{ kSamplesSingleBuffer }, wave_format_{ wave_format }{
         WAVEFORMATEX wave_format_ex{};
         wave_format_ex.wFormatTag = WAVE_FORMAT_PCM;
@@ -144,7 +144,7 @@ public:
         ds_buffer_desc.guid3DAlgorithm = { };
 
         LPDIRECTSOUNDBUFFER pDS_buffer = NULL;
-        auto hr = pDS_->CreateSoundBuffer(&ds_buffer_desc, &pDS_buffer, NULL);
+        auto hr = pDS8_->CreateSoundBuffer(&ds_buffer_desc, &pDS_buffer, NULL);
         if (SUCCEEDED(hr)) {
             hr = pDS_buffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)&pDS_buffer8_);
             pDS_buffer->Release();
@@ -161,7 +161,7 @@ public:
 private:
     bool is_valid_ = false;
 
-    IDirectSound* const pDS_;
+    IDirectSound8* const pDS8_;
     const std::size_t num_buffer_;
     const std::size_t samples_single_buffer_;
     const WaveFormat wave_format_;

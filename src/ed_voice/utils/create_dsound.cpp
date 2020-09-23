@@ -5,13 +5,13 @@
 
 namespace {
 constexpr char kSTR_dsound_dll[] = "dsound.dll";
-constexpr char kSTR_DirectSoundCreate[] = "DirectSoundCreate8";
-using CallDSCreate = decltype(DirectSoundCreate);
+constexpr char kSTR_DirectSoundCreate8[] = "DirectSoundCreate8";
+using CallDSCreate = decltype(DirectSoundCreate8);
 }  // namespace
 
-bool utils::CreateDSound(void** ppDS, void* hwnd) {
-    if (!ppDS || !hwnd) {
-        return false;
+void* utils::CreateDSound8(void* hwnd) {
+    if (!hwnd) {
+        return nullptr;
     }
 
     auto dsound_dll = LoadLibraryA(kSTR_dsound_dll);
@@ -19,17 +19,16 @@ bool utils::CreateDSound(void** ppDS, void* hwnd) {
         return false;
     }
 
-    auto pDirectSoundCreate = (CallDSCreate*)GetProcAddress(dsound_dll, kSTR_DirectSoundCreate);
-    if (pDirectSoundCreate) {
-        IDirectSound* pDS = NULL;
-        if (DS_OK == pDirectSoundCreate(NULL, &pDS, NULL)) {
-            if (DS_OK == pDS->SetCooperativeLevel(reinterpret_cast<HWND>(hwnd), DSSCL_PRIORITY)) {
-                *ppDS = pDS;
-                return true;
+    auto pDirectSoundCreate8 = (CallDSCreate*)GetProcAddress(dsound_dll, kSTR_DirectSoundCreate8);
+    if (pDirectSoundCreate8) {
+        IDirectSound8* pDS8 = NULL;
+        if (DS_OK == pDirectSoundCreate8(NULL, &pDS8, NULL)) {
+            if (DS_OK == pDS8->SetCooperativeLevel(reinterpret_cast<HWND>(hwnd), DSSCL_PRIORITY)) {
+                return pDS8;
             }
-            pDS->Release();
+            pDS8->Release();
         }
     }
     FreeLibrary(dsound_dll);
-    return false;
+    return nullptr;
 }

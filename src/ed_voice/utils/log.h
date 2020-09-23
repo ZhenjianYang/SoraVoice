@@ -32,7 +32,8 @@
                     _t->tm_year + 1900, _t->tm_mon + 1, _t->tm_mday,\
                     _t->tm_hour, _t->tm_min, _t->tm_sec, (int)_millis_part);\
         std::printf(format, ##__VA_ARGS__);\
-        std::printf("\n");
+        std::printf("\n");\
+        std::fflush(stdout);
 #else
 #define LOG_TO_STDOUT(...)
 #endif

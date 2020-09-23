@@ -120,7 +120,7 @@ bool Ogg::Init() {
         if (ready_) {
             LOG("Load ogg APIs Finished.");
         } else {
-            LOG("Load ogg APIs Finished.");
+            LOG("Load ogg APIs Failed.");
         }
         LOG("Loaded ov_open_callbacks = 0x%08X", (unsigned)ov_open_callbacks);
         LOG("Loaded ov_info = 0x%08X", (unsigned)ov_info);

@@ -4,11 +4,13 @@
 #include <string>
 
 #include "player/player.h"
+#include "utils/create_dsound.h"
 #include "utils/log.h"
 
 namespace {
 using PlayId = player::Player::PlayId;
 using StopType = player::Player::StopType;
+using utils::CreateDSound8;
 static HWND GetHWND() {
     char title[1024];
     GetConsoleTitle(title, 1024);
@@ -21,21 +23,35 @@ int main(int argc, char* argv[]) {
     HWND hwnd = GetHWND();
     CreateDirectory("voice", NULL);
 
-    auto player = player::Player::GetPlayer(&pDS, hwnd);
+    auto pDS8 = CreateDSound8(hwnd);
+
+    auto player = player::Player::GetPlayer(pDS8);
+    player->SetVolume(30);
     if (!player) {
         return 0;
     }
-    auto callback = [](PlayId pid, StopType stop) {
-        LOG("CallBack: PlayId = %d, StopType = %d", pid, (int)stop);
-    };
     while (true) {
         std::string f;
         std::cin >> f;
-        player->SetVolume(30);
-        if (f == "stop") {
+        if (f.empty()) {
+            continue;
+        }
+        else if (f == "exit") {
+            break;
+        }
+        else if (f == "stop") {
             player->StopAll();
         }
         else {
+            if (!f.empty() && f[0] == 'v') {
+                int volumn;
+                if (std::sscanf(f.c_str() + 1, "%d", &volumn)
+                    && volumn >= 0 && volumn <= 100) {
+                    player->SetVolume(volumn);
+                    continue;
+                }
+            }
+
             auto pattr = f.rfind('.');
             std::string attr;
             if (pattr != std::string::npos) {
@@ -47,7 +63,10 @@ int main(int argc, char* argv[]) {
             if (argc > 1) {
                 f = std::string(argv[1]) + "\\" + f;
             }
-            auto pid = player->Play(f, callback);
+            auto pid = player->Play(f, [f](PlayId pid, StopType stop) {
+                LOG("CallBack: PlayId = %d, StopType = %d, File = %s",
+                    pid, (int)stop, f.c_str());
+            });
             LOG("Playing %d: %s", pid, f.c_str());
         }
     }

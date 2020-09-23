@@ -97,7 +97,7 @@ public:
         return true;
     }
 
-    PlayerImpl(void* pDS) : pDS_{ pDS }, events_{ Events::CreateEvents(kEventsNum) } {
+    PlayerImpl(void* pDS8) : pDS8_{ pDS8 }, events_{ Events::CreateEvents(kEventsNum) } {
         if (!events_) {
             return;
         }
@@ -162,35 +162,11 @@ private:
     int volume_ = kVolumeMax;
     mutable std::mutex mtx_volumn_;
 
-    void* const pDS_;
+    void* const pDS8_;
     std::unique_ptr<Events> events_;
     std::thread th_worker_;
 
-    void EventWorker() {
-        while (is_valid_) {
-            switch (events_->WaitAny()) {
-            case kEventIndexNewPlay:
-                EventWorkerNewPlay();
-                break;
-            case kEventIndexReadOrEnd:
-                EventWorkerReadOrEnd();
-                break;
-            case kEventIndexStopAll:
-                EventWorkerStopAll();
-                break;
-            case kEventIndexCallback:
-                EventWorkerCallback();
-                break;
-            case kEventIndexSetVolumn:
-                EventWorkerSetVolumn();
-                break;
-            case kEventIndexExit:
-                return;
-            default:
-                break;
-            }
-        }
-    }
+    void EventWorker();
     void EventWorkerNewPlay();
     void EventWorkerReadOrEnd();
     void EventWorkerStopAll();
@@ -198,6 +174,31 @@ private:
     void EventWorkerSetVolumn();
 };  //PlayerImpl
 
+void PlayerImpl::EventWorker() {
+    while (is_valid_) {
+        switch (events_->WaitAny()) {
+        case kEventIndexNewPlay:
+            EventWorkerNewPlay();
+            break;
+        case kEventIndexReadOrEnd:
+            EventWorkerReadOrEnd();
+            break;
+        case kEventIndexStopAll:
+            EventWorkerStopAll();
+            break;
+        case kEventIndexCallback:
+            EventWorkerCallback();
+            break;
+        case kEventIndexSetVolumn:
+            EventWorkerSetVolumn();
+            break;
+        case kEventIndexExit:
+            return;
+        default:
+            break;
+        }
+    }
+}
 void PlayerImpl::EventWorkerNewPlay() {
     std::vector<std::unique_ptr<CallbackData>> callbacks;
     std::vector<std::unique_ptr<PlayData>> plays;
@@ -228,7 +229,7 @@ void PlayerImpl::EventWorkerNewPlay() {
             new_play->decoder->SamplesTotal(),
             static_cast<double>(new_play->decoder->SamplesTotal()) / new_play->decoder->GetWaveFormat().samples_per_sec);
 
-        new_play->buffer = SoundBuffer::CreateSoundBuffer(pDS_, new_play->decoder->GetWaveFormat());
+        new_play->buffer = SoundBuffer::CreateSoundBuffer(pDS8_, new_play->decoder->GetWaveFormat());
         if (!new_play->buffer) {
             LOG("Create sound buffer failed!");
             auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
@@ -353,6 +354,7 @@ void PlayerImpl::EventWorkerStopAll() {
         }
         events_->Set(kEventIndexCallback);
     }
+    LOG("StopAll Called, %d sounds stopped.", callbacks.size());
 }
 void PlayerImpl::EventWorkerCallback() {
     std::scoped_lock lock(mtx_pd_callback_);
@@ -369,21 +371,19 @@ void PlayerImpl::EventWorkerSetVolumn() {
         const auto& pd = kv.second;
         pd->buffer->SetVolume(volume_);
     }
+    LOG("Set volume: %d", volume_);
 }
 }  // namespace
 
-std::unique_ptr<player::Player> player::Player::GetPlayer(void** ppDS, void* hwnd) {
-    if (!ppDS) {
+std::unique_ptr<player::Player> player::Player::GetPlayer(void* pDS8) {
+    if (!pDS8) {
         return nullptr;
     }
-    if (!*ppDS) {
-        if (!utils::CreateDSound(ppDS, hwnd)) {
-            return nullptr;
-        }
-    }
-    if (!player::Decoder::InitAllDecoders()) {
+    LOG("Init Decoder...");
+    if (!Decoder::InitAllDecoders()) {
+        LOG("Init Decoder Failed!");
         return nullptr;
     }
-    auto player = std::make_unique<PlayerImpl>(*ppDS);
+    auto player = std::make_unique<PlayerImpl>(pDS8);
     return player->IsValid() ? std::move(player) : nullptr;
 }
