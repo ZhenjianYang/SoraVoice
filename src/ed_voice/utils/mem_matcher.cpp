@@ -13,8 +13,9 @@ constexpr std::size_t kBitsHalfByte = 4;
 constexpr std::size_t kNumHalfBytes = 2;
 }  // namespace
 
-utils::MemMatcher::MemMatcher(std::string_view pattern, Type type) {
-    if (type == Type::String) {
+utils::MemMatcher::MemMatcher(std::string_view pattern, Type type)
+        : pattern_str_{ pattern }, type_{ type } {
+    if (type_ == Type::String) {
         for (char ch : pattern) {
             if (ch == '?') {
                 pattern_.emplace_back(kZero, kZero);

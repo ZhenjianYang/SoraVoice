@@ -13,6 +13,13 @@ public:
     };
     MemMatcher(std::string_view pattern, Type type);
 
+    Type GetType() const {
+        return type_;
+    }
+    const std::string& Pattern() const {
+        return pattern_str_;
+    }
+
     template<typename Value, std::size_t N>
     bool Match(const Value (&array)[N]) const {
         return Match(array, N);
@@ -64,6 +71,8 @@ public:
 
     using InternalValueType = int;
 private:
+    std::string pattern_str_;
+    Type type_;
     std::vector<std::pair<InternalValueType, InternalValueType>> pattern_;
 };  // MemMatcher
 }  // namespace utils
