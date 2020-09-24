@@ -4,6 +4,8 @@
 #include "utils/log.h"
 
 namespace {
+static_assert(sizeof(void*) == 4, "32 bits only!");
+
 enum StartUpErrorCode {
     kSucceeded = 0,
     kFailed = -1
