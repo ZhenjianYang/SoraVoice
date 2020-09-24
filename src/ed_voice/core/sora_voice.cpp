@@ -2,10 +2,27 @@
 
 #include <memory>
 
+#include "core/voice_id_mapping.h"
 #include "global/global.h"
 #include "player/player.h"
 #include "utils/create_dsound.h"
 #include "utils/log.h"
+
+namespace {
+enum {
+    kOK = 0,
+    kError = -1
+};
+constexpr int kNumMapping = sizeof(kVoiceIdMapping) / sizeof(*kVoiceIdMapping);
+constexpr int kBgmVoiceIdLen = 6;
+static_assert(kBgmVoiceIdLen > kMaxVoiceIdLenNeedMapping, "kBgmVoiceIdLen <= kMaxVoiceIdLenNeedMapping !!!");
+constexpr char kVoiceDir[] = "voice/ogg/";
+constexpr char kVoicePrefixED6[] = "ch";
+constexpr char kVoicePrefixBGM[] = "ed";
+constexpr char kVoicePrefixZA[] = "v";
+constexpr char kAttrOgg[] = ".ogg";
+constexpr char kAttrWav[] = ".wav";
+}
 
 namespace {
 using player::Player;
@@ -14,7 +31,7 @@ class SoraVoiceImpl : public SoraVoice {
 public:
     SoraVoiceImpl(const std::string& title, const std::string& built_date,
                   std::vector<std::unique_ptr<char[]>>&& movable_strs);
-    void Play(byte* b) override;
+    int Play(byte* b) override;
 
 private:
     std::unique_ptr<Player> player_;
@@ -62,7 +79,50 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
 
     is_valid_ = true;
 }
-void SoraVoiceImpl::Play(byte*) {
+int SoraVoiceImpl::Play(byte* b) {
+    if (*b != '#') {
+        return kError;
+    }
+    b++;
+
+    int num_vid = 0;
+    byte* e = b;
+    for (int i = 0; i < kMaxVoiceIdLen; i++, e++) {
+        if (*e < '0' || *e > '9') {
+            break;
+        }
+        num_vid *= 10;
+        num_vid += *b - '0';
+    }
+    if (*e != 'v' || b == e) {
+        return kError;
+    }
+
+    std::string vid(b, e);
+    LOG("input Voice ID is '%s'", vid.c_str());
+    LOG("The max length of voice id need mapping is %d", kMaxVoiceIdLenNeedMapping);
+    if (e - b <= kMaxVoiceIdLenNeedMapping) {
+        num_vid += kVoiceIdAdjustAdder[e - b];
+        LOG("Adjusted Voice ID is %d", num_vid);
+        LOG("Number of mapping is %d", kNumMapping);
+        if (num_vid >= kNumMapping) {
+            LOG("Adjusted Voice ID is out of the range of Mapping");
+            return kError;
+        }
+
+        vid = kVoiceIdMapping[num_vid];
+        if (vid.empty()) {
+            LOG("Mapping Voice ID is empty");
+            return kError;
+        }
+    }
+
+    const char* prefix = vid.length() == kBgmVoiceIdLen ? kVoicePrefixBGM
+                                                        : kVoicePrefixED6;
+    std::string ogg_file_name = std::string(kVoiceDir) + prefix + vid + kAttrOgg;
+
+    player_->Play(ogg_file_name);
+    return kOK;
 }
 // SoraVoiceImpl
 }  // namespace

@@ -56,7 +56,7 @@ public:
         std::unordered_map<std::string, std::unique_ptr<MemScanner>> scanners;
     }
 
-    bool InSections(const char* sec_name, byte* begin, std::size_t length) const {
+    bool InSection(const char* sec_name, byte* begin, std::size_t length) const {
         auto it = secs_.find(sec_name);
         if (it == secs_.end()) {
             return false;
@@ -112,7 +112,7 @@ public:\
 #define DEFINE_APPLY() \
             void Apply() const override
 
-#define DEFINE_PIECE_END() };
+#define DEFINE_PIECE_END(PieceName_) };
 
 #define ADD_PIECES_BEGIN() \
     bool AddPieces() override { \

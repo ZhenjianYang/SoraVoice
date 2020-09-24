@@ -8,7 +8,7 @@
 
 struct SoraVoice {
 public:
-    virtual void Play(byte*) = 0;
+    virtual int Play(byte*) = 0;
     
     virtual ~SoraVoice() = default;
 

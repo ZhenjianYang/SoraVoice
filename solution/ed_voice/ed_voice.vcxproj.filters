@@ -23,6 +23,12 @@
     <Filter Include="src\core">
       <UniqueIdentifier>{de20fdda-7770-4ca5-b157-454f898d87c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\asm">
+      <UniqueIdentifier>{4cc5770f-4cdc-433a-818a-b1069037a986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\bridge">
+      <UniqueIdentifier>{c0b31a10-4d72-4fe3-8c0b-d1ca452a15c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h">
@@ -97,6 +103,18 @@
     <ClInclude Include="..\..\src\ed_voice\startup\scan_groups_dcl.h">
       <Filter>src\startup</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\asm\asm.h">
+      <Filter>src\asm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\bridge\bridge.h">
+      <Filter>src\bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\core\voice_id_mapping.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\core\voice_id.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -142,6 +160,15 @@
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_text.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp">
+      <Filter>src\bridge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\core\voice_id.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
   </ItemGroup>
