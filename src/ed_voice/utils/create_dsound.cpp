@@ -4,7 +4,8 @@
 #include <dsound.h>
 
 namespace {
-constexpr char kSTR_dsound_dll[] = "dsound.dll";
+constexpr int kMaxPathLen = 512;
+constexpr char kDllPath[] = R"(%systemroot%\System32\dsound.dll)";
 constexpr char kSTR_DirectSoundCreate8[] = "DirectSoundCreate8";
 using CallDSCreate = decltype(DirectSoundCreate8);
 }  // namespace
@@ -14,7 +15,9 @@ void* utils::CreateDSound8(void* hwnd) {
         return nullptr;
     }
 
-    auto dsound_dll = LoadLibraryA(kSTR_dsound_dll);
+    char buff[kMaxPathLen + 1];
+    ExpandEnvironmentStringsA(kDllPath, buff, sizeof(buff));
+    auto dsound_dll = LoadLibraryA(buff);
     if (!dsound_dll) {
         return false;
     }
