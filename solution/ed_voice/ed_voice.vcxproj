@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
+    <ClInclude Include="..\..\src\ed_voice\core\sora_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
     <ClInclude Include="..\..\src\ed_voice\global\global.h" />
@@ -25,6 +26,7 @@
     <ClInclude Include="..\..\src\ed_voice\player\player_base.h" />
     <ClInclude Include="..\..\src\ed_voice\player\sound_buffer.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group.h" />
+    <ClInclude Include="..\..\src\ed_voice\startup\scan_groups_dcl.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\startup.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
@@ -39,6 +41,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp" />

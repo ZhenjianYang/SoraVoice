@@ -1,5 +1,7 @@
 #include "startup.h"
 
+#include "core/sora_voice.h"
+#include "global/global.h"
 #include "startup/scan_group.h"
 #include "utils/log.h"
 
@@ -33,6 +35,14 @@ bool StartUp() {
         LOG("Group #%d,%s: Inject Succeeded!", i, groups[i]->Name().c_str());
 
         LOG("SoraVoice Starting...");
+        auto sora_voice = SoraVoice::GetSoraVoice(groups[i]->GameTitle(),
+                                                  groups[i]->GameBuiltDate(),
+                                                  std::move(groups[i]->MovableStrings()));
+        if (!sora_voice) {
+            LOG("SoraVoice Start Failed!");
+            return false;
+        }
+        global.sv = sora_voice.release();
         LOG("SoraVoice Started!");
         return true;
     }

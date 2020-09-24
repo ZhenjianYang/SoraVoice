@@ -1,11 +1,10 @@
 #include "scan_group.h"
 
+#include "startup/scan_groups_dcl.h"
 #include "utils/log.h"
 #include "utils/module_info.h"
 
 namespace startup {
-extern std::unique_ptr<ScanGroup> GetScanGroupTits(const std::vector<utils::SectionInfo>&);
-
 std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
     std::vector<std::unique_ptr<ScanGroup>> groups;
 
@@ -31,8 +30,7 @@ std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
             i, secs[i].name.c_str(), (unsigned)secs[i].start, (unsigned)secs[i].end, secs[i].size);
     }
 
-    auto get_scan_group_fun_list = { GetScanGroupTits };
-    for (auto get_scan_group_fun : get_scan_group_fun_list) {
+    for (auto get_scan_group_fun : GET_SCAN_GROUP_FUN_LIST) {
         groups.push_back(get_scan_group_fun(secs));
     }
 

@@ -5,6 +5,7 @@
 #include "global/signals.h"
 
 struct SoraVoice;
+
 typedef struct Global {
 	Signals sigs;
 	Addresses addrs;
