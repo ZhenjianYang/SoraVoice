@@ -1,6 +1,7 @@
 #include "startup/scan_group_common.h"
 
 #include "global/global.h"
+#include "utils/log.h"
 #include "utils/section_info.h"
 
 namespace {
@@ -13,12 +14,21 @@ DEFINE_PIECE_BEGIN(Tits, HWND, ".text", PatternType::Bytes,
         "A3 ?? ?? ?? 00 "
         "85 C0")
 DEFINE_ADDITIONAL_MATCH(begin, end) {
+    LOG("%s:%s matched at 0x%08X, start addtional check...",
+        Group->Name().c_str(), Name.c_str(), (unsigned)(begin));
     byte* addr = *(byte**)(begin + 1);
     constexpr char Falcom[] = "46 00 61 00 6c 00 63 00 6f 00 6d 00";
-    if (!group->InSections(".rdata", addr, 12)) {
+    constexpr std::size_t length = sizeof(Falcom) / 3;
+    if (!Group->InSections(".rdata", addr, length)) {
         return false;
     }
-    return MemMatch::BytesMatcher(Falcom).Match(addr, 12);
+    bool add = MemMatch::BytesMatcher(Falcom).Match(addr, length);
+    if (add) {
+        LOG("%s:%s addtional check passed!", Group->Name().c_str(), Name.c_str());
+    } else {
+        LOG("%s:%s addtional check failed!", Group->Name().c_str(), Name.c_str());
+    }
+    return add;
 }
 DEFINE_APPLY() {
     const auto& results = GetResults();

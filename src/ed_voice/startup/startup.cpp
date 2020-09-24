@@ -18,6 +18,7 @@ bool StartUp() {
             continue;
         }
 
+        global = {};
         LOG("Group #%d,%s: Scanning...", i, groups[i]->Name().c_str());
         if (!groups[i]->Scan()) {
             LOG("Group #%d,%s: Scan Failed", i, groups[i]->Name().c_str());

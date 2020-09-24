@@ -48,7 +48,8 @@ public:
         return true;
     }
 
-    explicit ScanGroupCommon(const std::vector<utils::SectionInfo>& section_info) {
+    ScanGroupCommon(const char* name, const std::vector<utils::SectionInfo>& section_info)
+            : name_{ name } {
         for (const auto& sec : section_info) {
             secs_[sec.name] = sec;
         }
@@ -86,7 +87,8 @@ private:
 class ScanGroup##GroupName_ : public startup::ScanGroupCommon {\
 public:\
     explicit ScanGroup##GroupName_(const std::vector<utils::SectionInfo>& section_info)\
-            : startup::ScanGroupCommon(section_info) { is_valid_ = AddPieces(); }
+            : startup::ScanGroupCommon(#GroupName_, section_info) { \
+        is_valid_ = AddPieces(); }
 
 #define DEFINE_PIECE_BEGIN(GroupName_, PieceName_, Section_, ParttenType_, Partten_) \
         class Piece##PieceName_ : public BasicPiece { \
@@ -96,9 +98,10 @@ public:\
             static constexpr  PatternType PatternType = ParttenType_; \
             Piece##PieceName_(ScanGroup##GroupName_* group) \
                 : BasicPiece(Partten_, ParttenType_), \
-                  group { group } {  } \
+                  Group { group }, Name { #PieceName_ } {  } \
         private: \
-            ScanGroupTits* const group;
+            ScanGroupTits* const Group; \
+            const std::string Name;
 
 #define DEFINE_ADDITIONAL_MATCH(begin, end) \
             bool AdditionalMatch(byte* begin, byte* end) const override
