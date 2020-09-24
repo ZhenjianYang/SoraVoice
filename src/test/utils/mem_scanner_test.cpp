@@ -28,14 +28,25 @@ TEST(MemScannerTest, BasicPiece) {
     const char* buff_end = std::end(buff) - 1;
 
     auto piece = MemScanner::GetBasicPiece("A?C?", MemScanner::PatternType::String);
+
+    piece->Match(buff + 2, buff_end);
+    EXPECT_TRUE(piece->AdditionalMatch(buff + 2, buff_end));
+    EXPECT_FALSE(piece->CheckResults());
+    EXPECT_THAT(piece->GetResults(), ElementsAre());
+
     piece->Match(buff, buff_end);
     EXPECT_TRUE(piece->AdditionalMatch(buff, buff_end));
+    EXPECT_TRUE(piece->CheckResults());
     EXPECT_THAT(piece->GetResults(), ElementsAre(buff));
+
     piece->Match(buff + 1, buff_end);
     EXPECT_TRUE(piece->AdditionalMatch(buff + 1, buff_end));
+    EXPECT_TRUE(piece->CheckResults());
     EXPECT_THAT(piece->GetResults(), ElementsAre(buff));
+
     piece->Match(buff + 3, buff_end);
     EXPECT_TRUE(piece->AdditionalMatch(buff + 3, buff_end));
+    EXPECT_TRUE(piece->CheckResults());
     EXPECT_THAT(piece->GetResults(), ElementsAre(buff, buff + 3));
 }
 
@@ -50,9 +61,9 @@ TEST(MemScannerTest, StandardPiece) {
     EXPECT_CALL(fns1, Apply(ElementsAre(buff, buff + 3, buff + 9)))
         .Times(1);
     scanner1.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-                      nullptr,
-                      std::bind(&MockFuncs::CheckResults, &fns1, _1),
-                      std::bind(&MockFuncs::Apply, &fns1, _1));
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns1, _1),
+                              std::bind(&MockFuncs::Apply, &fns1, _1));
     scanner1.Search();
     scanner1.CheckResult();
     scanner1.Apply();
@@ -64,9 +75,9 @@ TEST(MemScannerTest, StandardPiece) {
     EXPECT_CALL(fns2, Apply(ElementsAre()))
         .Times(1);
     scanner2.AddStandardPiece("X?X?", MemScanner::PatternType::String,
-                      nullptr,
-                      std::bind(&MockFuncs::CheckResults, &fns2, _1),
-                      std::bind(&MockFuncs::Apply, &fns2, _1));
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns2, _1),
+                              std::bind(&MockFuncs::Apply, &fns2, _1));
     scanner2.Search();
     scanner2.CheckResult();
     scanner2.Apply();
@@ -92,9 +103,9 @@ TEST(MemScannerTest, AdditionalMatch) {
     EXPECT_CALL(fns1, Apply(ElementsAre(buff, buff + 3, buff + 9)))
         .Times(1);
     scanner1.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        std::bind(&MockFuncs::AdditionalMatch, &fns1, _1, _2, _3),
-        std::bind(&MockFuncs::CheckResults, &fns1, _1),
-        std::bind(&MockFuncs::Apply, &fns1, _1));
+                              std::bind(&MockFuncs::AdditionalMatch, &fns1, _1, _2, _3),
+                              std::bind(&MockFuncs::CheckResults, &fns1, _1),
+                              std::bind(&MockFuncs::Apply, &fns1, _1));
     scanner1.Search();
     scanner1.CheckResult();
     scanner1.Apply();
@@ -115,9 +126,9 @@ TEST(MemScannerTest, AdditionalMatch) {
     EXPECT_CALL(fns2, Apply(ElementsAre(buff, buff + 9)))
         .Times(1);
     scanner2.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        std::bind(&MockFuncs::AdditionalMatch, &fns2, _1, _2, _3),
-        std::bind(&MockFuncs::CheckResults, &fns2, _1),
-        std::bind(&MockFuncs::Apply, &fns2, _1));
+                              std::bind(&MockFuncs::AdditionalMatch, &fns2, _1, _2, _3),
+                              std::bind(&MockFuncs::CheckResults, &fns2, _1),
+                              std::bind(&MockFuncs::Apply, &fns2, _1));
     scanner2.Search();
     scanner2.CheckResult();
     scanner2.Apply();
@@ -132,17 +143,17 @@ TEST(MemScannerTest, CheckResults) {
         .Times(1)
         .WillRepeatedly(Return(true));
     scanner1.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        nullptr,
-        std::bind(&MockFuncs::CheckResults, &fns11, _1),
-        nullptr);
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns11, _1),
+                              nullptr);
     MockFuncs fns12;
     EXPECT_CALL(fns12, CheckResults(ElementsAre(buff, buff + 3, buff + 9)))
         .Times(1)
         .WillRepeatedly(Return(true));
     scanner1.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        nullptr,
-        std::bind(&MockFuncs::CheckResults, &fns12, _1),
-        nullptr);
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns12, _1),
+                              nullptr);
     scanner1.Search();
     EXPECT_TRUE(scanner1.CheckResult());
 
@@ -152,17 +163,17 @@ TEST(MemScannerTest, CheckResults) {
         .Times(1)
         .WillRepeatedly(Return(true));
     scanner2.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        nullptr,
-        std::bind(&MockFuncs::CheckResults, &fns21, _1),
-        nullptr);
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns21, _1),
+                              nullptr);
     MockFuncs fns22;
     EXPECT_CALL(fns22, CheckResults(ElementsAre(buff, buff + 3, buff + 9)))
         .Times(1)
         .WillRepeatedly(Return(false));
     scanner2.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        nullptr,
-        std::bind(&MockFuncs::CheckResults, &fns22, _1),
-        nullptr);
+                              nullptr,
+                              std::bind(&MockFuncs::CheckResults, &fns22, _1),
+                              nullptr);
     scanner2.Search();
     EXPECT_FALSE(scanner2.CheckResult());
 }
@@ -175,16 +186,16 @@ TEST(MemScannerTest, CheckResultsIsNull) {
     EXPECT_CALL(fns1, Apply(ElementsAre(buff, buff + 3, buff + 9)))
         .Times(1);
     scanner.AddStandardPiece("A?C?", MemScanner::PatternType::String,
-        nullptr,
-        nullptr,
-        std::bind(&MockFuncs::Apply, &fns1, _1));
+                             nullptr,
+                             nullptr,
+                             std::bind(&MockFuncs::Apply, &fns1, _1));
     MockFuncs fns2;
     EXPECT_CALL(fns2, Apply(ElementsAre()))
         .Times(1);
     scanner.AddStandardPiece("Y?Y?", MemScanner::PatternType::String,
-        nullptr,
-        nullptr,
-        std::bind(&MockFuncs::Apply, &fns2, _1));
+                             nullptr,
+                             nullptr,
+                             std::bind(&MockFuncs::Apply, &fns2, _1));
     scanner.Search();
     EXPECT_TRUE(scanner.CheckResult());
     scanner.Apply();

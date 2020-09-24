@@ -32,7 +32,7 @@ public:
             return true;
         }
         virtual bool CheckResults() const {
-            return true;
+            return !GetResults().empty();
         }
         virtual void Apply() const {
         }
@@ -46,7 +46,6 @@ public:
         BasicPiece(std::string_view pattern, PatternType pattern_type)
             : matcher_(pattern, pattern_type) {
         }
-
         const Results& GetResults() const override {
             return results_;
         }
