@@ -17,7 +17,7 @@ public:
     using Results = std::vector<Iterator>;
     using FunAdditionalMatch = std::function<bool(const Results&, Iterator, Iterator)>;
     using FunCheckResults = std::function<bool(const Results&)>;
-    using FunApply = std::function<void(const Results&)>;
+    using FunApply = std::function<bool(const Results&)>;
 
     class Piece {
     public:
@@ -34,7 +34,8 @@ public:
         virtual bool CheckResults() const {
             return !GetResults().empty();
         }
-        virtual void Apply() const {
+        virtual bool Apply() const {
+            return true;
         }
         virtual ~Piece() = default;
     protected:
@@ -79,10 +80,11 @@ public:
         bool CheckResults() const override {
             return fun_results_check_ == nullptr || fun_results_check_(results_);
         }
-        void Apply() const override {
+        bool Apply() const override {
             if (fun_apply_ != nullptr) {
-                fun_apply_(results_);
+                return fun_apply_(results_);
             }
+            return true;
         }
 
     protected:
@@ -134,10 +136,12 @@ public:
         return result;
     }
 
-    void Apply() const {
+    bool Apply() const {
+        bool result = true;
         for (const auto piece : pieces_) {
-            piece->Apply();
+            result = result && piece->Apply();
         }
+        return result;
     }
 
     static std::unique_ptr<Piece> GetBasicPiece(std::string_view pattern, PatternType pattern_type) {

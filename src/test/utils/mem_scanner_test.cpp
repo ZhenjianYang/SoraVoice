@@ -19,7 +19,7 @@ class MockFuncs {
 public:
     MOCK_METHOD(bool, AdditionalMatch, (const Results&, IterType, IterType));
     MOCK_METHOD(bool, CheckResults, (const Results&));
-    MOCK_METHOD(void, Apply, (const Results&));
+    MOCK_METHOD(bool, Apply, (const Results&));
 };
 }  // namespace
 
