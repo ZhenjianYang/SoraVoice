@@ -92,7 +92,7 @@ int SoraVoiceImpl::Play(byte* b) {
             break;
         }
         num_vid *= 10;
-        num_vid += *b - '0';
+        num_vid += *e - '0';
     }
     if (*e != 'v' || b == e) {
         return kError;

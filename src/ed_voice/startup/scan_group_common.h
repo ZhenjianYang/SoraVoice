@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "base/byte.h"
+#include "utils/mem.h"
 #include "utils/mem_scanner.h"
 #include "utils/section_info.h"
 
@@ -16,6 +17,8 @@ public:
     using MemMatch = utils::MemMatcher;
     using BasicPiece = MemScanner::BasicPiece;
     using PatternType = MemScanner::PatternType;
+
+    static constexpr std::size_t kCodeBackupBlockSize = 0x1000;
 
     bool IsValid() const override {
         return is_valid_;
@@ -42,27 +45,96 @@ public:
         return result;
     }
     bool Inject() override {
+        bool result = true;
         for (const auto& scanner : scanners_) {
-            scanner->Apply();
+            result = result && scanner->Apply();
         }
-        return true;
+        return result;
     }
 
     ScanGroupCommon(const char* name, const std::vector<utils::SectionInfo>& section_info)
-            : name_{ name } {
+        : name_{ name } {
         for (const auto& sec : section_info) {
             secs_[sec.name] = sec;
         }
-        std::unordered_map<std::string, std::unique_ptr<MemScanner>> scanners;
+
+        strings_.push_back(std::make_unique<char[]>(kCodeBackupBlockSize));
+        code_bak_ = (byte*)strings_.back().get();
+        code_bak_remian = kCodeBackupBlockSize;
     }
 
     bool InSection(const char* sec_name, byte* begin, std::size_t length) const {
+        if (!sec_name || *sec_name == '\0') {
+            return true;
+        }
         auto it = secs_.find(sec_name);
         if (it == secs_.end()) {
             return false;
         }
         const auto& sec = it->second;
         return begin >= sec.start && begin + length <= sec.end;
+    }
+
+    byte* GetCodeBackupBlock(std::size_t length) {
+        if (code_bak_remian < length) {
+            return nullptr;
+        }
+        byte* ret = code_bak_;
+        code_bak_ += length;
+        code_bak_remian -= length;
+        return ret;
+    }
+
+    bool BackupCode(byte* p, std::size_t len, void* jmp_dst, void** next) {
+        byte* bak = GetCodeBackupBlock(len + 5);
+        std::memcpy(bak, p, len);
+        utils::FillWithJmp(bak + len, p + len);
+        if (next) {
+            *next = bak;
+        }
+        utils::MemProtection proction_bak, proction_bak2;
+        if (utils::ChangeMemProtection(p, len, utils::kMemProtectionRWE, &proction_bak)) {
+            utils::FillNop(p, len);
+            utils::FillWithJmp(p, jmp_dst);
+            utils::ChangeMemProtection(p, len, proction_bak, &proction_bak2);
+            return true;
+        }
+        return false;
+    }
+
+    bool RedirectWithJmp(byte* p, std::size_t len, void* dst, void** next, void** dst_old) {
+        if (dst_old) {
+            *dst_old = utils::GetCallJmpDest(p, len);
+        }
+        if (next) {
+            *next = p + len;
+        }
+        
+        utils::MemProtection proction_bak, proction_bak2;
+        if (utils::ChangeMemProtection(p, len, utils::kMemProtectionRWE, &proction_bak)) {
+            utils::FillNop(p, len);
+            utils::FillWithJmp(p, dst);
+            utils::ChangeMemProtection(p, len, proction_bak, &proction_bak2);
+            return true;
+        }
+        return false;
+    }
+
+    bool RedirectWithCall(byte* p, std::size_t len, void* dst, void** next, void** dst_old) {
+        if (dst_old) {
+            *dst_old = utils::GetCallJmpDest(p, len);
+        }
+        if (next) {
+            *next = p + len;
+        }
+        utils::MemProtection proction_bak, proction_bak2;
+        if (utils::ChangeMemProtection(p, len, utils::kMemProtectionRWE, &proction_bak)) {
+            utils::FillNop(p, len);
+            utils::FillWithCall(p, dst);
+            utils::ChangeMemProtection(p, len, proction_bak, &proction_bak2);
+            return true;
+        }
+        return false;
     }
 
 protected:
@@ -75,12 +147,31 @@ protected:
     std::vector<std::unique_ptr<MemScanner>> scanners_;
     std::unordered_map<std::string, utils::SectionInfo> secs_;
 
+    byte* code_bak_ = nullptr;
+    std::size_t code_bak_remian = 0;
+
     virtual bool AddPieces() = 0;
 
 private:
     ScanGroupCommon(const ScanGroupCommon&) = delete;
     ScanGroupCommon& operator=(const ScanGroupCommon&) = delete;
 };  // ScanGroupCommon
+
+class PieceCommon : public ScanGroupCommon::BasicPiece {
+public:
+    PieceCommon(std::string_view pattern, ScanGroupCommon::PatternType pattern_type,
+                ScanGroupCommon* group)
+        : ScanGroupCommon::BasicPiece(pattern, pattern_type), Group{ group } {
+    }
+
+    bool InSection(byte* p, std::size_t len) {
+
+    }
+
+protected:
+    ScanGroupCommon* const Group;
+};
+
 }  // namespace startup
 
 #define DEFINE_GROUP_BEGIN(GroupName_) \
@@ -103,14 +194,40 @@ public:\
             ScanGroupTits* const Group; \
             const std::string Name;
 
-#define DEFINE_ADDITIONAL_MATCH(begin, end) \
-            bool AdditionalMatch(byte* begin, byte* end) const override
+#define DEFINE_ADDITIONAL_MATCH_BEGIN(b, e) \
+            bool AdditionalMatch(byte* b, byte* e) const override { \
+                LOG("%s:%s matched at 0x%08X, start addtional check...", \
+                    Group->Name().c_str(), Name.c_str(), (unsigned)(b)); 
+#define DEFINE_ADDITIONAL_MATCH_END(rst) \
+            if (rst) { \
+                LOG("%s:%s addtional check passed!", Group->Name().c_str(), Name.c_str()); \
+            } else { \
+                LOG("%s:%s addtional check failed!", Group->Name().c_str(), Name.c_str()); \
+            } return (rst); }
 
-#define DEFINE_CHECK_RESULTS() \
-            bool CheckResults() const override
+#define DEFINE_CHECK_RESULTS_BEGIN() \
+            bool CheckResults() const override { \
+                LOG("%s:%s, start check results...", \
+                    Group->Name().c_str(), Name.c_str()); \
+                LOG("%d results matched.", GetResults().size());
+#define DEFINE_CHECK_RESULTS_END(rst) \
+            if (rst) { \
+                LOG("%s:%s check results passed!", Group->Name().c_str(), Name.c_str()); \
+            } else { \
+                LOG("%s:%s check results failed!", Group->Name().c_str(), Name.c_str()); \
+            } return (rst); }
 
-#define DEFINE_APPLY() \
-            void Apply() const override
+#define DEFINE_APPLY_BEGIN() \
+            bool Apply() const override { \
+                LOG("%s:%s, start apply...", \
+                    Group->Name().c_str(), Name.c_str()); \
+                LOG("%d results matched.", GetResults().size());
+#define DEFINE_APPLY_END(rst) \
+            if (rst) { \
+                LOG("%s:%s apply succeeded!", Group->Name().c_str(), Name.c_str()); \
+            } else { \
+                LOG("%s:%s apply failed!", Group->Name().c_str(), Name.c_str()); \
+            } return (rst); }
 
 #define DEFINE_PIECE_END(PieceName_) };
 
@@ -139,5 +256,12 @@ std::unique_ptr<ScanGroup> GetScanGroupTits(const std::vector<utils::SectionInfo
     auto group = std::make_unique<ScanGroupTits>(section_info); \
     return group; \
 }
+
+#define REF_STRING(SectionCode, p, SectionData, STR) \
+    Group->InSection(SectionCode, (byte*)(p), sizeof(byte*)) && \
+    Group->InSection(SectionData, *(byte**)(p), sizeof(STR)) && \
+    std::equal((std::remove_reference_t<decltype(STR[0])>*)(*(byte**)(p)), \
+               (std::remove_reference_t<decltype(STR[0])>*)(*(byte**)(p) + sizeof(STR)), \
+               STR)
 
 #endif  // __STARTUP_SCAN_GROUP_COMMON_H__

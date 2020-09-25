@@ -112,8 +112,8 @@
     <ClInclude Include="..\..\src\ed_voice\core\voice_id_mapping.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ed_voice\core\voice_id.h">
-      <Filter>src\core</Filter>
+    <ClInclude Include="..\..\src\ed_voice\utils\mem.h">
+      <Filter>src\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,8 +168,17 @@
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp">
       <Filter>src\bridge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\core\voice_id.cpp">
-      <Filter>src\core</Filter>
+    <ClCompile Include="..\..\src\ed_voice\utils\mem.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_ldat.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_dcdat.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp">
+      <Filter>src\bridge</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

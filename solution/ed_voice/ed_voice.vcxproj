@@ -19,7 +19,6 @@
     <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
     <ClInclude Include="..\..\src\ed_voice\bridge\bridge.h" />
     <ClInclude Include="..\..\src\ed_voice\core\sora_voice.h" />
-    <ClInclude Include="..\..\src\ed_voice\core\voice_id.h" />
     <ClInclude Include="..\..\src\ed_voice\core\voice_id_mapping.h" />
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
@@ -38,6 +37,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\events.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\load_ogg_apis.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\log.h" />
+    <ClInclude Include="..\..\src\ed_voice\utils\mem.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_matcher.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\mem_scanner.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\module_info.h" />
@@ -45,10 +45,12 @@
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_dcdat.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_ldat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_text.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
-    <ClCompile Include="..\..\src\ed_voice\core\voice_id.cpp" />
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp" />
@@ -61,6 +63,7 @@
     <ClCompile Include="..\..\src\ed_voice\utils\create_dsound.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\events.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\utils\mem.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\mem_matcher.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\module_info.cpp" />
   </ItemGroup>

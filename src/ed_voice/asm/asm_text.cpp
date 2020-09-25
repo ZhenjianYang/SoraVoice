@@ -2,7 +2,7 @@
 #include "bridge/bridge.h"
 #include "global/global.h"
 
-__declspec(naked) void asm_::asm_text() {
+__declspec(naked) void asm_::text() {
     __asm {
         jne short next
         pushad
@@ -12,6 +12,6 @@ __declspec(naked) void asm_::asm_text() {
         jmp dword ptr[global.addrs.text_next]
 
         next :
-        jmp dword ptr [global.addrs.text_jmp]
+        jmp dword ptr[global.addrs.text_jmp]
     }
 }
