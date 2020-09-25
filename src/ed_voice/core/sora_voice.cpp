@@ -1,6 +1,8 @@
 #include "sora_voice.h"
 
 #include <memory>
+#include <mutex>
+#include <unordered_set>
 
 #include "core/voice_id_mapping.h"
 #include "global/global.h"
@@ -34,10 +36,14 @@ public:
     int Play(byte* b) override;
 
 private:
-    std::unique_ptr<Player> player_;
     const std::string title_;
     const std::string built_date_;
     const std::vector<std::unique_ptr<char[]>> movable_strs_;
+    Signals* const sigs_;
+    std::unique_ptr<Player> player_;
+
+    std::unordered_set<Player::PlayId> playing_;
+    std::mutex mtx_playing_;
 
 public:
     bool IsValid() const {
@@ -55,7 +61,8 @@ private:
 
 SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_date,
                              std::vector<std::unique_ptr<char[]>>&& movable_strs)
-    : title_{ title }, built_date_{ built_date }, movable_strs_{ std::move(movable_strs) }{
+    : title_{ title }, built_date_{ built_date }, movable_strs_{ std::move(movable_strs) },
+      sigs_{ &global.sigs } {
     if (!global.addrs.pHwnd || !*global.addrs.pHwnd) {
         LOG("No hwnd.");
         return;
@@ -77,6 +84,7 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
     }
     LOG("Player Create Succeeded.");
 
+    memset(sigs_, 0, sizeof(*sigs_));
     is_valid_ = true;
 }
 int SoraVoiceImpl::Play(byte* b) {
@@ -121,7 +129,25 @@ int SoraVoiceImpl::Play(byte* b) {
                                                         : kVoicePrefixED6;
     std::string ogg_file_name = std::string(kVoiceDir) + prefix + vid + kAttrOgg;
 
-    player_->Play(ogg_file_name);
+    player_->StopAll();
+    {
+        std::scoped_lock lock(mtx_playing_);
+        auto play_id = player_->Play(ogg_file_name,
+                                     [this](Player::PlayId play_id, Player::StopType stop_type) {
+                LOG("PlayID: %d, stopped, type: %d", play_id, stop_type);
+                std::scoped_lock lock(mtx_playing_);
+                playing_.erase(play_id);
+                if (playing_.empty()) {
+                    sigs_->no_textse = 0;
+                    if (stop_type != Player::StopType::PlayEnd) {
+                        sigs_->no_dlgse = 0;
+                    }
+                }
+            });
+        playing_.insert(play_id);
+        sigs_->no_dlgse = 1;
+        sigs_->no_textse = 1;
+    }
     return kOK;
 }
 // SoraVoiceImpl

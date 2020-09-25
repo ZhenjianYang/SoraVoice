@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\asm\asm_dcdat.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_dlgse.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_ldat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_text.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_textse.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />

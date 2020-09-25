@@ -10,6 +10,11 @@ typedef struct Addresses {
     void* pdirs;
     void* ldat_next;
     void* dcdat_next;
+
+    void* textse_next;
+    void* textse_jmp;
+    void* dlgse_next;
+    void* dlgse_jmp;
 } Addresses;
 
 #endif  // __GLOBAL_ADDRESSES_H__

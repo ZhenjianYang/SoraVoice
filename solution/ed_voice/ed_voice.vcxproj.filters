@@ -180,5 +180,11 @@
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp">
       <Filter>src\bridge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_textse.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_dlgse.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

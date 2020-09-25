@@ -27,6 +27,8 @@ byte* utils::GetCallJmpDest(byte* p, unsigned length) {
     switch (length) {
     case 5: case 6:
         return p + length + *(int*)(p + length - 4);
+    case 2:
+        return p + length + (int)*(char*)(p + length - 1);
     default:
         return nullptr;
     }

@@ -88,12 +88,46 @@ DEFINE_APPLY_BEGIN()
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Ldat)
 
+DEFINE_PIECE_BEGIN(Tits, Textse, ".text", PatternType::Bytes,
+                   "FF D2 " "80 3D ?? ?? ?? ?? 00 " "75 11")
+DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
+    bool rst = Group->InSection(".data", *(byte**)(b + 4), sizeof(byte*))
+               && Group->InSection(".text", b + 0x2B, sizeof(byte*))
+               && *(b + 0x2B) == 0xC3;
+DEFINE_ADDITIONAL_MATCH_END(rst)
+DEFINE_APPLY_BEGIN()
+    const auto& results = GetResults();
+    byte* p = results.front();
+    global.addrs.textse_jmp = utils::GetCallJmpDest(p + 9, 2);
+    bool rst = Group->BackupCode(p + 11, 6, asm_::textse, &global.addrs.textse_next);
+    LOG("textse_jmp = 0x%08X", (unsigned)global.addrs.textse_jmp);
+    LOG("textse_next = 0x%08X", (unsigned)global.addrs.textse_next);
+DEFINE_APPLY_END(rst)
+DEFINE_PIECE_END(Textse)
+
+DEFINE_PIECE_BEGIN(Tits, Dlgse, ".text", PatternType::Bytes,
+                   "FF D0 " "80 3D ?? ?? ?? ?? 00 " "75 11")
+DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
+    bool rst = Group->InSection(".data", *(byte**)(b + 4), sizeof(byte*));
+DEFINE_ADDITIONAL_MATCH_END(rst)
+DEFINE_APPLY_BEGIN()
+const auto& results = GetResults();
+byte* p = results.front();
+global.addrs.dlgse_jmp = utils::GetCallJmpDest(p + 9, 2);
+bool rst = Group->BackupCode(p + 11, 6, asm_::dlgse, &global.addrs.dlgse_next);
+LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
+LOG("dlgse_next = 0x%08X", (unsigned)global.addrs.dlgse_next);
+DEFINE_APPLY_END(rst)
+DEFINE_PIECE_END(Dlgse)
+
 ADD_PIECES_BEGIN()
 ADD_PIECE(Hwnd)
 ADD_PIECE(Text)
 ADD_PIECE(Ldat)
 ADD_PIECE(Dcdat)
 ADD_PIECE(Pdirs)
+ADD_PIECE(Textse)
+ADD_PIECE(Dlgse)
 ADD_PIECES_END()
 
 DEFINE_GROUP_END()
