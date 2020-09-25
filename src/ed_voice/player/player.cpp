@@ -20,7 +20,7 @@ constexpr char kAttrWav[] = ".wav";
 constexpr char kAttrOgg[] = ".ogg";
 constexpr std::size_t kEventIndexNewPlay = 0;
 constexpr std::size_t kEventIndexReadOrEnd = 1;
-constexpr std::size_t kEventIndexStopAll = 2;
+//constexpr std::size_t kEventIndexStopAll = 2;
 constexpr std::size_t kEventIndexCallback = 3;
 constexpr std::size_t kEventIndexSetVolumn = 4;
 constexpr std::size_t kEventIndexExit = 5;
@@ -93,7 +93,7 @@ public:
         return new_id;
     }
     bool StopAll() override {
-        events_->Set(kEventIndexStopAll);
+        EventWorkerStopAll();
         return true;
     }
 
@@ -183,9 +183,9 @@ void PlayerImpl::EventWorker() {
         case kEventIndexReadOrEnd:
             EventWorkerReadOrEnd();
             break;
-        case kEventIndexStopAll:
-            EventWorkerStopAll();
-            break;
+        //case kEventIndexStopAll:
+        //    EventWorkerStopAll();
+        //    break;
         case kEventIndexCallback:
             EventWorkerCallback();
             break;
