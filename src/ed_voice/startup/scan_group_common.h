@@ -252,10 +252,7 @@ public:\
 #define DEFINE_ADDITIONAL_MATCH_BEGIN(b, e) \
             bool AdditionalMatch(byte* b, byte* e) const override {
 #define DEFINE_ADDITIONAL_MATCH_END(rst) \
-            if (rst) { \
-                LOG("%s:%s at 0x%08X addtional check passed!",\
-                    Group->Name().c_str(), Name.c_str(), (unsigned)(b)); \
-            } return (rst); }
+            return (rst); }
 
 #define DEFINE_CHECK_RESULTS_BEGIN() \
             bool CheckResults() const override { \

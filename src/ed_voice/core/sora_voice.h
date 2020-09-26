@@ -9,6 +9,7 @@
 struct SoraVoice {
 public:
     virtual int Play(byte*) = 0;
+    virtual int Stop() = 0;
     
     virtual ~SoraVoice() = default;
 

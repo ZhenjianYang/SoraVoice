@@ -34,6 +34,7 @@ public:
     SoraVoiceImpl(const std::string& title, const std::string& built_date,
                   std::vector<std::unique_ptr<char[]>>&& movable_strs);
     int Play(byte* b) override;
+    int Stop() override;
 
 private:
     const std::string title_;
@@ -149,6 +150,9 @@ int SoraVoiceImpl::Play(byte* b) {
         sigs_->no_textse = 1;
     }
     return kOK;
+}
+int SoraVoiceImpl::Stop() {
+    return player_->StopAll();
 }
 // SoraVoiceImpl
 }  // namespace

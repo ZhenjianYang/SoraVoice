@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
     <ClInclude Include="..\..\src\ed_voice\global\global.h" />
+    <ClInclude Include="..\..\src\ed_voice\global\info.h" />
     <ClInclude Include="..\..\src\ed_voice\global\signals.h" />
     <ClInclude Include="..\..\src\ed_voice\player\decoder.h" />
     <ClInclude Include="..\..\src\ed_voice\player\player.h" />

@@ -118,6 +118,9 @@
     <ClInclude Include="..\..\src\ed_voice\startup\string_patch.h">
       <Filter>src\startup</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\global\info.h">
+      <Filter>src\global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">

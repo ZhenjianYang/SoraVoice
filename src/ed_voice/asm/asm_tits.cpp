@@ -6,7 +6,15 @@ __declspec(naked) void asm_tits::text() {
     __asm {
         jne short next
         pushad
+        cmp dword ptr[global.info.game], GameTitsFC
+        je short fc
+        push edi
+        jmp common
+
+        fc:
         push ebx
+
+        common:
         call bridge::Play
         popad
         jmp dword ptr[global.addrs.text_next]
@@ -58,6 +66,9 @@ __declspec(naked) void asm_tits::dlgse() {
         cmp    dword ptr[global.sigs.no_dlgse], 0
         je     next
         mov    dword ptr[global.sigs.no_dlgse], 0
+        pushad
+        call   bridge::Stop
+        popad
         jmp    dword ptr[global.addrs.dlgse_jmp]
 
         next :
