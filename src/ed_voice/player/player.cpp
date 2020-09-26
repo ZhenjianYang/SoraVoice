@@ -291,7 +291,6 @@ void PlayerImpl::EventWorkerReadOrEnd() {
             } else if (pos / buff_size == pd->buffer_index || !pd->playing) {
                 if (pd->end_pos != kNotEnd) {
                     pd->stop_soon = true;
-                    continue;
                 }
                 pd->buffer_index++;
                 if (pd->buffer_index >= pd->buffer->GetBuffersNum()) {
@@ -305,7 +304,7 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                 } else {
                     auto read = pd->decoder->Read(write_buffer->Get(), buff_size);
                     if (read < buff_size) {
-                        pd->end_pos = read + pd->buffer_index * buff_size;
+                        pd->end_pos = pd->decoder->SamplesTotal() % pd->buffer->GetSamplesAllBuffers();
                     }
                     if (!pd->playing) {
                         pd->playing = true;
