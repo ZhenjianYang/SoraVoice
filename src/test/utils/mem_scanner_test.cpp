@@ -191,7 +191,7 @@ TEST(MemScannerTest, CheckResultsIsNull) {
                              std::bind(&MockFuncs::Apply, &fns1, _1));
     MockFuncs fns2;
     EXPECT_CALL(fns2, Apply(ElementsAre()))
-        .Times(1);
+        .Times(0);
     scanner.AddStandardPiece("Y?Y?", MemScanner::PatternType::String,
                              nullptr,
                              nullptr,
