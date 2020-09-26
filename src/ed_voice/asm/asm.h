@@ -1,7 +1,7 @@
 #ifndef __ASM_ASM_H__
 #define __ASM_ASM_H__
 
-namespace asm_ {
+namespace asm_tits {
 void text();
 void ldat();
 void dcdat();

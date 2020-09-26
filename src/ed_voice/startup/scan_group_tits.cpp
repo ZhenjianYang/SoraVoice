@@ -39,7 +39,7 @@ DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front() + 3;
     bool rst = Group->RedirectWithJmp(
-            p, 6, asm_::text, &global.addrs.text_next, &global.addrs.text_jmp);
+            p, 6, asm_tits::text, &global.addrs.text_next, &global.addrs.text_jmp);
     LOG("text_next = 0x%08X", (unsigned)global.addrs.text_next);
     LOG("text_jmp = 0x%08X", (unsigned)global.addrs.text_jmp);
 DEFINE_APPLY_END(rst)
@@ -53,7 +53,7 @@ DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front();
-    bool rst = Group->BackupCode(p, 6, asm_::ldat, &global.addrs.ldat_next);
+    bool rst = Group->BackupCode(p, 6, asm_tits::ldat, &global.addrs.ldat_next);
     LOG("ldat_next = 0x%08X", (unsigned)global.addrs.ldat_next);
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Ldat)
@@ -66,7 +66,7 @@ DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front();
-    bool rst = Group->BackupCode(p, 5, asm_::dcdat, &global.addrs.dcdat_next);
+    bool rst = Group->BackupCode(p, 5, asm_tits::dcdat, &global.addrs.dcdat_next);
     LOG("dcdat_next = 0x%08X", (unsigned)global.addrs.dcdat_next);
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Dcdat)
@@ -99,7 +99,7 @@ DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front();
     global.addrs.textse_jmp = utils::GetCallJmpDest(p + 9, 2);
-    bool rst = Group->BackupCode(p + 11, 6, asm_::textse, &global.addrs.textse_next);
+    bool rst = Group->BackupCode(p + 11, 6, asm_tits::textse, &global.addrs.textse_next);
     LOG("textse_jmp = 0x%08X", (unsigned)global.addrs.textse_jmp);
     LOG("textse_next = 0x%08X", (unsigned)global.addrs.textse_next);
 DEFINE_APPLY_END(rst)
@@ -114,7 +114,7 @@ DEFINE_APPLY_BEGIN()
 const auto& results = GetResults();
 byte* p = results.front();
 global.addrs.dlgse_jmp = utils::GetCallJmpDest(p + 9, 2);
-bool rst = Group->BackupCode(p + 11, 6, asm_::dlgse, &global.addrs.dlgse_next);
+bool rst = Group->BackupCode(p + 11, 6, asm_tits::dlgse, &global.addrs.dlgse_next);
 LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
 LOG("dlgse_next = 0x%08X", (unsigned)global.addrs.dlgse_next);
 DEFINE_APPLY_END(rst)
