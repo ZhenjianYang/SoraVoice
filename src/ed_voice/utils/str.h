@@ -45,6 +45,7 @@ inline static bool StringMatch(const void* p, const String& s, bool null_termana
                && (!null_termanate || *(pc + len) == 0);
     }
 }
+
 }  // namespace utils
 
 #endif  // __UTILS_STR_H__

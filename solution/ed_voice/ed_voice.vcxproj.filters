@@ -115,6 +115,9 @@
     <ClInclude Include="..\..\src\ed_voice\utils\mem.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\startup\string_patch.h">
+      <Filter>src\startup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -162,29 +165,20 @@
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_text.cpp">
-      <Filter>src\asm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp">
       <Filter>src\bridge</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\mem.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_ldat.cpp">
-      <Filter>src\asm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_dcdat.cpp">
-      <Filter>src\asm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp">
       <Filter>src\bridge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_textse.cpp">
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp">
       <Filter>src\asm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_dlgse.cpp">
-      <Filter>src\asm</Filter>
+    <ClCompile Include="..\..\src\ed_voice\startup\string_patch.cpp">
+      <Filter>src\startup</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -32,6 +32,7 @@
     <ClInclude Include="..\..\src\ed_voice\startup\scan_groups_dcl.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\scan_group_common.h" />
     <ClInclude Include="..\..\src\ed_voice\startup\startup.h" />
+    <ClInclude Include="..\..\src\ed_voice\startup\string_patch.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\build_date.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\create_dsound.h" />
     <ClInclude Include="..\..\src\ed_voice\utils\events.h" />
@@ -45,11 +46,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_dcdat.cpp" />
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_dlgse.cpp" />
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_ldat.cpp" />
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_text.cpp" />
-    <ClCompile Include="..\..\src\ed_voice\asm\asm_textse.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
@@ -62,6 +59,7 @@
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\startup\string_patch.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\create_dsound.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\events.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\load_ogg_apis.cpp" />

@@ -1,9 +1,10 @@
 #include "startup/scan_group_common.h"
 
-#include <Windows.h>
+#include <map>
 
 #include "asm/asm.h"
 #include "global/global.h"
+#include "startup/string_patch.h"
 #include "utils/log.h"
 #include "utils/mem.h"
 #include "utils/section_info.h"
@@ -111,14 +112,105 @@ DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     bool rst = Group->InSection(".data", *(byte**)(b + 4), sizeof(byte*));
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_APPLY_BEGIN()
-const auto& results = GetResults();
-byte* p = results.front();
-global.addrs.dlgse_jmp = utils::GetCallJmpDest(p + 9, 2);
-bool rst = Group->BackupCode(p + 11, 6, asm_tits::dlgse, &global.addrs.dlgse_next);
-LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
-LOG("dlgse_next = 0x%08X", (unsigned)global.addrs.dlgse_next);
+    const auto& results = GetResults();
+    byte* p = results.front();
+    global.addrs.dlgse_jmp = utils::GetCallJmpDest(p + 9, 2);
+    bool rst = Group->BackupCode(p + 11, 6, asm_tits::dlgse, &global.addrs.dlgse_next);
+    LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
+    LOG("dlgse_next = 0x%08X", (unsigned)global.addrs.dlgse_next);
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Dlgse)
+
+DEFINE_PIECE_BEGIN(Tits, Strpatch, ".rdata", PatternType::Bytes, "")
+    const startup::PatchingStrings strs_map_ = startup::LoadPatchingStrings();
+    mutable std::unordered_map<byte*, typename decltype(strs_map_.cbegin())> to_patch_;
+DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
+    bool rst = false;
+    for (auto it = strs_map_.cbegin(); it != strs_map_.cend(); ++it) {
+        if (int(it->first.length()) + 1 <= e - b && utils::StringMatch(b, it->first, true)) {
+            to_patch_[b] = it;
+            rst = true;
+            LOG("%s:%s at 0x%08X",
+                Group->Name().c_str(), Name.c_str(), (unsigned)(b));
+            LOG("String old: %s", it->first.c_str());
+            LOG("String new: %s", it->second.c_str());
+        }
+    }
+DEFINE_ADDITIONAL_MATCH_END(rst)
+DEFINE_CHECK_RESULTS_BEGIN()
+DEFINE_CHECK_RESULTS_END(true)
+DEFINE_APPLY_BEGIN()
+    int count = 0;
+    for (const auto& kv : to_patch_) {
+        LOG("Patch at: 0x%08X", (unsigned)kv.first);
+        LOG("String old: %s", kv.second->first.c_str());
+        LOG("String new: %s", kv.second->second.c_str());
+        bool rst = Group->DirectPatchString(kv.first, kv.second->second, true);
+        if (rst) {
+            LOG("Patch Succeeded.");
+            count++;
+        } else {
+            LOG("Patch Failed.");
+        }
+    }
+    LOG("%d Strings Patched.", count);
+DEFINE_APPLY_END(true)
+DEFINE_PIECE_END(Strpatch)
+
+DEFINE_PIECE_BEGIN(Tits, Strpatch2, ".text", PatternType::Bytes, "68 ?? ?? ?? 00")
+    const startup::RefPatchingStrings strs_map_
+        = startup::LoadRefPatchingStrings("voice/scena/Z_POKER9._DT");
+    mutable int diff = std::numeric_limits<int>::max();
+DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
+    bool rst = false;
+    if (GetResults().empty()) {
+        if (REF_STRING(".text", b + 1, ".rdata", std::get<1>(strs_map_))) {
+            diff = (byte*)std::get<0>(strs_map_) - *(byte**)(b + 1);
+            rst = true;
+        }
+    } else {
+        rst = std::get<2>(strs_map_).count(*(int*)(b + 1) + diff);
+    }
+    if (rst) {
+        LOG("%s:%s at 0x%08X",
+            Group->Name().c_str(), Name.c_str(), (unsigned)(b));
+        LOG("Ref: 0x%08X", *(unsigned*)(b + 1));
+        LOG("String old: %s", *(char**)(b + 1));
+        LOG("String new: %s", std::get<2>(strs_map_).find(*(int*)(b + 1) + diff)->second.c_str());
+    }
+DEFINE_ADDITIONAL_MATCH_END(rst)
+DEFINE_CHECK_RESULTS_BEGIN()
+DEFINE_CHECK_RESULTS_END(true)
+DEFINE_APPLY_BEGIN()
+    int count = 0;
+    std::map<int, std::vector<unsigned>> p;
+    for (const auto& kv : std::get<2>(strs_map_)) {
+        p[kv.first] = {};
+    }
+    for (byte* b : GetResults()) {
+        int offset = *(int*)(b + 1) + diff;
+        const std::string& s = std::get<2>(strs_map_).find(offset)->second;
+        LOG("Patch at: 0x%08X", (unsigned)b);
+        LOG("String old: %s", *(char**)(b + 1));
+        LOG("String new: %s", s.c_str());
+        bool rst = Group->RefPatchString(b + 1, s);
+        if (rst) {
+            LOG("Patch Succeeded.");
+            p[offset].push_back((unsigned)b);
+            count++;
+        } else {
+            LOG("Patch Failed.");
+        }
+    }
+    LOG("%d Strings Patched.", count);
+
+    for (const auto& kv : p) {
+        LOG("String old offset: 0x%08X", kv.first);
+        LOG("String new: %s", std::get<2>(strs_map_).find(kv.first)->second.c_str());
+        LOG("String Patched %d times.", kv.second.size());
+    }
+DEFINE_APPLY_END(true)
+DEFINE_PIECE_END(Strpatch2)
 
 ADD_PIECES_BEGIN()
 ADD_PIECE(Hwnd)
@@ -128,6 +220,8 @@ ADD_PIECE(Dcdat)
 ADD_PIECE(Pdirs)
 ADD_PIECE(Textse)
 ADD_PIECE(Dlgse)
+ADD_PIECE(Strpatch)
+ADD_PIECE(Strpatch2)
 ADD_PIECES_END()
 
 DEFINE_GROUP_END()

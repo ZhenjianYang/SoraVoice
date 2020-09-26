@@ -9,6 +9,7 @@
 #include "utils/mem.h"
 #include "utils/mem_scanner.h"
 #include "utils/section_info.h"
+#include "utils/str.h"
 
 namespace startup {
 class ScanGroupCommon : public ScanGroup {
@@ -83,6 +84,60 @@ public:
         code_bak_ += length;
         code_bak_remian -= length;
         return ret;
+    }
+
+    template<typename String>
+    bool DirectPatchString(byte* p, const String& s, bool null_termanate = false) {
+        using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
+        
+        Char* pc = reinterpret_cast<Char*>(p);
+        std::size_t len;
+        if constexpr (std::is_pointer_v<String>) {
+            len = std::char_traits<Char>::length(s);
+        } else if (std::is_array_v<String>) {
+            len = std::size(s) - 1;
+        } else {
+            len = std::size(s);
+        }
+        std::size_t chars_written = null_termanate ? (len + 1) * sizeof(Char) : len * sizeof(Char);
+
+        utils::MemProtection proction_bak, proction_bak2;
+        if (utils::ChangeMemProtection(p, chars_written, utils::kMemProtectionRWE, &proction_bak)) {
+            if constexpr (std::is_pointer_v<String>) {
+                std::copy_n(s, len, pc);
+            } else {
+                std::copy_n(std::begin(s), len, pc);
+            }
+            if (null_termanate) {
+                pc[len] = 0;
+            }
+            utils::ChangeMemProtection(p, chars_written, proction_bak, &proction_bak2);
+            return true;
+        }
+        return false;
+    }
+
+    template<typename String>
+    bool RefPatchString(byte* p, const String& s) {
+        using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
+        std::size_t len;
+        if constexpr (std::is_pointer_v<String>) {
+            len = std::char_traits<Char>::length(s);
+        } else if (std::is_array_v<String>) {
+            len = std::size(s) - 1;
+        } else {
+            len = std::size(s);
+        }
+        strings_.push_back(std::make_unique<char[]>((len + 1) * sizeof(Char)));
+        char* str_new = strings_.back().get();
+
+        utils::MemProtection proction_bak, proction_bak2;
+        if (utils::ChangeMemProtection(p, sizeof(str_new), utils::kMemProtectionRWE, &proction_bak)) {
+            *(char**)p = str_new;
+            utils::ChangeMemProtection(p, sizeof(str_new), proction_bak, &proction_bak2);
+            return true;
+        }
+        return false;
     }
 
     bool BackupCode(byte* p, std::size_t len, void* jmp_dst, void** next) {
@@ -195,14 +250,11 @@ public:\
             const std::string Name;
 
 #define DEFINE_ADDITIONAL_MATCH_BEGIN(b, e) \
-            bool AdditionalMatch(byte* b, byte* e) const override { \
-                LOG("%s:%s matched at 0x%08X, start addtional check...", \
-                    Group->Name().c_str(), Name.c_str(), (unsigned)(b)); 
+            bool AdditionalMatch(byte* b, byte* e) const override {
 #define DEFINE_ADDITIONAL_MATCH_END(rst) \
             if (rst) { \
-                LOG("%s:%s addtional check passed!", Group->Name().c_str(), Name.c_str()); \
-            } else { \
-                LOG("%s:%s addtional check failed!", Group->Name().c_str(), Name.c_str()); \
+                LOG("%s:%s at 0x%08X addtional check passed!",\
+                    Group->Name().c_str(), Name.c_str(), (unsigned)(b)); \
             } return (rst); }
 
 #define DEFINE_CHECK_RESULTS_BEGIN() \
@@ -260,8 +312,6 @@ std::unique_ptr<ScanGroup> GetScanGroupTits(const std::vector<utils::SectionInfo
 #define REF_STRING(SectionCode, p, SectionData, STR) \
     Group->InSection(SectionCode, (byte*)(p), sizeof(byte*)) && \
     Group->InSection(SectionData, *(byte**)(p), sizeof(STR)) && \
-    std::equal((std::remove_reference_t<decltype(STR[0])>*)(*(byte**)(p)), \
-               (std::remove_reference_t<decltype(STR[0])>*)(*(byte**)(p) + sizeof(STR)), \
-               STR)
+    utils::StringMatch(*(byte**)(p), STR, true)
 
 #endif  // __STARTUP_SCAN_GROUP_COMMON_H__
