@@ -192,5 +192,14 @@
     <ClCompile Include="..\..\src\ed_voice\core\load_config.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_za.cpp">
+      <Filter>src\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_za.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\bridge\bridge_scnp.cpp">
+      <Filter>src\bridge</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

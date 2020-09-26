@@ -56,7 +56,17 @@ public:
     ScanGroupCommon(const char* name, const std::vector<utils::SectionInfo>& section_info)
         : name_{ name } {
         for (const auto& sec : section_info) {
-            secs_[sec.name] = sec;
+            if (secs_.count(sec.name)) {
+                std::string nname = sec.name;
+                char ch = '2';
+                while (secs_.count(nname + ch)) {
+                    ch++;
+                }
+                secs_[nname + ch] = sec;
+            } else {
+                secs_[sec.name] = sec;
+            }
+            
         }
 
         strings_.push_back(std::make_unique<char[]>(kCodeBackupBlockSize));

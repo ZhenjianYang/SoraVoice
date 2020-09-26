@@ -50,8 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\bridge\bridge_scnp.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\load_config.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
@@ -62,6 +64,7 @@
     <ClCompile Include="..\..\src\ed_voice\player\sound_buffer.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\string_patch.cpp" />
     <ClCompile Include="..\..\src\ed_voice\utils\create_dsound.cpp" />

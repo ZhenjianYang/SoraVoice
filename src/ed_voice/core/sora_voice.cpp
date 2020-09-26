@@ -19,10 +19,11 @@ enum {
 constexpr int kNumMapping = sizeof(kVoiceIdMapping) / sizeof(*kVoiceIdMapping);
 constexpr int kBgmVoiceIdLen = 6;
 static_assert(kBgmVoiceIdLen > kMaxVoiceIdLenNeedMapping, "kBgmVoiceIdLen <= kMaxVoiceIdLenNeedMapping !!!");
-constexpr char kVoiceDir[] = "voice/ogg/";
-constexpr char kVoicePrefixED6[] = "ch";
-constexpr char kVoicePrefixBGM[] = "ed";
-constexpr char kVoicePrefixZA[] = "v";
+constexpr int kOriVoiceIdLen = 4;
+constexpr char kVoicePrefixOri[] = "data/se/ed7v";
+constexpr char kVoicePrefixED6[] = "voice/ogg/ch";
+constexpr char kVoicePrefixBGM[] = "voice/ogg/ed";
+constexpr char kVoicePrefixZA[] = "voice/ogg/v";
 constexpr char kAttrOgg[] = ".ogg";
 constexpr char kAttrWav[] = ".wav";
 constexpr char kConfigFilename[] = "voice/ed_voice.ini";
@@ -68,6 +69,8 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
                              std::vector<std::unique_ptr<char[]>>&& movable_strs)
     : title_{ title }, built_date_{ built_date }, movable_strs_{ std::move(movable_strs) },
       sigs_{ &global.sigs }, config_{ &global.config }, info_{ &global.info } {
+    LOG("Game = %d", info_->game);
+
     if (!global.addrs.pHwnd || !*global.addrs.pHwnd) {
         LOG("No hwnd.");
         return;
@@ -124,6 +127,19 @@ int SoraVoiceImpl::Play(byte* b) {
         num_vid *= 10;
         num_vid += *e - '0';
     }
+    if (*e == 'V' && e - b == kOriVoiceIdLen && info_->game == GameAo) {
+        if (config_->disable_ao_ori_voice) {
+            LOG("Disable ori voice: %s", std::string(b, e).c_str());
+            for (byte* t = b; t < e; t++) {
+                *t = '0';
+            }
+        } else {
+            LOG("Ori voice: %s, stop current playing", std::string(b, e).c_str());
+            player_->StopAll();
+            return kError;
+        }
+    }
+
     if (*e != 'v' || b == e) {
         return kError;
     }
@@ -131,7 +147,8 @@ int SoraVoiceImpl::Play(byte* b) {
     std::string vid(b, e);
     LOG("input Voice ID is '%s'", vid.c_str());
     LOG("The max length of voice id need mapping is %d", kMaxVoiceIdLenNeedMapping);
-    if (e - b <= kMaxVoiceIdLenNeedMapping) {
+    if (info_->game != GameAo && info_->game != GameZero
+        && e - b <= kMaxVoiceIdLenNeedMapping) {
         num_vid += kVoiceIdAdjustAdder[e - b];
         LOG("Adjusted Voice ID is %d", num_vid);
         LOG("Number of mapping is %d", kNumMapping);
@@ -147,9 +164,11 @@ int SoraVoiceImpl::Play(byte* b) {
         }
     }
 
-    const char* prefix = vid.length() == kBgmVoiceIdLen ? kVoicePrefixBGM
-                                                        : kVoicePrefixED6;
-    std::string ogg_file_name = std::string(kVoiceDir) + prefix + vid + kAttrOgg;
+    const char* prefix =
+            (info_->game == GameAo || info_->game == GameZero) ? kVoicePrefixZA
+                              : vid.length() == kBgmVoiceIdLen ? kVoicePrefixBGM
+                                                               : kVoicePrefixED6;
+    std::string ogg_file_name = prefix + vid + kAttrOgg;
 
     player_->StopAll();
     {

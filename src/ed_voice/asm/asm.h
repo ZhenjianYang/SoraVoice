@@ -7,6 +7,13 @@ void ldat();
 void dcdat();
 void textse();
 void dlgse();
-}  // namespace asm
+}  // namespace asm_tits
+
+namespace asm_za {
+    void text();
+    void scnp();
+    void textse();
+    void dlgse();
+}  // namespace asm_za
 
 #endif // __ASM_ASM_H__

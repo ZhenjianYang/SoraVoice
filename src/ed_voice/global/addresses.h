@@ -15,6 +15,8 @@ typedef struct Addresses {
     void* textse_jmp;
     void* dlgse_next;
     void* dlgse_jmp;
+
+    void* scnp_jmp;
 } Addresses;
 
 #endif  // __GLOBAL_ADDRESSES_H__
