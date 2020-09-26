@@ -5,6 +5,7 @@
 #include <unordered_set>
 
 #include "core/load_config.h"
+#include "core/rnd_voice.h"
 #include "core/voice_id_mapping.h"
 #include "global/global.h"
 #include "player/player.h"
@@ -111,6 +112,11 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
 
     memset(sigs_, 0, sizeof(*sigs_));
     is_valid_ = true;
+
+    if (info_->game == GameAo) {
+        LOG("Play random voice for ao...");
+        player_->Play(core::GetRandomVoice());
+    }
 }
 int SoraVoiceImpl::Play(byte* b) {
     if (*b != '#') {

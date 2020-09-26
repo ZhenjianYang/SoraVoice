@@ -19,6 +19,7 @@
     <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
     <ClInclude Include="..\..\src\ed_voice\bridge\bridge.h" />
     <ClInclude Include="..\..\src\ed_voice\core\load_config.h" />
+    <ClInclude Include="..\..\src\ed_voice\core\rnd_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\core\sora_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\core\voice_id_mapping.h" />
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_scnp.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\load_config.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\core\rnd_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
