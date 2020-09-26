@@ -5,28 +5,23 @@
 
 namespace {
 static_assert(sizeof(void*) == 4, "32 bits only!");
-
-enum StartUpErrorCode {
-    kSucceeded = 0,
-    kFailed = -1
-};
 }  // namesapce
 
 int __cdecl StartUp() {
-    static bool succeeded = false;
+    static int succeeded = 0;
 
     LOG("Start Up...");
     if (succeeded) {
         LOG("Already Started.");
-        return kSucceeded;
+        return 1;
     }
 
     succeeded = startup::StartUp();
     if (!succeeded) {
         LOG("Start Up Failed.");
-        return kFailed;
+        return succeeded;
     }
 
     LOG("Start Up Succeeded.");
-    return kSucceeded;
+    return succeeded;
 }

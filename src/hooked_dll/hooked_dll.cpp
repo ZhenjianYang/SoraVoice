@@ -63,7 +63,7 @@ HRESULT WINAPI HOOKED_API PARAMS_DCL {
         HMODULE dll = LoadLibraryA(STR_ED_VOICE_DLL);
         if (dll) {
             EdVoiceAPIType* start_up = (EdVoiceAPIType*)GetProcAddress(dll, STR_STARTUP);
-            if (!start_up || start_up()) {
+            if (!start_up || !start_up()) {
                 FreeLibrary(dll);
             }
         }
