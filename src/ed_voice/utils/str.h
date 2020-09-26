@@ -26,6 +26,25 @@ inline static std::vector<std::string> StrSplit(std::string_view s, char delimit
     }
     return splits;
 }
+
+template<typename String>
+inline static bool StringMatch(const void* p, const String& s, bool null_termanate = false) {
+    using Char = typename std::remove_reference_t<decltype(s[0])>;
+    Char* pc = reinterpret_cast<Char*>(p);
+    if constexpr (std::is_pointer_v<String>) {
+        std::size_t len = std::char_traits<Char>::length(s);
+        return std::equal(pc, pc + len, s)
+               && (!null_termanate || *(pc + len) == 0);
+    } else if (std::is_array_v<String>) {
+        std::size_t len = std::size(s) - 1;
+        return std::equal(pc, pc + len, std::begin(s))
+               && (!null_termanate || *(pc + len) == 0);
+    } else {
+        std::size_t len = std::size(s);
+        return std::equal(pc, pc + len, std::begin(s))
+               && (!null_termanate || *(pc + len) == 0);
+    }
+}
 }  // namespace utils
 
 #endif  // __UTILS_STR_H__
