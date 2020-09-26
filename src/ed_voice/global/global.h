@@ -2,6 +2,7 @@
 #define __GLOBAL_GLOBAL_H__
 
 #include "global/addresses.h"
+#include "global/config.h"
 #include "global/info.h"
 #include "global/signals.h"
 
@@ -9,6 +10,7 @@ struct SoraVoice;
 
 typedef struct Global {
     Info info;
+    Config config;
     Signals sigs;
     Addresses addrs;
     struct SoraVoice* sv;

@@ -121,6 +121,12 @@
     <ClInclude Include="..\..\src\ed_voice\global\info.h">
       <Filter>src\global</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\global\config.h">
+      <Filter>src\global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\core\load_config.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -182,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\startup\string_patch.cpp">
       <Filter>src\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\core\load_config.cpp">
+      <Filter>src\core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

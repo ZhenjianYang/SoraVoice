@@ -4,6 +4,7 @@
 #include <mutex>
 #include <unordered_set>
 
+#include "core/load_config.h"
 #include "core/voice_id_mapping.h"
 #include "global/global.h"
 #include "player/player.h"
@@ -24,6 +25,7 @@ constexpr char kVoicePrefixBGM[] = "ed";
 constexpr char kVoicePrefixZA[] = "v";
 constexpr char kAttrOgg[] = ".ogg";
 constexpr char kAttrWav[] = ".wav";
+constexpr char kConfigFilename[] = "voice/ed_voice.ini";
 }
 
 namespace {
@@ -41,6 +43,8 @@ private:
     const std::string built_date_;
     const std::vector<std::unique_ptr<char[]>> movable_strs_;
     Signals* const sigs_;
+    Config* const config_;
+    const Info* const info_;
     std::unique_ptr<Player> player_;
 
     std::unordered_set<Player::PlayId> playing_;
@@ -63,7 +67,7 @@ private:
 SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_date,
                              std::vector<std::unique_ptr<char[]>>&& movable_strs)
     : title_{ title }, built_date_{ built_date }, movable_strs_{ std::move(movable_strs) },
-      sigs_{ &global.sigs } {
+      sigs_{ &global.sigs }, config_{ &global.config }, info_{ &global.info } {
     if (!global.addrs.pHwnd || !*global.addrs.pHwnd) {
         LOG("No hwnd.");
         return;
@@ -84,6 +88,23 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
         return;
     }
     LOG("Player Create Succeeded.");
+
+    core::LoadConfig(config_, kConfigFilename);
+    if (config_->volumn > player::kVolumeMax) {
+        config_->volumn = player::kVolumeMax;
+    }
+    if (config_->volumn < 0) {
+        config_->volumn = 0;
+    }
+    core::SaveConfig(config_, kConfigFilename, info_);
+    LOG("Config:\n"
+        "    Volumn = %d\n"
+        "    DisableTextSe = %d\n"
+        "    DisableDialogSe = %d\n"
+        "    DisableAoOriVoice = %d",
+        config_->volumn, config_->disable_text_se, config_->disable_ao_ori_voice,
+        config_->disable_ao_ori_voice);
+    player_->SetVolume(config_->volumn);
 
     memset(sigs_, 0, sizeof(*sigs_));
     is_valid_ = true;

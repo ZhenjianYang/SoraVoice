@@ -18,10 +18,12 @@
     <ClInclude Include="..\..\src\ed_voice\asm\asm.h" />
     <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
     <ClInclude Include="..\..\src\ed_voice\bridge\bridge.h" />
+    <ClInclude Include="..\..\src\ed_voice\core\load_config.h" />
     <ClInclude Include="..\..\src\ed_voice\core\sora_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\core\voice_id_mapping.h" />
     <ClInclude Include="..\..\src\ed_voice\ed_voice.h" />
     <ClInclude Include="..\..\src\ed_voice\global\addresses.h" />
+    <ClInclude Include="..\..\src\ed_voice\global\config.h" />
     <ClInclude Include="..\..\src\ed_voice\global\global.h" />
     <ClInclude Include="..\..\src\ed_voice\global\info.h" />
     <ClInclude Include="..\..\src\ed_voice\global\signals.h" />
@@ -50,6 +52,7 @@
     <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\core\load_config.cpp" />
     <ClCompile Include="..\..\src\ed_voice\core\sora_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />

@@ -138,7 +138,7 @@ DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front();
     global.addrs.dlgse_jmp = utils::GetCallJmpDest(p + 10, 2);
-    bool rst = Group->BackupCode(p + 12, 6, asm_tits::dlgse, &global.addrs.dlgse_next);
+    bool rst = Group->BackupCode(p + 3, 7, asm_tits::dlgse, &global.addrs.dlgse_next);
     LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
     LOG("dlgse_next = 0x%08X", (unsigned)global.addrs.dlgse_next);
 DEFINE_APPLY_END(rst)
