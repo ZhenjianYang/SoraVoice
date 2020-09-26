@@ -144,13 +144,13 @@ DEFINE_APPLY_BEGIN()
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Dlgse)
 
-DEFINE_PIECE_BEGIN(Tits, Strpatch, ".rdata", PatternType::Bytes, "")
+DEFINE_PIECE_BEGIN(Tits, Strpatch, ".text", PatternType::Bytes, "68 ?? ?? ?? 00")
     const startup::PatchingStrings strs_map_ = startup::LoadPatchingStrings();
     mutable std::unordered_map<byte*, typename decltype(strs_map_.cbegin())> to_patch_;
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     bool rst = false;
     for (auto it = strs_map_.cbegin(); it != strs_map_.cend(); ++it) {
-        if (int(it->first.length()) + 1 <= e - b && utils::StringMatch(b, it->first, true)) {
+        if (REF_STRING(".text", b + 1, ".rdata", it->first)) {
             to_patch_[b] = it;
             rst = true;
         }
@@ -165,7 +165,7 @@ DEFINE_APPLY_BEGIN()
         LOG("Patch at: 0x%08X", (unsigned)kv.first);
         LOG("String old: %s", kv.second->first.c_str());
         LOG("String new: %s", kv.second->second.c_str());
-        if (Group->DirectPatchString(kv.first, kv.second->second, true)) {
+        if (Group->RefPatchString(kv.first + 1, kv.second->second)) {
             LOG("Patch Succeeded.");
             count++;
         } else {
