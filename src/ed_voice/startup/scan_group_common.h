@@ -246,7 +246,7 @@ public:\
                 : BasicPiece(Partten_, ParttenType_), \
                   Group { group }, Name { #PieceName_ } {  } \
         private: \
-            ScanGroupTits* const Group; \
+            ScanGroup##GroupName_* const Group; \
             const std::string Name;
 
 #define DEFINE_ADDITIONAL_MATCH_BEGIN(b, e) \
@@ -301,8 +301,9 @@ public:\
 #define DEFINE_GROUP_END() };
 
 #define DEFINE_STATIC_GET_GROUP(GroupName_) \
-std::unique_ptr<ScanGroup> GetScanGroupTits(const std::vector<utils::SectionInfo>& section_info) { \
-    auto group = std::make_unique<ScanGroupTits>(section_info); \
+std::unique_ptr<ScanGroup> \
+GetScanGroup##GroupName_(const std::vector<utils::SectionInfo>& section_info) { \
+    auto group = std::make_unique<ScanGroup##GroupName_>(section_info); \
     return group; \
 }
 

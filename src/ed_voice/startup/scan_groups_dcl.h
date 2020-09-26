@@ -15,8 +15,9 @@
 
 namespace startup {
 DECLARE_SCAN_GROUP(Tits);
+DECLARE_SCAN_GROUP(Za);
 }  // namespace startup
 
-#define GET_SCAN_GROUP_FUN_LIST { GET_SCAN_GROUP_FUN(Tits) }
+#define GET_SCAN_GROUP_FUN_LIST { GET_SCAN_GROUP_FUN(Tits), GET_SCAN_GROUP_FUN(Za) }
 
 #endif  // __STARTUP_SCAN_GROUPS_DCLS_H__
