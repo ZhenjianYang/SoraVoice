@@ -78,13 +78,13 @@ public:
         return volume_;
     }
 
-    PlayId Play(std::string_view file_name, StopCallback callback = nullptr) override {
+    PlayId Play(std::string_view file_name, StopCallback callback = nullptr, std::size_t delay_ms = 0) override {
         PlayId new_id = current_playid_++;
         if (new_id == kInvalidPlayId) {
             new_id = current_playid_++;
         }
         std::unique_ptr<NewData> new_data = std::make_unique<NewData>(
-            new_id, std::string(file_name), callback);
+            new_id, std::string(file_name), callback, delay_ms);
         {
             std::scoped_lock lock(mtx_pd_new_);
             pd_new_[new_data->play_id] = std::move(new_data);
@@ -122,9 +122,10 @@ private:
         PlayId play_id = kInvalidPlayId;
         std::string file_name;
         StopCallback callback;
+        std::size_t delay_ms;
 
-        NewData(PlayId play_id, const std::string& file_name, StopCallback callback)
-            : play_id{ play_id }, file_name{ file_name }, callback{ callback }{
+        NewData(PlayId play_id, const std::string& file_name, StopCallback callback, std::size_t delay_ms)
+            : play_id{ play_id }, file_name{ file_name }, callback{ callback }, delay_ms { delay_ms }{
         }
     };
     struct PlayData {
@@ -134,10 +135,12 @@ private:
         std::unique_ptr<Decoder> decoder;
         std::unique_ptr<SoundBuffer> buffer;
 
+        std::size_t pre_samples = 0;
         std::size_t buffer_index = 0;
         std::size_t end_pos = kNotEnd;
-        bool stop_soon = false;
         bool playing = false;
+        bool stop_soon = false;
+        bool read_all = false;
 
         PlayData(PlayId play_id, StopCallback callback)
             : play_id{ play_id }, callback{ callback }{
@@ -228,6 +231,8 @@ void PlayerImpl::EventWorkerNewPlay() {
             new_play->decoder->GetWaveFormat().block_align, new_play->decoder->GetWaveFormat().bits_per_sample,
             new_play->decoder->SamplesTotal(),
             static_cast<double>(new_play->decoder->SamplesTotal()) / new_play->decoder->GetWaveFormat().samples_per_sec);
+        new_play->pre_samples = static_cast<unsigned long long>(pd->delay_ms)
+                * new_play->decoder->GetWaveFormat().samples_per_sec / 1000U;
 
         new_play->buffer = SoundBuffer::CreateSoundBuffer(pDS8_, new_play->decoder->GetWaveFormat());
         if (!new_play->buffer) {
@@ -243,8 +248,9 @@ void PlayerImpl::EventWorkerNewPlay() {
             new_play->buffer->GetBuffersNum(), new_play->buffer->GetSamplesSingleBuffer(),
             new_play->buffer->GetSamplesAllBuffers());
 
-        std::size_t end_pos = new_play->decoder->SamplesTotal() % new_play->buffer->GetSamplesAllBuffers();
-        std::vector<std::size_t> pos{ end_pos };
+        new_play->end_pos = (new_play->pre_samples + new_play->decoder->SamplesTotal())
+                % new_play->buffer->GetSamplesAllBuffers();
+        std::vector<std::size_t> pos{ new_play->end_pos };
         for (std::size_t i = 0; i < new_play->buffer->GetBuffersNum(); i++) {
             pos.push_back(i * new_play->buffer->GetSamplesSingleBuffer() + 2);
         }
@@ -289,7 +295,7 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                     to_erase.push_back(it);
                 }
             } else if (pos / buff_size == pd->buffer_index || !pd->playing) {
-                if (pd->end_pos != kNotEnd) {
+                if (pd->read_all) {
                     pd->stop_soon = true;
                 }
                 pd->buffer_index++;
@@ -302,9 +308,18 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                     callbacks.push_back(std::move(ended));
                     to_erase.push_back(it);
                 } else {
-                    auto read = pd->decoder->Read(write_buffer->Get(), buff_size);
+                    std::size_t read = 0;
+                    auto* buff = write_buffer->Get();
+                    if (pd->pre_samples) {
+                        std::size_t empty_samples = std::min(pd->pre_samples, buff_size);
+                        memset(buff, 0, empty_samples * pd->decoder->GetWaveFormat().block_align);
+                        buff += empty_samples * pd->decoder->GetWaveFormat().block_align;
+                        pd->pre_samples -= empty_samples;
+                        read += empty_samples;
+                    }
+                    read += pd->decoder->Read(buff, buff_size - read);
                     if (read < buff_size) {
-                        pd->end_pos = pd->decoder->SamplesTotal() % pd->buffer->GetSamplesAllBuffers();
+                        pd->read_all = true;
                     }
                     if (!pd->playing) {
                         pd->playing = true;
