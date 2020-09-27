@@ -107,7 +107,7 @@ DEFINE_APPLY_BEGIN()
     LOG("pdirs = 0x%08X", (unsigned)global.addrs.pdirs);
     bool rst = true;
 DEFINE_APPLY_END(rst)
-DEFINE_PIECE_END(Ldat)
+DEFINE_PIECE_END(Pdirs)
 
 DEFINE_PIECE_BEGIN(Tits, Textse, ".text", PatternType::Bytes,
                    "57 " "FF D2 " "80 3D ?? ?? ?? ?? 00 " "75 11")

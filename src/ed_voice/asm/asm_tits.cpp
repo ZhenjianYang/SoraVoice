@@ -40,9 +40,11 @@ __declspec(naked) void asm_tits::ldat() {
 
 __declspec(naked) void asm_tits::dcdat() {
     __asm {
-        push    ebx
         push    edi
+        push    ebx
+        push    0
         call    bridge::DecompressDat
+        add     esp, 12
         test    eax, eax
         je      short next
         ret
