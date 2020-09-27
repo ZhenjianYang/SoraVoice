@@ -3,7 +3,12 @@
 #include <fstream>
 #include <string>
 
+#include "utils/build_date.h"
+
 namespace {
+constexpr char kSoraVoice[] = "SoraVoice";
+constexpr char kUrl[] = "https://github.com/ZhenjianYang/SoraVoice";
+
 #define DEFINE_CONFIG(name, config_name, dft_value, comment) \
     constexpr char k##name[] = #config_name; \
     constexpr char k##name##Cmt[] = comment; \
@@ -22,11 +27,11 @@ namespace {
 #define SET_CONFIG(config, name, s, v) \
     if (k##name == s) { config->name = v; }
 
-DEFINE_CONFIG(volumn, Volumn, 100, "#Volume: 0 ~ 100");
-DEFINE_CONFIG(disable_text_se, DisableTextSe, 1, "#Disable dialog text SE.");
-DEFINE_CONFIG(disable_dialog_se, DisableDialogSe, 1, "#Disable dialog closing SE.");
+DEFINE_CONFIG(volumn, Volumn, 100, "# Volume: 0 ~ 100");
+DEFINE_CONFIG(disable_text_se, DisableTextSe, 1, "# (Voiced lines only) Disable dialog text beep SE.");
+DEFINE_CONFIG(disable_dialog_se, DisableDialogSe, 1, "# (Voiced lines only) Disable dialog closing SE.");
 DEFINE_CONFIG(disable_ao_ori_voice, DisableAoOriVoice, 1,
-              "#(Ao only)Disable origanal senario voice. (play evo voice only)");
+              "# (AO only) Disable origanal senario voice. (Play evo voice only)");
 
 static std::string Trim(const std::string& s) {
     if (s.empty()) {
@@ -89,6 +94,10 @@ bool core::SaveConfig(const Config* config, const char* filename, const Info* in
     if (!ofs) {
         return false;
     }
+
+    ofs << "# " << kSoraVoice << " " << kBuildDate << "\n";
+    ofs << "# " << kUrl << "\n" << "\n" << "\n";
+
 
     OUTPUT_CONFIG(ofs, config, volumn);
     OUTPUT_CONFIG(ofs, config, disable_text_se);
