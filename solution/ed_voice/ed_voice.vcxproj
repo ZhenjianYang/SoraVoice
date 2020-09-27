@@ -50,6 +50,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\str.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_sora.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
@@ -65,6 +66,7 @@
     <ClCompile Include="..\..\src\ed_voice\player\player.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\sound_buffer.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_sora.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />

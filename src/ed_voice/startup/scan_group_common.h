@@ -76,7 +76,7 @@ public:
 
     bool InSection(const char* sec_name, byte* begin, std::size_t length) const {
         if (!sec_name || *sec_name == '\0') {
-            return true;
+            return begin;
         }
         auto it = secs_.find(sec_name);
         if (it == secs_.end()) {
@@ -139,7 +139,13 @@ public:
             len = std::size(s);
         }
         strings_.push_back(std::make_unique<char[]>((len + 1) * sizeof(Char)));
-        char* str_new = strings_.back().get();
+        Char* str_new = (Char*)strings_.back().get();
+        if constexpr (std::is_pointer_v<String>) {
+            std::copy_n(s, len, str_new);
+        } else {
+            std::copy_n(std::begin(s), len, str_new);
+        }
+        str_new[len] = '\0';
 
         utils::MemProtection proction_bak, proction_bak2;
         if (utils::ChangeMemProtection(p, sizeof(str_new), utils::kMemProtectionRWE, &proction_bak)) {
@@ -309,6 +315,14 @@ public:\
         }
 #define ADD_PIECES_END() return true; }
 #define DEFINE_GROUP_END() };
+
+#define ADD_SECTION_ALIAS(Name1_, Name2_) { \
+    if (!secs_.count(Name1_) && secs_.count(Name2_)) { \
+        secs_[Name1_] = secs_[Name2_]; \
+    } else if (secs_.count(Name1_) && !secs_.count(Name2_)) {\
+        secs_[Name2_] = secs_[Name1_]; \
+    } \
+}
 
 #define DEFINE_STATIC_GET_GROUP(GroupName_) \
 std::unique_ptr<ScanGroup> \

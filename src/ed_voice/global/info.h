@@ -3,9 +3,7 @@
 
 enum Game {
     GameUnknown = 0,
-    GameSoraFC,
-    GameSoraSC,
-    GameSora3rd,
+    GameSora,
     GameTitsFC,
     GameTitsSC3rd,
     GameZero,
