@@ -20,6 +20,7 @@ enum {
 constexpr int kNumMapping = sizeof(kVoiceIdMapping) / sizeof(*kVoiceIdMapping);
 constexpr int kBgmVoiceIdLen = 6;
 static_assert(kBgmVoiceIdLen > kMaxVoiceIdLenNeedMapping, "kBgmVoiceIdLen <= kMaxVoiceIdLenNeedMapping !!!");
+constexpr int kBgmVoiceFilenameLen = 4;
 constexpr int kOriVoiceIdLen = 4;
 constexpr char kVoicePrefixOri[] = "data/se/ed7v";
 constexpr char kVoicePrefixED6[] = "voice/ogg/ch";
@@ -174,6 +175,12 @@ int SoraVoiceImpl::Play(byte* b) {
             (info_->game == GameAo || info_->game == GameZero) ? kVoicePrefixZA
                               : vid.length() == kBgmVoiceIdLen ? kVoicePrefixBGM
                                                                : kVoicePrefixED6;
+
+    if (info_->game != GameAo && info_->game != GameZero
+        && vid.length() == kBgmVoiceIdLen) {
+        vid = vid.substr(kBgmVoiceIdLen - kBgmVoiceFilenameLen);
+    }
+
     std::string ogg_file_name = prefix + vid + kAttrOgg;
 
     player_->StopAll();
@@ -186,7 +193,7 @@ int SoraVoiceImpl::Play(byte* b) {
                 playing_.erase(play_id);
                 if (playing_.empty()) {
                     sigs_->no_textse = 0;
-                    if (stop_type != Player::StopType::PlayEnd) {
+                    if (stop_type == Player::StopType::Error) {
                         sigs_->no_dlgse = 0;
                     }
                 }
