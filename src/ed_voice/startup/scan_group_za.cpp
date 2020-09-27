@@ -16,10 +16,10 @@ DEFINE_GROUP_BEGIN(Za)
 DEFINE_PIECE_BEGIN(Za, Hwnd, ".text", PatternType::Bytes,
                    "50 "
                    "8B 4D F4 "
-                   "8B 91 ?? ?? 00 00 "
+                   "8B 91 ?? ?? ?? 00 "
                    "52 "
-                   "B9 ?? ?? ?? 00 "
-                   "E8 ?? ?? ?? FF "
+                   "B9 ?? ?? ?? ?? "
+                   "E8 ?? ?? ?? ?? "
                    "6A 20")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     bool rst = Group->InSection(".data", *(byte**)(b + 12), 4);
@@ -98,7 +98,11 @@ DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* t = results.front() + 3;
-    global.info.game = *t == 0x0D ? GameZero : GameAo;
+    if (*t == 0x0D) {
+        global.info.game = GameZero;
+    } else {
+        global.info.game = GameAo;
+    }
     byte* p = results.front() + 14;
     bool rst = Group->RedirectWithCall(p, 5, asm_za::textse,
                                        nullptr, &global.addrs.textse_jmp);
@@ -132,6 +136,7 @@ DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Dlgse)
 
 ADD_PIECES_BEGIN()
+ADD_SECTION_ALIAS(".text", ".textbss")
 ADD_PIECE(Hwnd)
 ADD_PIECE(Text)
 ADD_PIECE(Scnp)
