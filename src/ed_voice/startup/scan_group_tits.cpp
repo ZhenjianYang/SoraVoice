@@ -59,34 +59,53 @@ DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Text)
 
 DEFINE_PIECE_BEGIN(Tits, Ldat, ".text", PatternType::Bytes,
-                   "81 EC 84 02 00 00")
+                   "68 ?? ?? ?? ??")
+    const utils::MemMatcher matcher_cn = utils::MemMatcher(
+        "E9 ?? ?? ?? ?? 90", PatternType::Bytes);
+    const utils::MemMatcher matcher_en = utils::MemMatcher(
+        "81 EC 84 02 00 00", PatternType::Bytes);
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    bool rst = REF_STRING(".text", b + 0x1A, ".rdata", L"ED6_DT%02x.DAT") && *(b + 0x19) == 0x68;
+    bool rst = (matcher_cn.Match(b - 0x19) || matcher_en.Match(b - 0x19))
+               && REF_STRING(".text", b + 1, ".rdata", L"ED6_DT%02x.DAT");
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
-    bool rst = Group->BackupCode(p, 6, asm_tits::ldat, &global.addrs.ldat_next);
+    byte* p = results.front() - 0x19;
+    bool rst = false;
+    if (*p == 0x81) {
+        rst = Group->BackupCode(p, 6, asm_tits::ldat, &global.addrs.ldat_next);
+    } else {
+        rst = Group->RedirectWithJmp(p, 5, asm_tits::ldat, nullptr, &global.addrs.ldat_next);
+    }
     LOG("Apply at 0x%08X", unsigned(p));
     LOG("ldat_next = 0x%08X", (unsigned)global.addrs.ldat_next);
 DEFINE_APPLY_END(rst)
 DEFINE_PIECE_END(Ldat)
 
 DEFINE_PIECE_BEGIN(Tits, Dcdat, ".text", PatternType::Bytes,
-                   "83 EC 18 8B 03")
+                   "89 44 24 04 8B 07 56")
+    const utils::MemMatcher matcher_cn = utils::MemMatcher(
+        "E9 ?? ?? ?? ??", PatternType::Bytes);
+    const utils::MemMatcher matcher_en = utils::MemMatcher(
+        "83 EC 18 8B 03", PatternType::Bytes);
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    bool rst = true;
+    bool rst = matcher_cn.Match(b - 5) || matcher_en.Match(b - 5);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
-    bool rst = Group->BackupCode(p, 5, asm_tits::dcdat, &global.addrs.dcdat_next);
+    byte* p = results.front() - 5;
+    bool rst = false;
+    if (*p == 0x83) {
+        rst = Group->BackupCode(p, 5, asm_tits::dcdat, &global.addrs.dcdat_next);
+    } else {
+        rst = Group->RedirectWithJmp(p, 5, asm_tits::dcdat, nullptr, &global.addrs.dcdat_next);
+    }
     LOG("Apply at 0x%08X", unsigned(p));
     LOG("dcdat_next = 0x%08X", (unsigned)global.addrs.dcdat_next);
 DEFINE_APPLY_END(rst)
