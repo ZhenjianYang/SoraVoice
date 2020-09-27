@@ -29,6 +29,7 @@ constexpr char kVoicePrefixZA[] = "voice/ogg/v";
 constexpr char kAttrOgg[] = ".ogg";
 constexpr char kAttrWav[] = ".wav";
 constexpr char kConfigFilename[] = "voice/ed_voice.ini";
+constexpr std::size_t kAoRndVoiceDelayMs = 1000;
 }
 
 namespace {
@@ -116,7 +117,7 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
 
     if (info_->game == GameAo) {
         LOG("Play random voice for ao...");
-        player_->Play(core::GetRandomVoice());
+        player_->Play(core::GetRandomVoice(), nullptr, kAoRndVoiceDelayMs);
     }
 }
 int SoraVoiceImpl::Play(byte* b) {
