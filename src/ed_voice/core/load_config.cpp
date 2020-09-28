@@ -27,11 +27,11 @@ constexpr char kUrl[] = "https://github.com/ZhenjianYang/SoraVoice";
 #define SET_CONFIG(config, name, s, v) \
     if (k##name == s) { config->name = v; }
 
-DEFINE_CONFIG(volumn, Volumn, 100, "# Volume: 0 ~ 100");
+DEFINE_CONFIG(volume, Volume, 100, "# Volume: 0 ~ 100");
 DEFINE_CONFIG(disable_text_se, DisableTextSe, 1, "# (Voiced lines only) Disable dialog text beep SE.");
 DEFINE_CONFIG(disable_dialog_se, DisableDialogSe, 1, "# (Voiced lines only) Disable dialog closing SE.");
 DEFINE_CONFIG(disable_ao_ori_voice, DisableAoOriVoice, 1,
-              "# (AO only) Disable origanal senario voice. (Play evo voice only)");
+              "# (AO only) Disable original scenario voice. (Play evo voice only)");
 
 static std::string Trim(const std::string& s) {
     if (s.empty()) {
@@ -61,7 +61,7 @@ static bool GetNameAndValue(const std::string& s, std::string* name, int* value)
 }  // namespace
 
 bool core::LoadConfig(Config* config, const char* filename) {
-    SET_TO_DEFAULT(config, volumn);
+    SET_TO_DEFAULT(config, volume);
     SET_TO_DEFAULT(config, disable_text_se);
     SET_TO_DEFAULT(config, disable_dialog_se);
     SET_TO_DEFAULT(config, disable_ao_ori_voice);
@@ -80,7 +80,7 @@ bool core::LoadConfig(Config* config, const char* filename) {
         if (!GetNameAndValue(s, &name, &value)) {
             continue;
         }
-        SET_CONFIG(config, volumn, name, value);
+        SET_CONFIG(config, volume, name, value);
         SET_CONFIG(config, disable_text_se, name, value);
         SET_CONFIG(config, disable_dialog_se, name, value);
         SET_CONFIG(config, disable_ao_ori_voice, name, value);
@@ -99,7 +99,7 @@ bool core::SaveConfig(const Config* config, const char* filename, const Info* in
     ofs << "# " << kUrl << "\n" << "\n" << "\n";
 
 
-    OUTPUT_CONFIG(ofs, config, volumn);
+    OUTPUT_CONFIG(ofs, config, volume);
     OUTPUT_CONFIG(ofs, config, disable_text_se);
     OUTPUT_CONFIG(ofs, config, disable_dialog_se);
     if (info->game == GameAo) {
