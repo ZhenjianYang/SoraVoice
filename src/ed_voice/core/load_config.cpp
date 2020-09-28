@@ -6,7 +6,7 @@
 #include "utils/build_date.h"
 
 namespace {
-constexpr char kSoraVoice[] = "SoraVoice";
+constexpr char kSoraVoice[] = "SoraVoice (Lite)";
 constexpr char kUrl[] = "https://github.com/ZhenjianYang/SoraVoice";
 
 #define DEFINE_CONFIG(name, config_name, dft_value, comment) \
