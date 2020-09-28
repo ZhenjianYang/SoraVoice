@@ -44,10 +44,10 @@ int main(int argc, char* argv[]) {
         }
         else {
             if (!f.empty() && f[0] == 'v') {
-                int volumn;
-                if (std::sscanf(f.c_str() + 1, "%d", &volumn)
-                    && volumn >= 0 && volumn <= 100) {
-                    player->SetVolume(volumn);
+                int volume;
+                if (std::sscanf(f.c_str() + 1, "%d", &volume)
+                    && volume >= 0 && volume <= 100) {
+                    player->SetVolume(volume);
                     continue;
                 }
             }

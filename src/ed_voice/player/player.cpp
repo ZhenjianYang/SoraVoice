@@ -22,7 +22,7 @@ constexpr std::size_t kEventIndexNewPlay = 0;
 constexpr std::size_t kEventIndexReadOrEnd = 1;
 //constexpr std::size_t kEventIndexStopAll = 2;
 constexpr std::size_t kEventIndexCallback = 3;
-constexpr std::size_t kEventIndexSetVolumn = 4;
+constexpr std::size_t kEventIndexSetVolume = 4;
 constexpr std::size_t kEventIndexExit = 5;
 constexpr std::size_t kEventsNum = 6;
 constexpr std::size_t kNotEnd = ~0U;
@@ -69,12 +69,12 @@ public:
     }
 
     void SetVolume(int volume = kVolumeMax) override {
-        std::scoped_lock lock(mtx_volumn_);
+        std::scoped_lock lock(mtx_volume_);
         volume_ = volume;
-        events_->Set(kEventIndexSetVolumn);
+        events_->Set(kEventIndexSetVolume);
     }
     int GetVolume() const override {
-        std::scoped_lock lock(mtx_volumn_);
+        std::scoped_lock lock(mtx_volume_);
         return volume_;
     }
 
@@ -163,7 +163,7 @@ private:
     mutable std::mutex mtx_pd_callback_;
 
     int volume_ = kVolumeMax;
-    mutable std::mutex mtx_volumn_;
+    mutable std::mutex mtx_volume_;
 
     void* const pDS8_;
     std::unique_ptr<Events> events_;
@@ -174,7 +174,7 @@ private:
     void EventWorkerReadOrEnd();
     void EventWorkerStopAll();
     void EventWorkerCallback();
-    void EventWorkerSetVolumn();
+    void EventWorkerSetVolume();
 };  //PlayerImpl
 
 void PlayerImpl::EventWorker() {
@@ -192,8 +192,8 @@ void PlayerImpl::EventWorker() {
         case kEventIndexCallback:
             EventWorkerCallback();
             break;
-        case kEventIndexSetVolumn:
-            EventWorkerSetVolumn();
+        case kEventIndexSetVolume:
+            EventWorkerSetVolume();
             break;
         case kEventIndexExit:
             return;
@@ -257,7 +257,7 @@ void PlayerImpl::EventWorkerNewPlay() {
         new_play->buffer->AddPositionsEvent(events_->GetRawEvent(kEventIndexReadOrEnd), pos);
         new_play->buffer_index = new_play->buffer->GetBuffersNum() - 1;
         {
-            std::scoped_lock lock_volume(mtx_volumn_);
+            std::scoped_lock lock_volume(mtx_volume_);
             new_play->buffer->SetVolume(volume_);
         }
         plays.push_back(std::move(new_play));
@@ -379,8 +379,8 @@ void PlayerImpl::EventWorkerCallback() {
     }
     pd_callback_.clear();
 }
-void PlayerImpl::EventWorkerSetVolumn() {
-    std::scoped_lock lock(mtx_volumn_, mtx_pd_playing_);;
+void PlayerImpl::EventWorkerSetVolume() {
+    std::scoped_lock lock(mtx_volume_, mtx_pd_playing_);;
     for (const auto& kv : pd_playing_) {
         const auto& pd = kv.second;
         pd->buffer->SetVolume(volume_);
