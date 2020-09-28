@@ -96,21 +96,21 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
     LOG("Player Create Succeeded.");
 
     core::LoadConfig(config_, kConfigFilename);
-    if (config_->volumn > player::kVolumeMax) {
-        config_->volumn = player::kVolumeMax;
+    if (config_->volume > player::kVolumeMax) {
+        config_->volume = player::kVolumeMax;
     }
-    if (config_->volumn < 0) {
-        config_->volumn = 0;
+    if (config_->volume < 0) {
+        config_->volume = 0;
     }
     core::SaveConfig(config_, kConfigFilename, info_);
     LOG("Config:\n"
-        "    Volumn = %d\n"
+        "    Volume = %d\n"
         "    DisableTextSe = %d\n"
         "    DisableDialogSe = %d\n"
         "    DisableAoOriVoice = %d",
-        config_->volumn, config_->disable_text_se, config_->disable_ao_ori_voice,
+        config_->volume, config_->disable_text_se, config_->disable_ao_ori_voice,
         config_->disable_ao_ori_voice);
-    player_->SetVolume(config_->volumn);
+    player_->SetVolume(config_->volume);
 
     memset(sigs_, 0, sizeof(*sigs_));
     is_valid_ = true;
