@@ -23,10 +23,10 @@ this series with latest updates**.
 
 Things you need:
 
-- The Game
-- SoraVoice (Lite)
-- Voice Scripts
-- Voice files
+- [The Game](#the-game)
+- [SoraVoice (Lite)](#soravoice-lite-1)
+- [Voice Scripts](#voice-files)
+- [Voice files](#voice-files)
 
 ### The Game
 
@@ -175,10 +175,10 @@ PC游戏《空·零·碧之轨迹》系列进化版剧情语音补丁。
 
 需要的东西:
 
-- 游戏
-- 语音补丁（本项目）
-- 语音脚本
-- 语音文件
+- [游戏](#游戏)
+- [语音补丁（本项目）](#语音补丁本项目)
+- [语音脚本](#语音脚本)
+- [语音文件](#语音文件)
 
 ### 游戏
 
