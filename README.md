@@ -1,6 +1,6 @@
 # SoraVoice (Lite)
 
-This project's objective is to bring voice acting to the PC versions of *Sora/Zero/Ao no Kiseki*from the
+This project's objective is to bring voice acting to the PC versions of *Sora/Zero/Ao no Kiseki* from the
 *Evolution* version of these games.
 
 All information about this project can be found at [SoraVoice (Lite)](https://github.com/ZhenjianYang/SoraVoice).
