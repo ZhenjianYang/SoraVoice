@@ -119,6 +119,9 @@ DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
                && REF_STRING(".data", *(byte**)(b + 6) + 7 * sizeof(byte*), "", "CH00000 ._CH")
                && REF_STRING(".data", *(byte**)(b + 6) + 9 * sizeof(byte*), "", "CH10000 ._CH");
 DEFINE_ADDITIONAL_MATCH_END(rst)
+DEFINE_CHECK_RESULTS_BEGIN()
+    bool rst = !GetResults().empty();
+DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
     byte* p = results.front();
