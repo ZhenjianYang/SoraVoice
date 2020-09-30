@@ -32,6 +32,7 @@ DEFINE_CONFIG(disable_text_se, DisableTextSe, 1, "# (Voiced lines only) Disable 
 DEFINE_CONFIG(disable_dialog_se, DisableDialogSe, 1, "# (Voiced lines only) Disable dialog closing SE.");
 DEFINE_CONFIG(disable_ao_ori_voice, DisableAoOriVoice, 1,
               "# (AO only) Disable original scenario voice. (Play evo voice only)");
+DEFINE_CONFIG(show_info, ShwoInfo, 1, "# Show information of SoraVoice (Lite) in the title bar.");
 
 static std::string Trim(const std::string& s) {
     if (s.empty()) {
@@ -65,6 +66,7 @@ bool core::LoadConfig(Config* config, const char* filename) {
     SET_TO_DEFAULT(config, disable_text_se);
     SET_TO_DEFAULT(config, disable_dialog_se);
     SET_TO_DEFAULT(config, disable_ao_ori_voice);
+    SET_TO_DEFAULT(config, show_info);
 
     std::ifstream ifs(filename, std::ios::in);
     if (!ifs) {
@@ -84,6 +86,7 @@ bool core::LoadConfig(Config* config, const char* filename) {
         SET_CONFIG(config, disable_text_se, name, value);
         SET_CONFIG(config, disable_dialog_se, name, value);
         SET_CONFIG(config, disable_ao_ori_voice, name, value);
+        SET_CONFIG(config, show_info, name, value);
     }
 
     return true;
@@ -98,7 +101,7 @@ bool core::SaveConfig(const Config* config, const char* filename, const Info* in
     ofs << "# " << kSoraVoice << " " << kBuildDate << "\n";
     ofs << "# " << kUrl << "\n" << "\n" << "\n";
 
-
+    OUTPUT_CONFIG(ofs, config, show_info);
     OUTPUT_CONFIG(ofs, config, volume);
     OUTPUT_CONFIG(ofs, config, disable_text_se);
     OUTPUT_CONFIG(ofs, config, disable_dialog_se);

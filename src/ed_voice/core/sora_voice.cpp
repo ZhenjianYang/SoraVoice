@@ -9,8 +9,10 @@
 #include "core/voice_id_mapping.h"
 #include "global/global.h"
 #include "player/player.h"
+#include "utils/build_date.h"
 #include "utils/create_dsound.h"
 #include "utils/log.h"
+#include "utils/win_title.h"
 
 namespace {
 enum {
@@ -30,6 +32,8 @@ constexpr char kAttrOgg[] = ".ogg";
 constexpr char kAttrWav[] = ".wav";
 constexpr char kConfigFilename[] = "voice/ed_voice.ini";
 constexpr std::size_t kAoRndVoiceDelayMs = 1000;
+
+constexpr const char* kInfo[] = { " - SoraVoice (Lite) ", kBuildDate };
 }
 
 namespace {
@@ -114,6 +118,17 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
 
     memset(sigs_, 0, sizeof(*sigs_));
     is_valid_ = true;
+
+    if (config_->show_info) {
+        std::string win_title = utils::GetWinTitle(*global.addrs.pHwnd);
+        LOG("Window title: %s", title.c_str());
+        for (auto info : kInfo) {
+            win_title.append(info);
+        }
+        if (utils::SetWinTitle(*global.addrs.pHwnd, win_title)) {
+            LOG("New window title: %s", win_title.c_str());
+        }
+    }
 
     if (info_->game == GameAo) {
         LOG("Play random voice for ao...");
