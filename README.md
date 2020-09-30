@@ -120,13 +120,14 @@ Then, you will get **Voice Files** in the `ogg/` folder.
 
 ### Launch the game
 
-You have everything ready, have fun!
+If all goes well, you will see an information of SoraVoice (Lite) in the title bar after launching the game.
 
 ## About the configuration file
 
 After launching the game, configuration file `voice/ed_voice.ini` will be automatically generated. Settings listed below:
 |                  |                                                |
 |------------------|-------------------------------------------------
+|ShowInfo          | Show information of SoraVoice (Lite) in the title bar
 |Volume            | Volume: 0 ~ 100
 |DisableTextSe     | Disable dialog text beep SE. (Voiced lines only)
 |DisableDialogSe   | Disable dialog closing SE.  (Voiced lines only) 
@@ -259,13 +260,14 @@ oggenc2.exe -Q -q 6.00 -n "ogg\%%~ni.ogg" "wav\%%~ni.wav"
 
 ### 运行游戏
 
-至此，全部步骤完成！
+如果所有步骤均正确完成，启动游戏后，可以在标题栏看到关于SoraVoice (Lite)的信息。
 
 ## 关于配置文件
 
 运行游戏后，会自动生成配置文件`voice/ed_voice.ini`, 罗列配置项如下:
 |                  |                                                |
 |------------------|-------------------------------------------------
+|ShowInfo          | 在标题栏显示关于SoraVoice (Lite)的信息
 |Volume            | 音量: 0 ~ 100
 |DisableTextSe     | 禁用对话框文字音效 (仅在有语音时生效)
 |DisableDialogSe   | 禁用对话框关闭音效 (仅在有语音时生效) 
