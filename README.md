@@ -48,7 +48,7 @@ Games brought from platforms listed below are supported. Games from other platfo
 ### SoraVoice (Lite)
 
 Download the latest file at [Release](https://github.com/ZhenjianYang/SoraVoice/releases/latest), extract `dinput8.dll`
-and folders `voice` & `dll` to your game's installation folder.
+and folder `voice` to your game's installation folder.
 
 #### About `dsound.dll`
 
@@ -201,7 +201,7 @@ PC游戏《空·零·碧之轨迹》系列进化版剧情语音补丁。
 ### 语音补丁（本项目）
 
 从[Release](https://github.com/ZhenjianYang/SoraVoice/releases/latest)下载最新的文件,
-将压缩包内的`dinput8.dll`以及`voice`和`dll`这两个文件夹解压到游戏的安装目录即可。
+将压缩包内的`dinput8.dll`以及`voice`文件夹解压到游戏的安装目录即可。
 
 #### 关于dsound.dll   
 对于《空之轨迹》系列, 可以用`dsound.dll`替换掉`dinput8.dll`, 以应对`dinput8.dll`无法使用的情况(比如另一个MOD也使用了`dinput8.dll`)。
