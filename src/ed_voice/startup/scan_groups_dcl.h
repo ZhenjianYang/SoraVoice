@@ -15,12 +15,14 @@
 
 namespace startup {
 DECLARE_SCAN_GROUP(Tits);
+DECLARE_SCAN_GROUP(Titsl);
 DECLARE_SCAN_GROUP(Za);
 DECLARE_SCAN_GROUP(Sora);
 }  // namespace startup
 
 #define GET_SCAN_GROUP_FUN_LIST { \
     GET_SCAN_GROUP_FUN(Tits), \
+    GET_SCAN_GROUP_FUN(Titsl), \
     GET_SCAN_GROUP_FUN(Sora), \
     GET_SCAN_GROUP_FUN(Za), \
 }

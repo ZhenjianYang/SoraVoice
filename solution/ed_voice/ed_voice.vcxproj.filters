@@ -228,5 +228,11 @@
     <ClCompile Include="..\..\src\ed_voice\player\decoder.cpp">
       <Filter>src\player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_titsl.cpp">
+      <Filter>src\asm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_titsl.cpp">
+      <Filter>src\startup</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

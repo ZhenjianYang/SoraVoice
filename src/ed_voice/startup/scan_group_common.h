@@ -72,6 +72,8 @@ public:
         strings_.push_back(std::make_unique<char[]>(kCodeBackupBlockSize));
         code_bak_ = (byte*)strings_.back().get();
         code_bak_remian = kCodeBackupBlockSize;
+        utils::MemProtection proction_bak;
+        utils::ChangeMemProtection(code_bak_, kCodeBackupBlockSize, utils::kMemProtectionRWE, &proction_bak);
     }
 
     bool InSection(const char* sec_name, byte* begin, std::size_t length) const {
@@ -83,7 +85,11 @@ public:
             return false;
         }
         const auto& sec = it->second;
-        return begin >= sec.start && begin + length <= sec.end;
+        if (length > sec.size) {
+            return false;
+        }
+        return (unsigned long long)begin >= (unsigned long long)sec.start
+                  && (unsigned long long)begin <= (unsigned long long)sec.end - length;
     }
 
     byte* GetCodeBackupBlock(std::size_t length) {
@@ -227,21 +233,6 @@ private:
     ScanGroupCommon(const ScanGroupCommon&) = delete;
     ScanGroupCommon& operator=(const ScanGroupCommon&) = delete;
 };  // ScanGroupCommon
-
-class PieceCommon : public ScanGroupCommon::BasicPiece {
-public:
-    PieceCommon(std::string_view pattern, ScanGroupCommon::PatternType pattern_type,
-                ScanGroupCommon* group)
-        : ScanGroupCommon::BasicPiece(pattern, pattern_type), Group{ group } {
-    }
-
-    bool InSection(byte* p, std::size_t len) {
-
-    }
-
-protected:
-    ScanGroupCommon* const Group;
-};
 
 }  // namespace startup
 

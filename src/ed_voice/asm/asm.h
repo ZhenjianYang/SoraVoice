@@ -9,6 +9,14 @@ void textse();
 void dlgse();
 }  // namespace asm_tits
 
+namespace asm_titsl {
+    void text();
+    void ldat();
+    void dcdat();
+    void textse();
+    void dlgse();
+}  // namespace asm_titsl
+
 namespace asm_sora {
     void text();
     void ldat();

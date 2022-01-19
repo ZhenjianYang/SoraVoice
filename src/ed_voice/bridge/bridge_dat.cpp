@@ -75,6 +75,10 @@ inline const char* GetDir(int idx) {
 
 }  // namespace
 
+int __cdecl bridge::LoadDatF(void* buff, int idx, void*, unsigned offset, unsigned size) {
+    return bridge::LoadDat(nullptr, buff, idx, offset, size);
+}
+
 int __cdecl bridge::LoadDat(void*, void* buff, int idx, unsigned offset, unsigned size) {
     const char* dir = GetDir(idx);
     if (!dir) {

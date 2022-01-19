@@ -11,6 +11,7 @@ constexpr struct {
     const char* str_old;
     const char* str_new;
 } kDirectPatchingStrings[] = {
+
     {"%c#2C\n#56IEarth Sepith x%d,\n#57IWater Sepith x%d,\n#58IFire Sepith x%d,\n#59IWind Sepith x%d,\n#62ITime Sepith x%d,\n#60ISpace Sepith x%d,\n#0and#2C #61IMirage Sepith x%d#0.",
      "%c#2C\n#56IEarth Sepith x%d,\n#57IWater Sepith x%d,\n#58IFire Sepith x%d,\n#59IWind Sepith x%d,\n#62ITime Sepith x%d,\n#60ISpace Sepith x%d,\n#0Cand#2C #61IMirage Sepith x%d#0C."}
 };

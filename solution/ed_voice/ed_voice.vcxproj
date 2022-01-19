@@ -55,6 +55,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\asm\asm_sora.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_tits.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\asm\asm_titsl.cpp" />
     <ClCompile Include="..\..\src\ed_voice\asm\asm_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge.cpp" />
     <ClCompile Include="..\..\src\ed_voice\bridge\bridge_dat.cpp" />
@@ -72,6 +73,7 @@
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_sora.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_tits.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\startup\scan_group_titsl.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_za.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\startup.cpp" />
     <ClCompile Include="..\..\src\ed_voice\startup\string_patch.cpp" />

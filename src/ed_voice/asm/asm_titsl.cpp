@@ -2,7 +2,7 @@
 #include "bridge/bridge.h"
 #include "global/global.h"
 
-__declspec(naked) void asm_tits::text() {
+__declspec(naked) void asm_titsl::text() {
     __asm {
         jne     short next
         pushad
@@ -13,7 +13,7 @@ __declspec(naked) void asm_tits::text() {
         jmp     common
 
         fc:
-        push esi
+        push ebx
 
         common:
         call bridge::Play
@@ -26,14 +26,10 @@ __declspec(naked) void asm_tits::text() {
     }
 }
 
-__declspec(naked) void asm_tits::ldat() {
+__declspec(naked) void asm_titsl::ldat() {
     __asm {
-        push    edx
-        push    ecx
-        call    bridge::LoadDatF
+        call    bridge::LoadDat
         test    eax, eax
-        pop     ecx
-        pop     edx
         je      short next
         ret
 
@@ -42,16 +38,14 @@ __declspec(naked) void asm_tits::ldat() {
     }
 }
 
-__declspec(naked) void asm_tits::dcdat() {
+__declspec(naked) void asm_titsl::dcdat() {
     __asm {
-        pushad
-        push    edx
-        push    ecx
+        push    edi
+        push    ebx
         push    0
         call    bridge::DecompressDat
         add     esp, 12
         test    eax, eax
-        popad
         je      short next
         ret
 
@@ -60,7 +54,7 @@ __declspec(naked) void asm_tits::dcdat() {
     }
 }
 
-__declspec(naked) void asm_tits::textse() {
+__declspec(naked) void asm_titsl::textse() {
     __asm {
         cmp    dword ptr[global.sigs.no_textse], 0
         je     short next
@@ -73,22 +67,24 @@ __declspec(naked) void asm_tits::textse() {
     }
 }
 
-__declspec(naked) void asm_tits::dlgse() {
+__declspec(naked) void asm_titsl::dlgse() {
     __asm {
+        cmp    dword ptr[global.sigs.no_dlgse], 0
+        je     short next
+        mov    dword ptr[global.sigs.no_dlgse], 0
+        cmp    dword ptr[global.config.disable_dialog_se], 0
+        je     short next
+
         pushad
         call   bridge::Stop
         popad
-
-        cmp    dword ptr[global.sigs.no_dlgse], 0
-        je     short jump
-        mov    dword ptr[global.sigs.no_dlgse], 0
-        cmp    dword ptr[global.config.disable_dialog_se], 0
-        je     short jump
-
-        ret
-
-        jump :
         jmp    dword ptr[global.addrs.dlgse_jmp]
+
+        next :
+        pushad
+        call   bridge::Stop
+        popad
+        jmp    dword ptr[global.addrs.dlgse_next]
     }
 }
 
