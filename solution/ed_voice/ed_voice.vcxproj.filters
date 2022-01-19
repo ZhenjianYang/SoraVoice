@@ -133,6 +133,12 @@
     <ClInclude Include="..\..\src\ed_voice\utils\win_title.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\decoder_ogg.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ed_voice\player\decoder_wav.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp">
@@ -218,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\utils\win_title.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\decoder.cpp">
+      <Filter>src\player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

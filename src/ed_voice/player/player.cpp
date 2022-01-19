@@ -16,8 +16,6 @@ using player::Decoder;
 using player::Player;
 using player::SoundBuffer;
 using utils::Events;
-constexpr char kAttrWav[] = ".wav";
-constexpr char kAttrOgg[] = ".ogg";
 constexpr std::size_t kEventIndexNewPlay = 0;
 constexpr std::size_t kEventIndexReadOrEnd = 1;
 //constexpr std::size_t kEventIndexStopAll = 2;
@@ -32,17 +30,11 @@ static std::unique_ptr<Decoder> GetDecoderByFilename(std::string_view file_name)
     if (pos == std::string::npos) {
         return nullptr;
     }
-    std::string attr = std::string(file_name.substr(pos));
+    std::string attr = std::string(file_name.substr(pos + 1));
     for (char& ch : attr) {
         ch = static_cast<char>(std::tolower(ch));
     }
-    if (attr == kAttrWav) {
-        return Decoder::GetWav();
-    } else if (attr == kAttrOgg) {
-        return Decoder::GetOgg();
-    } else {
-        return nullptr;
-    }
+    return Decoder::Get(attr);
 }
 
 class PlayerImpl : public player::Player {
@@ -394,7 +386,7 @@ std::unique_ptr<player::Player> player::Player::GetPlayer(void* pDS8) {
         return nullptr;
     }
     LOG("Init Decoder...");
-    if (!Decoder::InitAllDecoders()) {
+    if (!Decoder::Init()) {
         LOG("Init Decoder Failed!");
         return nullptr;
     }

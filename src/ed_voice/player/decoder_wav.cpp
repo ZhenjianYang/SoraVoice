@@ -1,49 +1,14 @@
-#include "player/decoder.h"
+#include "player/decoder_wav.h"
 
-#include <fstream>
 
 namespace {
-using player::BuffByte;
-using player::Decoder;
-using player::WaveFormat;
-using std::int32_t;
-using std::uint32_t;
-using std::uint16_t;
-
 constexpr uint32_t kTag_RIFF = 0x46464952;
 constexpr uint32_t kTag_WAVE = 0x45564157;
 constexpr uint32_t kTag_fmt = 0x20746D66;
 constexpr uint32_t kTag_data = 0x61746164;
+}// namesapce
 
-class Wav : public Decoder {
-public:
-    bool Open(const char* file_name) override;
-    std::size_t Read(BuffByte* buff, std::size_t samples_count) override;
-    void Close() override;
-
-    Wav() = default;
-    ~Wav() override {
-        this->Close();
-    }
-private:
-    std::ifstream ifs_;
-
-    Wav(const Wav&) = delete;
-    Wav& operator=(const Wav&) = delete;
-    Wav(Wav&&) = delete;
-    Wav& operator=(Wav&&) = delete;
-
-private:
-    static bool ready_;
-
-public:
-    static bool Init();
-    static bool Ready() {
-        return ready_;
-    }
-};  // Wav
-
-bool Wav::Open(const char* file_name) {
+bool player::impl::Wav::Open(const char* file_name) {
     ifs_ = std::ifstream(file_name, std::ios::binary | std::ios::in);
     if (!ifs_) {
         return false;
@@ -76,7 +41,7 @@ bool Wav::Open(const char* file_name) {
     return true;
 }
 
-std::size_t Wav::Read(BuffByte* buff, std::size_t samples_count) {
+std::size_t player::impl::Wav::Read(BuffByte* buff, std::size_t samples_count) {
     if (!buff || !samples_count) {
         return 0;
     }
@@ -92,23 +57,14 @@ std::size_t Wav::Read(BuffByte* buff, std::size_t samples_count) {
     return read;
 }
 
-void Wav::Close() {
+void player::impl::Wav::Close() {
     ifs_.close();
 }
 
-bool Wav::ready_;
-
-bool Wav::Init() {
-    ready_ = true;
-    return ready_;
+bool player::impl::Wav::Init() {
+    return true;
 }
 
-}  // namesapce
-
-std::unique_ptr<Decoder> player::Decoder::GetWav() {
-    return Wav::Ready() ? std::make_unique<Wav>() : nullptr;
-}
-
-bool player::Decoder::InitWav() {
-    return Wav::Init();
+std::unique_ptr<player::Decoder> player::impl::Wav::Get() {
+    return std::make_unique<Wav>();
 }
