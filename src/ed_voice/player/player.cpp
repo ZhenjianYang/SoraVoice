@@ -16,14 +16,14 @@ using player::Decoder;
 using player::Player;
 using player::SoundBuffer;
 using utils::Events;
-constexpr std::size_t kEventIndexNewPlay = 0;
-constexpr std::size_t kEventIndexReadOrEnd = 1;
-//constexpr std::size_t kEventIndexStopAll = 2;
-constexpr std::size_t kEventIndexCallback = 3;
-constexpr std::size_t kEventIndexSetVolume = 4;
-constexpr std::size_t kEventIndexExit = 5;
-constexpr std::size_t kEventsNum = 6;
-constexpr std::size_t kNotEnd = ~0U;
+constexpr int kEventIndexNewPlay = 0;
+constexpr int kEventIndexReadOrEnd = 1;
+//constexpr int kEventIndexStopAll = 2;
+constexpr int kEventIndexCallback = 3;
+constexpr int kEventIndexSetVolume = 4;
+constexpr int kEventIndexExit = 5;
+constexpr int kEventsNum = 6;
+constexpr int kNotEnd = ~0U;
 
 static std::unique_ptr<Decoder> GetDecoderByFilename(std::string_view file_name) {
     auto pos = file_name.rfind('.');
@@ -70,7 +70,7 @@ public:
         return volume_;
     }
 
-    PlayId Play(std::string_view file_name, StopCallback callback = nullptr, std::size_t delay_ms = 0) override {
+    PlayId Play(std::string_view file_name, StopCallback callback = nullptr, int delay_ms = 0) override {
         PlayId new_id = current_playid_++;
         if (new_id == kInvalidPlayId) {
             new_id = current_playid_++;
@@ -114,9 +114,9 @@ private:
         PlayId play_id = kInvalidPlayId;
         std::string file_name;
         StopCallback callback;
-        std::size_t delay_ms;
+        int delay_ms;
 
-        NewData(PlayId play_id, const std::string& file_name, StopCallback callback, std::size_t delay_ms)
+        NewData(PlayId play_id, const std::string& file_name, StopCallback callback, int delay_ms)
             : play_id{ play_id }, file_name{ file_name }, callback{ callback }, delay_ms { delay_ms }{
         }
     };
@@ -127,9 +127,9 @@ private:
         std::unique_ptr<Decoder> decoder;
         std::unique_ptr<SoundBuffer> buffer;
 
-        std::size_t pre_samples = 0;
-        std::size_t buffer_index = 0;
-        std::size_t end_pos = kNotEnd;
+        int pre_samples = 0;
+        int buffer_index = 0;
+        int end_pos = kNotEnd;
         bool playing = false;
         bool stop_soon = false;
         bool read_all = false;
@@ -242,8 +242,8 @@ void PlayerImpl::EventWorkerNewPlay() {
 
         new_play->end_pos = (new_play->pre_samples + new_play->decoder->SamplesTotal())
                 % new_play->buffer->GetSamplesAllBuffers();
-        std::vector<std::size_t> pos{ new_play->end_pos };
-        for (std::size_t i = 0; i < new_play->buffer->GetBuffersNum(); i++) {
+        std::vector<int> pos{ new_play->end_pos };
+        for (int i = 0; i < new_play->buffer->GetBuffersNum(); i++) {
             pos.push_back(i * new_play->buffer->GetSamplesSingleBuffer() + 2);
         }
         new_play->buffer->AddPositionsEvent(events_->GetRawEvent(kEventIndexReadOrEnd), pos);
@@ -300,10 +300,10 @@ void PlayerImpl::EventWorkerReadOrEnd() {
                     callbacks.push_back(std::move(ended));
                     to_erase.push_back(it);
                 } else {
-                    std::size_t read = 0;
+                    int read = 0;
                     auto* buff = write_buffer->Get();
                     if (pd->pre_samples) {
-                        std::size_t empty_samples = std::min(pd->pre_samples, buff_size);
+                        int empty_samples = std::min(pd->pre_samples, buff_size);
                         memset(buff, 0, empty_samples * pd->decoder->GetWaveFormat().block_align);
                         buff += empty_samples * pd->decoder->GetWaveFormat().block_align;
                         pd->pre_samples -= empty_samples;

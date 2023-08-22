@@ -45,12 +45,12 @@ public:
         wave_format_.avg_bytes_per_sec = wave_format_.samples_per_sec * wave_format_.block_align;
 
         samples_read_ = 0;
-        samples_total_ = static_cast<std::size_t>(_ov_pcm_total(&this->ov_file, -1));
+        samples_total_ = static_cast<int>(_ov_pcm_total(&this->ov_file, -1));
 
         return true;
     }
 
-    std::size_t Read(BuffByte* buff, std::size_t samples_count) override {
+    int Read(BuffByte* buff, int samples_count) override {
         if (!buff || !samples_count) {
             return 0;
         }
@@ -59,9 +59,9 @@ public:
             return 0;
         }
 
-        std::size_t request = std::min(samples_total_ - samples_read_, samples_count);
+        int request = std::min(samples_total_ - samples_read_, samples_count);
         constexpr int block = 4096;
-        std::size_t read = 0;
+        int read = 0;
         int bitstream = 0;
         while (read < request) {
             int block_bytes = std::min(static_cast<int>(request - read) * wave_format_.block_align, block);

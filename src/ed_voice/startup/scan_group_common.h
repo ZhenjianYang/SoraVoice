@@ -19,7 +19,7 @@ public:
     using BasicPiece = MemScanner::BasicPiece;
     using PatternType = MemScanner::PatternType;
 
-    static constexpr std::size_t kCodeBackupBlockSize = 0x1000;
+    static constexpr int kCodeBackupBlockSize = 0x1000;
 
     bool IsValid() const override {
         return is_valid_;
@@ -76,7 +76,7 @@ public:
         utils::ChangeMemProtection(code_bak_, kCodeBackupBlockSize, utils::kMemProtectionRWE, &proction_bak);
     }
 
-    bool InSection(const char* sec_name, byte* begin, std::size_t length) const {
+    bool InSection(const char* sec_name, byte* begin, int length) const {
         if (!sec_name || *sec_name == '\0') {
             return begin;
         }
@@ -92,7 +92,7 @@ public:
                   && (unsigned long long)begin <= (unsigned long long)sec.end - length;
     }
 
-    byte* GetCodeBackupBlock(std::size_t length) {
+    byte* GetCodeBackupBlock(int length) {
         if (code_bak_remian < length) {
             return nullptr;
         }
@@ -107,7 +107,7 @@ public:
         using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
         
         Char* pc = reinterpret_cast<Char*>(p);
-        std::size_t len;
+        int len;
         if constexpr (std::is_pointer_v<String>) {
             len = std::char_traits<Char>::length(s);
         } else if (std::is_array_v<String>) {
@@ -115,7 +115,7 @@ public:
         } else {
             len = std::size(s);
         }
-        std::size_t chars_written = null_termanate ? (len + 1) * sizeof(Char) : len * sizeof(Char);
+        int chars_written = null_termanate ? (len + 1) * sizeof(Char) : len * sizeof(Char);
 
         utils::MemProtection proction_bak, proction_bak2;
         if (utils::ChangeMemProtection(p, chars_written, utils::kMemProtectionRWE, &proction_bak)) {
@@ -136,7 +136,7 @@ public:
     template<typename String>
     bool RefPatchString(byte* p, const String& s) {
         using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
-        std::size_t len;
+        int len;
         if constexpr (std::is_pointer_v<String>) {
             len = std::char_traits<Char>::length(s);
         } else if (std::is_array_v<String>) {
@@ -162,7 +162,7 @@ public:
         return false;
     }
 
-    bool BackupCode(byte* p, std::size_t len, void* jmp_dst, void** next) {
+    bool BackupCode(byte* p, int len, void* jmp_dst, void** next) {
         byte* bak = GetCodeBackupBlock(len + 5);
         std::memcpy(bak, p, len);
         utils::FillWithJmp(bak + len, p + len);
@@ -179,7 +179,7 @@ public:
         return false;
     }
 
-    bool RedirectWithJmp(byte* p, std::size_t len, void* dst, void** next, void** dst_old) {
+    bool RedirectWithJmp(byte* p, int len, void* dst, void** next, void** dst_old) {
         if (dst_old) {
             *dst_old = utils::GetCallJmpDest(p, len);
         }
@@ -197,7 +197,7 @@ public:
         return false;
     }
 
-    bool RedirectWithCall(byte* p, std::size_t len, void* dst, void** next, void** dst_old) {
+    bool RedirectWithCall(byte* p, int len, void* dst, void** next, void** dst_old) {
         if (dst_old) {
             *dst_old = utils::GetCallJmpDest(p, len);
         }
@@ -225,7 +225,7 @@ protected:
     std::unordered_map<std::string, utils::SectionInfo> secs_;
 
     byte* code_bak_ = nullptr;
-    std::size_t code_bak_remian = 0;
+    int code_bak_remian = 0;
 
     virtual bool AddPieces() = 0;
 

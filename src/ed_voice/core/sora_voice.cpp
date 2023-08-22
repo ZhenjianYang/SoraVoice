@@ -31,7 +31,7 @@ constexpr char kVoicePrefixZA[] = "voice/ogg/v";
 constexpr char kAttrOgg[] = ".ogg";
 constexpr char kAttrWav[] = ".wav";
 constexpr char kConfigFilename[] = "voice/ed_voice.ini";
-constexpr std::size_t kAoRndVoiceDelayMs = 1000;
+constexpr int kAoRndVoiceDelayMs = 1000;
 
 constexpr const char* kInfo[] = { " - SoraVoice (Lite) ", kBuildDate };
 }

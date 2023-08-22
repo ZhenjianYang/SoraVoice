@@ -22,7 +22,7 @@ using startup::PatchingStrings;
 inline static std::string GetStrOld(const std::string& s) {
     std::string r;
     r.reserve(s.length());
-    std::size_t last_sharp = std::string::npos;
+    int last_sharp = std::string::npos;
     for (char ch : s) {
         if (ch == '#') {
             last_sharp = r.length();

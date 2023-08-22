@@ -10,7 +10,7 @@ std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
 
     LOG("Get exe module information...");
     byte* base;
-    std::size_t size;
+    int size;
     if (!utils::GetCurrentModuleInformation(&base, &size)) {
         LOG("Get exe module information Failed");
         return groups;
@@ -20,7 +20,7 @@ std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
     LOG("Get sections information...");
     auto secs = utils::GetSectionsInfo(base);
     LOG("%d section(s).", secs.size());
-    for (std::size_t i = 0; i < secs.size(); i++) {
+    for (int i = 0; i < secs.size(); i++) {
         LOG("\n"
             "    Section #%d\n"
             "        Name : %s\n"

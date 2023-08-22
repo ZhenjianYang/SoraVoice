@@ -47,7 +47,7 @@ public:
         return true;
     }
 
-    std::size_t Read(BuffByte* buff, std::size_t samples_count) override {
+    int Read(BuffByte* buff, int samples_count) override {
         if (!buff || !samples_count) {
             return 0;
         }
@@ -56,7 +56,7 @@ public:
             return 0;
         }
 
-        std::size_t read = std::min(samples_total_ - samples_read_, samples_count);
+        int read = std::min(samples_total_ - samples_read_, samples_count);
         ifs_.read(reinterpret_cast<char*>(buff), read * static_cast<std::streamsize>(wave_format_.block_align));
 
         samples_read_ += read;

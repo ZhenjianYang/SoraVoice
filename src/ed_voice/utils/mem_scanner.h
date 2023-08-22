@@ -93,7 +93,7 @@ public:
         const FunApply fun_apply_ = nullptr;
     };  // StandardPiece
 
-    MemScanner(Iterator begin, std::size_t length)
+    MemScanner(Iterator begin, int length)
         : begin_{ begin }, end_{ begin + length } {
     }
     MemScanner(Iterator begin, Iterator end)

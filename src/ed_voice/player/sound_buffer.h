@@ -13,21 +13,21 @@ public:
     class Buffer {
     public:
         virtual BuffByte* Get() const = 0;
-        virtual std::size_t Samples() const = 0;
+        virtual int Samples() const = 0;
         virtual ~Buffer() = default;
     };
 
-    virtual std::size_t GetBuffersNum() const = 0;
-    virtual std::size_t GetSamplesSingleBuffer() const = 0;
-    virtual std::size_t GetSamplesAllBuffers() const = 0;
-    virtual std::unique_ptr<Buffer> GetBufferForWrite(std::size_t buffer_index) const = 0;
-    virtual std::size_t GetPosition() const = 0;
+    virtual int GetBuffersNum() const = 0;
+    virtual int GetSamplesSingleBuffer() const = 0;
+    virtual int GetSamplesAllBuffers() const = 0;
+    virtual std::unique_ptr<Buffer> GetBufferForWrite(int buffer_index) const = 0;
+    virtual int GetPosition() const = 0;
 
     virtual bool Play() const = 0;
     virtual bool Stop() const = 0;
     virtual bool SetVolume(int volume) const = 0;
     virtual bool AddPositionsEvent(utils::RawEvent event,
-                                   const std::vector<std::size_t>& pos) const = 0;
+                                   const std::vector<int>& pos) const = 0;
 
     virtual ~SoundBuffer() = default;
 public:

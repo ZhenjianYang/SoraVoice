@@ -10,7 +10,7 @@ struct SectionInfo {
     std::string name;
     byte* start;
     byte* end;
-    std::size_t size;
+    int size;
 };
 }  // namespace utils
 

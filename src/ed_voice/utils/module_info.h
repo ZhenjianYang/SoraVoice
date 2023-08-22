@@ -8,7 +8,7 @@
 
 namespace utils {
 
-bool GetCurrentModuleInformation(byte* *base, std::size_t *size);
+bool GetCurrentModuleInformation(byte* *base, int *size);
 
 std::vector<SectionInfo> GetSectionsInfo(byte* base);
 

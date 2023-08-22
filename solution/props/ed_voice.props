@@ -7,7 +7,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(EdVoiceSrcDir)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4709;4100</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4389;4709;4100</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>dbghelp.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>

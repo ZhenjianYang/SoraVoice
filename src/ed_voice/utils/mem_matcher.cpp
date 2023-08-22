@@ -9,8 +9,8 @@ namespace {
 constexpr ::utils::MemMatcher::InternalValueType kZero = 0;
 constexpr ::utils::MemMatcher::InternalValueType kAllBits = 0xFF;
 constexpr ::utils::MemMatcher::InternalValueType kHalfByte = 0xF;
-constexpr std::size_t kBitsHalfByte = 4;
-constexpr std::size_t kNumHalfBytes = 2;
+constexpr int kBitsHalfByte = 4;
+constexpr int kNumHalfBytes = 2;
 }  // namespace
 
 utils::MemMatcher::MemMatcher(std::string_view pattern, Type type)

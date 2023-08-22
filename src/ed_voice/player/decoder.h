@@ -11,24 +11,24 @@ namespace player {
 class Decoder {
 public:
     virtual bool Open(const char* file_name) = 0;
-    virtual std::size_t Read(BuffByte* buff, std::size_t samples_count) = 0;
+    virtual int Read(BuffByte* buff, int samples_count) = 0;
     virtual void Close() = 0;
 
     const WaveFormat& GetWaveFormat() {
         return wave_format_;
     }
-    std::size_t SamplesTotal() const {
+    int SamplesTotal() const {
         return samples_total_;
     }
-    std::size_t SamplesRead() const {
+    int SamplesRead() const {
         return samples_read_;
     }
     virtual ~Decoder() = default;
 
 protected:
     WaveFormat wave_format_ { };
-    std::size_t samples_total_ = 0;
-    std::size_t samples_read_ = 0;
+    int samples_total_ = 0;
+    int samples_read_ = 0;
 
 public:
     static std::unique_ptr<Decoder> Get(std::string_view decoder_name);

@@ -9,8 +9,8 @@ using player::SoundBuffer;
 using player::WaveFormat;
 using player::kVolumeMax;
 
-constexpr std::size_t kBufferNum = 2;
-constexpr std::size_t kSamplesSingleBuffer = 24000;
+constexpr int kBufferNum = 2;
+constexpr int kSamplesSingleBuffer = 24000;
 
 inline static int GetDSVolume(int volume) {
     return volume <= 0 ? DSBVOLUME_MIN
@@ -25,12 +25,12 @@ public:
     BuffByte* Get() const override {
         return reinterpret_cast<BuffByte*>(pap1_);
     }
-    std::size_t Samples() const override {
+    int Samples() const override {
         return samples_;
     }
 
     BufferImpl(IDirectSoundBuffer8* pds_buffer,
-               std::size_t start, std::size_t samples, std::size_t sample_size)
+               int start, int samples, int sample_size)
         : pDS_buffer8_{ pds_buffer }, start_{ start }, samples_{ samples },
           sample_size_{ sample_size } {
         auto lock = pDS_buffer8_->Lock(start_ * sample_size_, samples_ * sample_size_,
@@ -49,9 +49,9 @@ public:
 
 private:
     IDirectSoundBuffer8* const pDS_buffer8_;
-    const std::size_t start_;
-    const std::size_t samples_;
-    const std::size_t sample_size_;
+    const int start_;
+    const int samples_;
+    const int sample_size_;
 
     bool is_valid_ = false;
 
@@ -70,16 +70,16 @@ public:
         return is_valid_;
     }
 
-    std::size_t GetBuffersNum() const override {
+    int GetBuffersNum() const override {
         return num_buffer_;
     }
-    std::size_t GetSamplesSingleBuffer() const override {
+    int GetSamplesSingleBuffer() const override {
         return samples_single_buffer_;
     }
-    std::size_t GetSamplesAllBuffers() const override {
+    int GetSamplesAllBuffers() const override {
         return GetBuffersNum() * GetSamplesSingleBuffer();
     }
-    std::unique_ptr<Buffer> GetBufferForWrite(std::size_t buffer_index) const override {
+    std::unique_ptr<Buffer> GetBufferForWrite(int buffer_index) const override {
         if (buffer_index >= GetBuffersNum()) {
             return nullptr;
         }
@@ -87,7 +87,7 @@ public:
                                                    GetSamplesSingleBuffer(), wave_format_.block_align);
         return buffer->IsValid() ? std::move(buffer) : nullptr;
     }
-    std::size_t GetPosition() const override {
+    int GetPosition() const override {
         DWORD pos;
         pDS_buffer8_->GetCurrentPosition(&pos, NULL);
         return pos / wave_format_.block_align;
@@ -106,7 +106,7 @@ public:
         return DS_OK == pDS_buffer8_->SetVolume(GetDSVolume(volume));
     }
     bool AddPositionsEvent(utils::RawEvent event,
-                           const std::vector<std::size_t>& pos) const override {
+                           const std::vector<int>& pos) const override {
         LPDIRECTSOUNDNOTIFY8 pDS_notify;
 
         auto hr = pDS_buffer8_->QueryInterface(IID_IDirectSoundNotify8, (LPVOID*)&pDS_notify);
@@ -114,7 +114,7 @@ public:
             return false;
         }
         auto notifis = std::make_unique<DSBPOSITIONNOTIFY[]>(pos.size());
-        for (std::size_t i = 0; i < pos.size(); i++) {
+        for (int i = 0; i < pos.size(); i++) {
             notifis[i].dwOffset = pos[i] * wave_format_.block_align;
             notifis[i].hEventNotify = reinterpret_cast<HANDLE>(event);
         }
@@ -162,8 +162,8 @@ private:
     bool is_valid_ = false;
 
     IDirectSound8* const pDS8_;
-    const std::size_t num_buffer_;
-    const std::size_t samples_single_buffer_;
+    const int num_buffer_;
+    const int samples_single_buffer_;
     const WaveFormat wave_format_;
 
     IDirectSoundBuffer8* pDS_buffer8_ = nullptr;

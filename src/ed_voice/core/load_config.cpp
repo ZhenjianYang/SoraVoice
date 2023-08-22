@@ -38,7 +38,7 @@ static std::string Trim(const std::string& s) {
     if (s.empty()) {
         return s;
     }
-    std::size_t b = 0, e = s.length() - 1;
+    int b = 0, e = s.length() - 1;
     for (; b <= e && s[b] == ' '; b++);
     for (; b <= e && s[e] == ' '; e--);
     return e >= b ? s.substr(b, e - b + 1) : "";

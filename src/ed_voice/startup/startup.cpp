@@ -11,7 +11,7 @@ bool StartUp() {
     auto groups = startup::ScanGroup::GetScanGroups();
     LOG("%d groups generated.", groups.size());
 
-    for (std::size_t i = 0; i < groups.size(); i++) {
+    for (int i = 0; i < groups.size(); i++) {
         LOG("Group #%d,%s", i, groups[i]->Name().c_str());
         if (!groups[i]->IsValid()) {
             LOG("Not valid, skipped.");

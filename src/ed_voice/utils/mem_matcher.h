@@ -20,18 +20,18 @@ public:
         return pattern_str_;
     }
 
-    template<typename Value, std::size_t N>
+    template<typename Value, int N>
     bool Match(const Value (&array)[N]) const {
         return Match(array, N);
     }
 
     template<typename Iterator,
              typename Value = decltype(*std::declval<Iterator>())>
-    bool Match(Iterator begin, std::size_t length = std::numeric_limits<std::size_t>::max()) const {
+    bool Match(Iterator begin, int length = std::numeric_limits<int>::max()) const {
         if (length < pattern_.size()) {
             return false;
         }
-        for (std::size_t i = 0; i < pattern_.size(); ++i, ++begin) {
+        for (int i = 0; i < pattern_.size(); ++i, ++begin) {
             if (((pattern_[i].first ^ *begin) & pattern_[i].second) != 0) {
                 return false;
             }
@@ -42,7 +42,7 @@ public:
     template<typename Iterator,
              typename Value = decltype(*std::declval<Iterator>())>
     bool Match(Iterator begin, Iterator end) const {
-        std::size_t i = 0;
+        int i = 0;
         for (; i < pattern_.size() && begin != end; ++i, ++begin) {
             if (((pattern_[i].first ^ *begin) & pattern_[i].second) != 0) {
                 return false;

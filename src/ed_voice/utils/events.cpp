@@ -16,25 +16,25 @@ public:
         auto wait = WaitForMultipleObjects(num_, events_.get(), TRUE, INFINITE);
         return static_cast<WaitResult>(wait);
     }
-    WaitResult WaitOne(std::size_t index) const override {
+    WaitResult WaitOne(int index) const override {
         auto wait = index < num_ ? WaitForSingleObject(events_[index], INFINITE)
                                  : WAIT_FAILED;
         return static_cast<WaitResult>(wait);
     }
-    bool Set(std::size_t index) const override {
+    bool Set(int index) const override {
         if (index >= num_) {
             return false;
         }
         return SetEvent(events_[index]);
     }
-    bool Reset(std::size_t index) const override {
+    bool Reset(int index) const override {
         if (index >= num_) {
             return false;
         }
         return ResetEvent(events_[index]);
     }
 
-    RawEvent GetRawEvent(std::size_t index) const override {
+    RawEvent GetRawEvent(int index) const override {
         if (index >= num_) {
             return nullptr;
         }
@@ -45,9 +45,9 @@ public:
         return valid_;
     }
 
-    explicit EventsImpl(std::size_t num)
+    explicit EventsImpl(int num)
         : num_{ num }, events_{ std::make_unique<HANDLE[]>(num) } {
-        for (std::size_t i = 0; i < num_; i++) {
+        for (int i = 0; i < num_; i++) {
             events_[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
             if (!events_[i]) {
                 return;
@@ -56,7 +56,7 @@ public:
         valid_ = true;
     }
     ~EventsImpl() override {
-        for (std::size_t i = 0; i < num_; i++) {
+        for (int i = 0; i < num_; i++) {
             if (events_[i]) {
                 CloseHandle(events_[i]);
                 events_[i] = NULL;
@@ -65,7 +65,7 @@ public:
     }
 private:
     std::unique_ptr<HANDLE[]> events_;
-    const std::size_t num_;
+    const int num_;
     bool valid_ = false;
 
     EventsImpl(const EventsImpl&) = delete;
@@ -73,7 +73,7 @@ private:
 };  // EventsImpl
 }  // namespace
 
-std::unique_ptr<Events> utils::Events::CreateEvents(std::size_t num) {
+std::unique_ptr<Events> utils::Events::CreateEvents(int num) {
     if (num > kMaxEvents) {
         return nullptr;
     }
