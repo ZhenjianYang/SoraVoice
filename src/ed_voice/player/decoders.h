@@ -12,9 +12,13 @@ struct DecoderId {
     const char Name[DECODER_NAME_MAXLEN + 1];
     bool (* const Init)();
     std::unique_ptr<Decoder>(* const Get)();
+
+    bool IsValid() const {
+        return Init && Get;
+    }
 };
 
-extern const DecoderId* const* const DecoerList;
+extern const DecoderId* const DecoerList;
 
 }  // namespace player::impl
 

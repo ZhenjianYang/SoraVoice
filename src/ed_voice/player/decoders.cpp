@@ -2,14 +2,14 @@
 
 namespace player::impl {
 
-extern DecoderId DecoderOgg;
-extern DecoderId DecoderWav;
+extern const DecoderId DecoderOgg;
+extern const DecoderId DecoderWav;
 
-static const DecoderId* _DecoerList[] = {
-    &DecoderOgg,
-    &DecoderWav,
-    nullptr
+static const DecoderId _DecoerList[] = {
+    DecoderOgg,
+    DecoderWav,
+    {},
 };
-const DecoderId * const * const DecoerList = _DecoerList;
+const DecoderId * const DecoerList = _DecoerList;
 
 }  // namespace player::impl

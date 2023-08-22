@@ -91,7 +91,7 @@ static std::unique_ptr<player::Decoder> Get() {
 }// namesapce
 
 namespace player::impl {
-const DecoderId DecoderWav {
+extern const DecoderId DecoderWav {
     "wav",
     &Init,
     &Get

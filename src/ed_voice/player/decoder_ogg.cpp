@@ -123,7 +123,7 @@ static std::unique_ptr<Decoder> Get() {
 } // namespace
 
 namespace player::impl {
-const DecoderId DecoderOgg{
+extern const DecoderId DecoderOgg {
     "ogg",
     &Init,
     &Get
