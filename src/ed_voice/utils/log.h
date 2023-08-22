@@ -38,7 +38,7 @@
 #define LOG_TO_STDOUT(...)
 #endif
 
-#define LOG(format, ...) 	{\
+#define LOG(format, ...)  {\
         using std::chrono::system_clock;\
         auto _now = system_clock::now();\
         auto _millis_part = std::chrono::duration_cast<std::chrono::milliseconds>(\

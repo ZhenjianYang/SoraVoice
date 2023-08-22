@@ -21,18 +21,18 @@ bool utils::GetCurrentModuleInformation(byte* *base, std::size_t *size) {
 std::vector<SectionInfo> utils::GetSectionsInfo(byte* base) {
     std::vector<SectionInfo> secs;
 
-	IMAGE_NT_HEADERS* nt_header = ImageNtHeader(base);
-	IMAGE_SECTION_HEADER* sec_header = (IMAGE_SECTION_HEADER*)(nt_header + 1);
+    IMAGE_NT_HEADERS* nt_header = ImageNtHeader(base);
+    IMAGE_SECTION_HEADER* sec_header = (IMAGE_SECTION_HEADER*)(nt_header + 1);
 
-	char sec_name[sizeof(sec_header->Name) + 1] {};
-	for (std::size_t i = 0; i < nt_header->FileHeader.NumberOfSections; i++, sec_header++) {
-		std::copy_n(sec_header->Name, sizeof(sec_header->Name), sec_name);
+    char sec_name[sizeof(sec_header->Name) + 1] {};
+    for (std::size_t i = 0; i < nt_header->FileHeader.NumberOfSections; i++, sec_header++) {
+        std::copy_n(sec_header->Name, sizeof(sec_header->Name), sec_name);
 
         secs.push_back({ sec_name,
-                         base + sec_header->VirtualAddress,
-                         base + sec_header->VirtualAddress + sec_header->Misc.VirtualSize,
-                         sec_header->Misc.VirtualSize });
-	}
+                            base + sec_header->VirtualAddress,
+                            base + sec_header->VirtualAddress + sec_header->Misc.VirtualSize,
+                            sec_header->Misc.VirtualSize });
+    }
 
     return secs;
 }
