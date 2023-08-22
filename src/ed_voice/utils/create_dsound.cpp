@@ -19,7 +19,7 @@ void* utils::CreateDSound8(void* hwnd) {
     ExpandEnvironmentStringsA(kDllPath, buff, sizeof(buff));
     auto dsound_dll = LoadLibraryA(buff);
     if (!dsound_dll) {
-        return false;
+        return nullptr;
     }
 
     auto pDirectSoundCreate8 = (CallDSCreate*)GetProcAddress(dsound_dll, kSTR_DirectSoundCreate8);

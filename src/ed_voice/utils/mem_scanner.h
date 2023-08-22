@@ -75,14 +75,14 @@ public:
         }
 
         bool AdditionalMatch(Iterator begin, Iterator end) const override {
-            return fun_additional_match_ == nullptr || fun_additional_match_(results_, begin, end);
+            return fun_additional_match_ == nullptr || fun_additional_match_(this->results_, begin, end);
         }
         bool CheckResults() const override {
-            return fun_results_check_ == nullptr || fun_results_check_(results_);
+            return fun_results_check_ == nullptr || fun_results_check_(this->results_);
         }
         bool Apply() const override {
             if (fun_apply_ != nullptr) {
-                return fun_apply_(results_);
+                return fun_apply_(this->results_);
             }
             return true;
         }
