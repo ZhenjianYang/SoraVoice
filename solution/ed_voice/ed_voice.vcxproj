@@ -29,8 +29,7 @@
     <ClInclude Include="..\..\src\ed_voice\global\info.h" />
     <ClInclude Include="..\..\src\ed_voice\global\signals.h" />
     <ClInclude Include="..\..\src\ed_voice\player\decoder.h" />
-    <ClInclude Include="..\..\src\ed_voice\player\decoder_ogg.h" />
-    <ClInclude Include="..\..\src\ed_voice\player\decoder_wav.h" />
+    <ClInclude Include="..\..\src\ed_voice\player\decoders.h" />
     <ClInclude Include="..\..\src\ed_voice\player\player.h" />
     <ClInclude Include="..\..\src\ed_voice\player\player_base.h" />
     <ClInclude Include="..\..\src\ed_voice\player\sound_buffer.h" />
@@ -66,6 +65,7 @@
     <ClCompile Include="..\..\src\ed_voice\ed_voice.cpp" />
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\player\decoders.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_wav.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\player.cpp" />

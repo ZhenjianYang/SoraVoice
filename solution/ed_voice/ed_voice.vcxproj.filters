@@ -133,10 +133,7 @@
     <ClInclude Include="..\..\src\ed_voice\utils\win_title.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ed_voice\player\decoder_ogg.h">
-      <Filter>src\player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ed_voice\player\decoder_wav.h">
+    <ClInclude Include="..\..\src\ed_voice\player\decoders.h">
       <Filter>src\player</Filter>
     </ClInclude>
   </ItemGroup>
@@ -233,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ed_voice\startup\scan_group_titsl.cpp">
       <Filter>src\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\decoders.cpp">
+      <Filter>src\player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
