@@ -305,3 +305,6 @@ $RECYCLE.BIN/
 
 # exe
 *.exe
+
+# keep extlibs
+!extlibs/lib/*

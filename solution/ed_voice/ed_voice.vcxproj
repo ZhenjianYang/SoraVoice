@@ -66,6 +66,7 @@
     <ClCompile Include="..\..\src\ed_voice\global\global.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoders.cpp" />
+    <ClCompile Include="..\..\src\ed_voice\player\decoder_ffmpeg.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_ogg.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\decoder_wav.cpp" />
     <ClCompile Include="..\..\src\ed_voice\player\player.cpp" />

@@ -1,5 +1,7 @@
 #include "sora_voice.h"
 
+#include <filesystem>
+#include <string>
 #include <memory>
 #include <mutex>
 #include <unordered_set>
@@ -25,11 +27,11 @@ static_assert(kBgmVoiceIdLen > kMaxVoiceIdLenNeedMapping, "kBgmVoiceIdLen <= kMa
 constexpr int kBgmVoiceFilenameLen = 4;
 constexpr int kOriVoiceIdLen = 4;
 constexpr char kVoicePrefixOri[] = "data/se/ed7v";
-constexpr char kVoicePrefixED6[] = "voice/ogg/ch";
-constexpr char kVoicePrefixBGM[] = "voice/ogg/ed";
-constexpr char kVoicePrefixZA[] = "voice/ogg/v";
-constexpr char kAttrOgg[] = ".ogg";
-constexpr char kAttrWav[] = ".wav";
+constexpr char kVoicePrefixED6[] = "voice/%s/ch%s.%s";
+constexpr char kVoicePrefixBGM[] = "voice/%s/ed%s.%s";
+constexpr char kVoicePrefixZA[] = "voice/%s/v%s.%s";
+constexpr char kVoiceDir[] = "voice/%s";
+constexpr char kAttrs[][4] = { "at9", "ogg", "wav" };
 constexpr char kConfigFilename[] = "voice/ed_voice.ini";
 constexpr int kAoRndVoiceDelayMs = 1000;
 
@@ -55,6 +57,7 @@ private:
     const Info* const info_;
     std::unique_ptr<Player> player_;
 
+    std::vector<std::string> attrs_;
     std::unordered_set<Player::PlayId> playing_;
     std::mutex mtx_playing_;
 
@@ -130,6 +133,15 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
         }
     }
 
+    char dirname[128];
+    for (int i = 0; i < sizeof(kAttrs) / sizeof(*kAttrs); i++) {
+        std::snprintf(dirname, sizeof(dirname), kVoiceDir, kAttrs[i]);
+        if (std::filesystem::is_directory(dirname)) {
+            LOG("Add voice directory: %s", kAttrs[i]);
+            attrs_.push_back(kAttrs[i]);
+        }
+    }
+
     if (info_->game == GameAo) {
         LOG("Play random voice for ao...");
         player_->Play(core::GetRandomVoice(), nullptr, kAoRndVoiceDelayMs);
@@ -197,12 +209,17 @@ int SoraVoiceImpl::Play(byte* b) {
         vid = vid.substr(kBgmVoiceIdLen - kBgmVoiceFilenameLen);
     }
 
-    std::string ogg_file_name = prefix + vid + kAttrOgg;
+    std::vector<std::string> filenames;
+    char filename[128];
+    for (const auto& attr: attrs_) {
+        std::snprintf(filename, sizeof(filename), prefix, attr.c_str(), vid.c_str(), attr.c_str());
+        filenames.push_back(filename);
+    }
 
     player_->StopAll();
     {
         std::scoped_lock lock(mtx_playing_);
-        auto play_id = player_->Play(ogg_file_name,
+        auto play_id = player_->Play(filenames,
                                      [this](Player::PlayId play_id, Player::StopType stop_type) {
                 LOG("PlayID: %d, stopped, type: %d", play_id, stop_type);
                 std::scoped_lock lock(mtx_playing_);

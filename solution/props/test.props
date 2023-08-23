@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(gtestIncDir);$(gmockIncDir);$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibOutDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(gtestIncDir);$(gmockIncDir);$(ExtlibsIncDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibOutDir);$(ExtlibsLibTestDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

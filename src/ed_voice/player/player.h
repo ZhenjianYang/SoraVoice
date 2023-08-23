@@ -27,7 +27,8 @@ public:
     virtual void SetVolume(int volume = kVolumeMax) = 0;
     virtual int GetVolume() const = 0;
 
-    virtual PlayId Play(std::string_view file_name, StopCallback callback = nullptr, int delay_ms = 0) = 0;
+    virtual PlayId Play(const std::vector<std::string>& filenames, StopCallback callback = nullptr, int delay_ms = 0) = 0;
+    virtual PlayId Play(std::string_view filename, StopCallback callback = nullptr, int delay_ms = 0) = 0;
     virtual bool StopAll() = 0;
 
     virtual ~Player() = default;

@@ -18,7 +18,8 @@ struct DecoderId {
     }
 };
 
-extern const DecoderId* const DecoerList;
+extern const DecoderId* const DecoderList;
+extern const DecoderId* const DefaultDecoder;
 
 }  // namespace player::impl
 

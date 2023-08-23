@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include <filesystem>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -37,6 +38,15 @@ static std::unique_ptr<Decoder> GetDecoderByFilename(std::string_view file_name)
     return Decoder::Get(attr);
 }
 
+static int FindFirstExists(const std::vector<std::string>& filenames) {
+    for (int i = 0; i < filenames.size(); i++) {
+        if (std::filesystem::exists(filenames[i])) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 class PlayerImpl : public player::Player {
 public:
     bool IsValid() const {
@@ -70,13 +80,18 @@ public:
         return volume_;
     }
 
-    PlayId Play(std::string_view file_name, StopCallback callback = nullptr, int delay_ms = 0) override {
+    PlayId Play(std::string_view filename, StopCallback callback = nullptr, int delay_ms = 0) override {
+        const std::vector<std::string> filenames { std::string(filename) };
+        return Play(filenames, callback, delay_ms);
+    }
+
+    PlayId Play(const std::vector<std::string>& filenames, StopCallback callback = nullptr, int delay_ms = 0) override {
         PlayId new_id = current_playid_++;
         if (new_id == kInvalidPlayId) {
             new_id = current_playid_++;
         }
         std::unique_ptr<NewData> new_data = std::make_unique<NewData>(
-            new_id, std::string(file_name), callback, delay_ms);
+            new_id, filenames, callback, delay_ms);
         {
             std::scoped_lock lock(mtx_pd_new_);
             pd_new_[new_data->play_id] = std::move(new_data);
@@ -112,12 +127,12 @@ private:
 
     struct NewData {
         PlayId play_id = kInvalidPlayId;
-        std::string file_name;
+        std::vector<std::string> filenames;
         StopCallback callback;
         int delay_ms;
 
-        NewData(PlayId play_id, const std::string& file_name, StopCallback callback, int delay_ms)
-            : play_id{ play_id }, file_name{ file_name }, callback{ callback }, delay_ms { delay_ms }{
+        NewData(PlayId play_id, const std::vector<std::string>& filenames, StopCallback callback, int delay_ms)
+            : play_id{ play_id }, filenames{ filenames }, callback{ callback }, delay_ms { delay_ms }{
         }
     };
     struct PlayData {
@@ -200,10 +215,17 @@ void PlayerImpl::EventWorkerNewPlay() {
     std::scoped_lock lock(mtx_pd_new_);
     for (auto& kv : pd_new_) {
         auto& pd = kv.second;
-        LOG("New PlayID: %d, FileName: %s", pd->play_id, pd->file_name.c_str());
+        int ifile = FindFirstExists(pd->filenames);
+        if (ifile < 0) {
+            LOG("No files exist!");
+            auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
+            callbacks.push_back(std::move(ended));
+            continue;
+        }
+        LOG("New PlayID: %d, FileName: %s", pd->play_id, pd->filenames[ifile].c_str());
         auto new_play = std::make_unique<PlayData>(pd->play_id, pd->callback);
-        new_play->decoder = GetDecoderByFilename(pd->file_name);
-        if (!new_play->decoder || !new_play->decoder->Open(pd->file_name.c_str())) {
+        new_play->decoder = GetDecoderByFilename(pd->filenames[ifile]);
+        if (!new_play->decoder || !new_play->decoder->Open(pd->filenames[ifile].c_str())) {
             LOG("Open file failed!");
             auto ended = std::make_unique<CallbackData>(pd->play_id, StopType::Error, pd->callback);
             callbacks.push_back(std::move(ended));
@@ -218,7 +240,7 @@ void PlayerImpl::EventWorkerNewPlay() {
             "    BitsPerSample  : %d\n"
             "    TotalSamples   : %d\n"
             "    LengthInSeconds: %.3f",
-            pd->file_name.c_str(), new_play->decoder->GetWaveFormat().channels,
+            pd->filenames[ifile].c_str(), new_play->decoder->GetWaveFormat().channels,
             new_play->decoder->GetWaveFormat().samples_per_sec, new_play->decoder->GetWaveFormat().avg_bytes_per_sec,
             new_play->decoder->GetWaveFormat().block_align, new_play->decoder->GetWaveFormat().bits_per_sample,
             new_play->decoder->SamplesTotal(),
