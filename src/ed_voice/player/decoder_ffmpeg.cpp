@@ -76,7 +76,6 @@ public:
         buf_ = std::make_unique<uint8_t[]>(wave_format_.block_align * SAMPLES_IN_BUFF);
         read_frame_ = true;
 
-        av_dump_format(fmt_ctx_, stream_index_, NULL, 0);
         samples_total_ = fmt_ctx_->duration * wave_format_.samples_per_sec / AV_TIME_BASE;
         return true;
     }
