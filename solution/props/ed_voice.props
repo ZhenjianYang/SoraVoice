@@ -2,15 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup>
-    <IncludePath>$(VorbisIncDir);$(OggIncDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(VorbisIncDir);$(OggIncDir);$(ExtlibsIncDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(ExtlibsLibDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(EdVoiceSrcDir)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4018;4389;4709;4100</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dbghelp.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Secur32.lib;Ws2_32.lib;bcrypt.lib;Strmiids.lib;Mfuuid.lib;libavcodec.a;libavformat.a;libavutil.a;libswresample.a;dbghelp.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 </Project>

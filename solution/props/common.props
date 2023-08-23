@@ -9,6 +9,9 @@
     <SrcDir>$(SolutionDir)..\src\</SrcDir>
     <DefDir>$(SrcDir)def\</DefDir>
     <ExtlibsDir>$(SolutionDir)..\extlibs\</ExtlibsDir>
+    <ExtlibsIncDir>$(ExtlibsDir)\include\</ExtlibsIncDir>
+    <ExtlibsLibDir>$(ExtlibsDir)\lib\$(Configuration)\</ExtlibsLibDir>
+    <ExtlibsLibTestDir>$(ExtlibsDir)\lib\Debug\</ExtlibsLibTestDir>
     <LibOutDir>$(OutDir)\</LibOutDir>
     <EdVoiceSrcDir>$(SrcDir)ed_voice\</EdVoiceSrcDir>
     <VorbisDir>$(ExtlibsDir)vorbis\</VorbisDir>
@@ -28,6 +31,15 @@
     </BuildMacro>
     <BuildMacro Include="ExtlibsDir">
       <Value>$(ExtlibsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ExtlibsIncDir">
+      <Value>$(ExtlibsIncDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ExtlibsLibDir">
+      <Value>$(ExtlibsLibDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ExtlibsLibTestDir">
+      <Value>$(ExtlibsLibTestDir)</Value>
     </BuildMacro>
     <BuildMacro Include="DefDir">
       <Value>$(DefDir)</Value>
@@ -72,12 +84,11 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link />
   </ItemDefinitionGroup>

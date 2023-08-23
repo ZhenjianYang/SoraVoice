@@ -228,5 +228,8 @@
     <ClCompile Include="..\..\src\ed_voice\player\decoders.cpp">
       <Filter>src\player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ed_voice\player\decoder_ffmpeg.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

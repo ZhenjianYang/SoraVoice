@@ -6,12 +6,13 @@ extern const DecoderId DecoderOgg;
 extern const DecoderId DecoderWav;
 extern const DecoderId DecoderFfmpeg;
 
-static const DecoderId _DecoerList[] = {
+static const DecoderId _DecoderList[] = {
     DecoderOgg,
     DecoderWav,
     DecoderFfmpeg,
     {},
 };
-const DecoderId * const DecoerList = _DecoerList;
+const DecoderId * const DecoderList = _DecoderList;
+const DecoderId * const DefaultDecoder = &DecoderFfmpeg;
 
 }  // namespace player::impl
