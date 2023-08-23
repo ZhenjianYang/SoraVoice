@@ -5,7 +5,6 @@
 
 #include <unordered_map>
 
-#include "base/byte.h"
 #include "utils/mem.h"
 #include "utils/mem_scanner.h"
 #include "utils/section_info.h"
@@ -14,7 +13,7 @@
 namespace startup {
 class ScanGroupCommon : public ScanGroup {
 public:
-    using MemScanner = utils::MemScanner<byte*>;
+    using MemScanner = utils::MemScanner<uint8_t*>;
     using MemMatch = utils::MemMatcher;
     using BasicPiece = MemScanner::BasicPiece;
     using PatternType = MemScanner::PatternType;
@@ -70,13 +69,13 @@ public:
         }
 
         strings_.push_back(std::make_unique<char[]>(kCodeBackupBlockSize));
-        code_bak_ = (byte*)strings_.back().get();
+        code_bak_ = (uint8_t*)strings_.back().get();
         code_bak_remian = kCodeBackupBlockSize;
         utils::MemProtection proction_bak;
         utils::ChangeMemProtection(code_bak_, kCodeBackupBlockSize, utils::kMemProtectionRWE, &proction_bak);
     }
 
-    bool InSection(const char* sec_name, byte* begin, int length) const {
+    bool InSection(const char* sec_name, uint8_t* begin, int length) const {
         if (!sec_name || *sec_name == '\0') {
             return begin;
         }
@@ -92,18 +91,18 @@ public:
                   && (unsigned long long)begin <= (unsigned long long)sec.end - length;
     }
 
-    byte* GetCodeBackupBlock(int length) {
+    uint8_t* GetCodeBackupBlock(int length) {
         if (code_bak_remian < length) {
             return nullptr;
         }
-        byte* ret = code_bak_;
+        uint8_t* ret = code_bak_;
         code_bak_ += length;
         code_bak_remian -= length;
         return ret;
     }
 
     template<typename String>
-    bool DirectPatchString(byte* p, const String& s, bool null_termanate = false) {
+    bool DirectPatchString(uint8_t* p, const String& s, bool null_termanate = false) {
         using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
         
         Char* pc = reinterpret_cast<Char*>(p);
@@ -134,7 +133,7 @@ public:
     }
 
     template<typename String>
-    bool RefPatchString(byte* p, const String& s) {
+    bool RefPatchString(uint8_t* p, const String& s) {
         using Char = typename std::remove_const_t<std::remove_reference_t<decltype(s[0])>>;
         int len;
         if constexpr (std::is_pointer_v<String>) {
@@ -162,8 +161,8 @@ public:
         return false;
     }
 
-    bool BackupCode(byte* p, int len, void* jmp_dst, void** next) {
-        byte* bak = GetCodeBackupBlock(len + 5);
+    bool BackupCode(uint8_t* p, int len, void* jmp_dst, void** next) {
+        uint8_t* bak = GetCodeBackupBlock(len + 5);
         std::memcpy(bak, p, len);
         utils::FillWithJmp(bak + len, p + len);
         if (next) {
@@ -179,7 +178,7 @@ public:
         return false;
     }
 
-    bool RedirectWithJmp(byte* p, int len, void* dst, void** next, void** dst_old) {
+    bool RedirectWithJmp(uint8_t* p, int len, void* dst, void** next, void** dst_old) {
         if (dst_old) {
             *dst_old = utils::GetCallJmpDest(p, len);
         }
@@ -197,7 +196,7 @@ public:
         return false;
     }
 
-    bool RedirectWithCall(byte* p, int len, void* dst, void** next, void** dst_old) {
+    bool RedirectWithCall(uint8_t* p, int len, void* dst, void** next, void** dst_old) {
         if (dst_old) {
             *dst_old = utils::GetCallJmpDest(p, len);
         }
@@ -224,7 +223,7 @@ protected:
     std::vector<std::unique_ptr<MemScanner>> scanners_;
     std::unordered_map<std::string, utils::SectionInfo> secs_;
 
-    byte* code_bak_ = nullptr;
+    uint8_t* code_bak_ = nullptr;
     int code_bak_remian = 0;
 
     virtual bool AddPieces() = 0;
@@ -257,7 +256,7 @@ public:\
             const std::string Name;
 
 #define DEFINE_ADDITIONAL_MATCH_BEGIN(b, e) \
-            bool AdditionalMatch(byte* b, byte* e) const override {
+            bool AdditionalMatch(uint8_t* b, uint8_t* e) const override {
 #define DEFINE_ADDITIONAL_MATCH_END(rst) \
             return (rst); }
 
@@ -323,8 +322,8 @@ GetScanGroup##GroupName_(const std::vector<utils::SectionInfo>& section_info) { 
 }
 
 #define REF_STRING(SectionCode, p, SectionData, STR) \
-    Group->InSection(SectionCode, (byte*)(p), sizeof(byte*)) && \
-    Group->InSection(SectionData, *(byte**)(p), sizeof(STR)) && \
-    utils::StringMatch(*(byte**)(p), STR, true)
+    Group->InSection(SectionCode, (uint8_t*)(p), sizeof(uint8_t*)) && \
+    Group->InSection(SectionData, *(uint8_t**)(p), sizeof(STR)) && \
+    utils::StringMatch(*(uint8_t**)(p), STR, true)
 
 #endif  // __STARTUP_SCAN_GROUP_COMMON_H__

@@ -3,14 +3,13 @@
 
 #include <vector>
 
-#include "base/byte.h"
 #include "utils/section_info.h"
 
 namespace utils {
 
-bool GetCurrentModuleInformation(byte* *base, int *size);
+bool GetCurrentModuleInformation(uint8_t* *base, int *size);
 
-std::vector<SectionInfo> GetSectionsInfo(byte* base);
+std::vector<SectionInfo> GetSectionsInfo(uint8_t* base);
 
 }  // namespace utils
 

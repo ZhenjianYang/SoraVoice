@@ -44,7 +44,7 @@ DEFINE_PIECE_END(Hwnd)
 DEFINE_PIECE_BEGIN(Sora, Text, ".text", PatternType::Bytes,
                    "3C 23 0F 85 ?? ?? ?? ?? 42")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 2, 6);
+    uint8_t* dst = utils::GetCallJmpDest(b + 2, 6);
     bool rst = Group->InSection(".text", dst, 1);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
@@ -52,7 +52,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 2;
+    uint8_t* p = results.front() + 2;
     bool rst = Group->RedirectWithJmp(
             p, 6, asm_sora::text, &global.addrs.text_next, &global.addrs.text_jmp);
     LOG("Apply at 0x%08X", unsigned(p));
@@ -71,7 +71,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
+    uint8_t* p = results.front();
     bool rst = Group->BackupCode(p, 8, asm_sora::dcdat, &global.addrs.dcdat_next);
     LOG("Apply at 0x%08X", unsigned(p));
     LOG("dcdat_next = 0x%08X", (unsigned)global.addrs.dcdat_next);
@@ -87,18 +87,18 @@ DEFINE_PIECE_BEGIN(Sora, Ldat, ".text", PatternType::Bytes,
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     bool rst = (   (*(b + 1) == 0x0C && *(b + 2) == 0xB5 && matcher_fscs.Match(b - 0x11))
                 || (*(b + 1) == 0x14 && *(b + 2) == 0x85 && matcher_3rd.Match(b - 0x13)))
-               && Group->InSection(".data", *(byte**)(b + 3), sizeof(byte*) * 0x20)
-               && REF_STRING(".data", *(byte**)(b + 3) + 6 * sizeof(byte*), "", "CH20000 ._CH")
-               && REF_STRING(".data", *(byte**)(b + 3) + 7 * sizeof(byte*), "", "CH00000 ._CH")
-               && REF_STRING(".data", *(byte**)(b + 3) + 9 * sizeof(byte*), "", "CH10000 ._CH");
+               && Group->InSection(".data", *(uint8_t**)(b + 3), sizeof(uint8_t*) * 0x20)
+               && REF_STRING(".data", *(uint8_t**)(b + 3) + 6 * sizeof(uint8_t*), "", "CH20000 ._CH")
+               && REF_STRING(".data", *(uint8_t**)(b + 3) + 7 * sizeof(uint8_t*), "", "CH00000 ._CH")
+               && REF_STRING(".data", *(uint8_t**)(b + 3) + 9 * sizeof(uint8_t*), "", "CH10000 ._CH");
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
-    global.addrs.pdirs = *(byte**)(p + 3);
+    uint8_t* p = results.front();
+    global.addrs.pdirs = *(uint8_t**)(p + 3);
     bool rst = false;
     if (*(p + 1) == 0x0C) {
         rst = Group->BackupCode(p - 0x11, 6, asm_sora::ldat, &global.addrs.ldat_next);
@@ -122,7 +122,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 12;
+    uint8_t* p = results.front() + 12;
     bool rst = Group->RedirectWithCall(p, 5, asm_sora::textse,
                                        nullptr, &global.addrs.textse_jmp);
     LOG("Apply at 0x%08X", unsigned(p));
@@ -140,7 +140,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 11;
+    uint8_t* p = results.front() + 11;
     bool rst = Group->RedirectWithCall(p, 5, asm_sora::dlgse,
                                        nullptr, &global.addrs.dlgse_jmp);
     LOG("Apply at 0x%08X", unsigned(p));
@@ -168,7 +168,7 @@ DEFINE_APPLY_BEGIN()
         cnts[kv.first] = 0;
     }
 #endif
-    for (byte* b : GetResults()) {
+    for (uint8_t* b : GetResults()) {
         int offset = *(int*)(b + 1);
         const std::string& s = std::get<2>(strs_map_).find(offset)->second;
         if (Group->RefPatchString(b + 1, s)) {

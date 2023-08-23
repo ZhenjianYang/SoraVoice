@@ -31,7 +31,7 @@ std::vector<SectionInfo> utils::GetSectionsInfo(byte* base) {
         secs.push_back({ sec_name,
                             base + sec_header->VirtualAddress,
                             base + sec_header->VirtualAddress + sec_header->Misc.VirtualSize,
-                            (int)sec_header->Misc.VirtualSize });
+                            (uint32_t)sec_header->Misc.VirtualSize });
     }
 
     return secs;

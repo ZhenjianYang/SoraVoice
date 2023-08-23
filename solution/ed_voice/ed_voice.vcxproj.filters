@@ -14,9 +14,6 @@
     <Filter Include="src\global">
       <UniqueIdentifier>{d2a02250-48f4-4b4f-9b2b-046fd1f1f6f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\base">
-      <UniqueIdentifier>{3816c044-c3de-4858-a2b0-9c922c918842}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\player">
       <UniqueIdentifier>{e52b7d3d-adc0-41fb-84d6-ab85704d8125}</UniqueIdentifier>
     </Filter>
@@ -60,9 +57,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ed_voice\global\signals.h">
       <Filter>src\global</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ed_voice\base\byte.h">
-      <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ed_voice\utils\module_info.h">
       <Filter>src\utils</Filter>

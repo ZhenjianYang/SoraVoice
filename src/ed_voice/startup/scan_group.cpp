@@ -9,7 +9,7 @@ std::vector<std::unique_ptr<ScanGroup>> startup::ScanGroup::GetScanGroups() {
     std::vector<std::unique_ptr<ScanGroup>> groups;
 
     LOG("Get exe module information...");
-    byte* base;
+    uint8_t* base;
     int size;
     if (!utils::GetCurrentModuleInformation(&base, &size)) {
         LOG("Get exe module information Failed");

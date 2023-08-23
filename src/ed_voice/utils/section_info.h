@@ -3,14 +3,12 @@
 
 #include <string>
 
-#include "base/byte.h"
-
 namespace utils {
 struct SectionInfo {
     std::string name;
-    byte* start;
-    byte* end;
-    int size;
+    uint8_t* start;
+    uint8_t* end;
+    uint32_t size;
 };
 }  // namespace utils
 

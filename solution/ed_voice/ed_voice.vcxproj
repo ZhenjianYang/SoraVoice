@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ed_voice\asm\asm.h" />
-    <ClInclude Include="..\..\src\ed_voice\base\byte.h" />
     <ClInclude Include="..\..\src\ed_voice\bridge\bridge.h" />
     <ClInclude Include="..\..\src\ed_voice\core\load_config.h" />
     <ClInclude Include="..\..\src\ed_voice\core\rnd_voice.h" />

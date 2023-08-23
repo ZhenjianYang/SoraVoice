@@ -22,7 +22,7 @@ DEFINE_PIECE_BEGIN(Za, Hwnd, ".text", PatternType::Bytes,
                    "E8 ?? ?? ?? ?? "
                    "6A 20")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    bool rst = Group->InSection(".data", *(byte**)(b + 12), 4);
+    bool rst = Group->InSection(".data", *(uint8_t**)(b + 12), 4);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
@@ -41,7 +41,7 @@ DEFINE_PIECE_BEGIN(Za, Text, ".text", PatternType::Bytes,
                    "8B 45 08 "
                    "83 C0 01")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 3, 6);
+    uint8_t* dst = utils::GetCallJmpDest(b + 3, 6);
     bool rst = Group->InSection(".text", dst, 1);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
@@ -49,7 +49,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 3;
+    uint8_t* p = results.front() + 3;
     bool rst = Group->RedirectWithJmp(
             p, 6, asm_za::text, &global.addrs.text_next, &global.addrs.text_jmp);
     LOG("Apply at 0x%08X", (unsigned)p);
@@ -64,7 +64,7 @@ DEFINE_PIECE_BEGIN(Za, Scnp, ".text", PatternType::Bytes,
                    "52 "
                    "E8 ?? ?? ?? ??")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 9, 5);
+    uint8_t* dst = utils::GetCallJmpDest(b + 9, 5);
     bool rst = Group->InSection(".text", dst, 1)
                && REF_STRING(".text", b + 1, ".rdata", "%s/%s.bin");
 DEFINE_ADDITIONAL_MATCH_END(rst)
@@ -73,7 +73,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 9;
+    uint8_t* p = results.front() + 9;
     bool rst = Group->RedirectWithCall(p, 5, asm_za::scnp,
                                        nullptr, &global.addrs.scnp_jmp);
     LOG("Apply at 0x%08X", (unsigned)p);
@@ -89,7 +89,7 @@ DEFINE_PIECE_BEGIN(Za, Textse, ".text", PatternType::Bytes,
                    "E8 ?? ?? ?? ?? "
                    "8B 45 F8")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 14, 5);
+    uint8_t* dst = utils::GetCallJmpDest(b + 14, 5);
     bool rst = Group->InSection(".text", dst, 1);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
@@ -97,13 +97,13 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* t = results.front() + 3;
+    uint8_t* t = results.front() + 3;
     if (*t == 0x0D) {
         global.info.game = GameZero;
     } else {
         global.info.game = GameAo;
     }
-    byte* p = results.front() + 14;
+    uint8_t* p = results.front() + 14;
     bool rst = Group->RedirectWithCall(p, 5, asm_za::textse,
                                        nullptr, &global.addrs.textse_jmp);
     LOG("Apply at 0x%08X", (unsigned)p);
@@ -119,7 +119,7 @@ DEFINE_PIECE_BEGIN(Za, Dlgse, ".text", PatternType::Bytes,
                    "E8 ?? ?? ?? ?? "
                    "83 7D EC 00")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 14, 5);
+    uint8_t* dst = utils::GetCallJmpDest(b + 14, 5);
     bool rst = Group->InSection(".text", dst, 1);
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
@@ -127,7 +127,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() + 14;
+    uint8_t* p = results.front() + 14;
     bool rst = Group->RedirectWithCall(p, 5, asm_za::dlgse,
                                        nullptr, &global.addrs.dlgse_jmp);
     LOG("Apply at 0x%08X", (unsigned)p);

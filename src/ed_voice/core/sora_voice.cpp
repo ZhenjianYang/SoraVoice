@@ -43,7 +43,7 @@ class SoraVoiceImpl : public SoraVoice {
 public:
     SoraVoiceImpl(const std::string& title, const std::string& built_date,
                   std::vector<std::unique_ptr<char[]>>&& movable_strs);
-    int Play(byte* b) override;
+    int Play(uint8_t* b) override;
     int Stop() override;
 
 private:
@@ -135,14 +135,14 @@ SoraVoiceImpl::SoraVoiceImpl(const std::string& title, const std::string& built_
         player_->Play(core::GetRandomVoice(), nullptr, kAoRndVoiceDelayMs);
     }
 }
-int SoraVoiceImpl::Play(byte* b) {
+int SoraVoiceImpl::Play(uint8_t* b) {
     if (*b != '#') {
         return kError;
     }
     b++;
 
     int num_vid = 0;
-    byte* e = b;
+    uint8_t* e = b;
     for (int i = 0; i < kMaxVoiceIdLen; i++, e++) {
         if (*e < '0' || *e > '9') {
             break;
@@ -153,7 +153,7 @@ int SoraVoiceImpl::Play(byte* b) {
     if (*e == 'V' && e - b == kOriVoiceIdLen && info_->game == GameAo) {
         if (config_->disable_ao_ori_voice) {
             LOG("Disable ori voice: %s", std::string(b, e).c_str());
-            for (byte* t = b; t < e; t++) {
+            for (uint8_t* t = b; t < e; t++) {
                 *t = '0';
             }
         } else {

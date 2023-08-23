@@ -42,7 +42,7 @@ DEFINE_APPLY_BEGIN()
         const utils::MemMatcher matcher_3rd = utils::MemMatcher(
             "89 B3 ?? ?? ?? ?? E9 ?? ?? ?? ?? 3C 23", PatternType::Bytes);
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    byte* dst = utils::GetCallJmpDest(b + 1, 6);
+    uint8_t* dst = utils::GetCallJmpDest(b + 1, 6);
     bool rst = Group->InSection(".text", dst, 1)
         && (matcher_fc.Match(b - 2) || matcher_sc.Match(b - 10) || matcher_3rd.Match(b - 12));
 DEFINE_ADDITIONAL_MATCH_END(rst)
@@ -51,7 +51,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.back() + 1;
+    uint8_t* p = results.back() + 1;
     bool rst = Group->RedirectWithJmp(
             p, 6, asm_tits::text, &global.addrs.text_next, &global.addrs.text_jmp);
     if (*(p + 9) == 0x46) {
@@ -87,7 +87,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
+    uint8_t* p = results.front();
     bool rst = false;
     for (int i = 5; i <= 0x20; i++) {
         if (matcher_cn.Match(p - i)) {
@@ -119,7 +119,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front() - 5;
+    uint8_t* p = results.front() - 5;
     bool rst = false;
     if (*p == 0x83) {
         rst = Group->BackupCode(p, 5, asm_tits::dcdat, &global.addrs.dcdat_next);
@@ -134,18 +134,18 @@ DEFINE_PIECE_END(Dcdat)
 DEFINE_PIECE_BEGIN(Tits, Pdirs, ".text", PatternType::Bytes,
                    "8D 0C C0 8B 04 95 ?? ?? ?? 00")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    bool rst = Group->InSection(".data", *(byte**)(b + 6), sizeof(byte*) * 0x20)
-               && REF_STRING(".data", *(byte**)(b + 6) + 6 * sizeof(byte*), "", "CH20000 ._CH")
-               && REF_STRING(".data", *(byte**)(b + 6) + 7 * sizeof(byte*), "", "CH00000 ._CH")
-               && REF_STRING(".data", *(byte**)(b + 6) + 9 * sizeof(byte*), "", "CH10000 ._CH");
+    bool rst = Group->InSection(".data", *(uint8_t**)(b + 6), sizeof(uint8_t*) * 0x20)
+               && REF_STRING(".data", *(uint8_t**)(b + 6) + 6 * sizeof(uint8_t*), "", "CH20000 ._CH")
+               && REF_STRING(".data", *(uint8_t**)(b + 6) + 7 * sizeof(uint8_t*), "", "CH00000 ._CH")
+               && REF_STRING(".data", *(uint8_t**)(b + 6) + 9 * sizeof(uint8_t*), "", "CH10000 ._CH");
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
-    global.addrs.pdirs = *(byte**)(p + 6);
+    uint8_t* p = results.front();
+    global.addrs.pdirs = *(uint8_t**)(p + 6);
     LOG("pdirs = 0x%08X", (unsigned)global.addrs.pdirs);
     bool rst = true;
 DEFINE_APPLY_END(rst)
@@ -154,14 +154,14 @@ DEFINE_PIECE_END(Pdirs)
 DEFINE_PIECE_BEGIN(Tits, Textse, ".text", PatternType::Bytes,
                    "74 1E " "80 3D ?? ?? ?? ?? 00 " "75 ?? " "6A 00")
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
-    bool rst = Group->InSection(".data", *(byte**)(b + 4), sizeof(byte*));
+    bool rst = Group->InSection(".data", *(uint8_t**)(b + 4), sizeof(uint8_t*));
 DEFINE_ADDITIONAL_MATCH_END(rst)
 DEFINE_CHECK_RESULTS_BEGIN()
     bool rst = !GetResults().empty();
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
+    uint8_t* p = results.front();
     global.addrs.textse_jmp = utils::GetCallJmpDest(p + 9, 2);
     bool rst = Group->BackupCode(p + 2, 7, asm_tits::textse, &global.addrs.textse_next);
     LOG("Apply at 0x%08X", unsigned(p + 2));
@@ -180,7 +180,7 @@ DEFINE_CHECK_RESULTS_BEGIN()
 DEFINE_CHECK_RESULTS_END(rst)
 DEFINE_APPLY_BEGIN()
     const auto& results = GetResults();
-    byte* p = results.front();
+    uint8_t* p = results.front();
     bool rst = Group->RedirectWithCall(p + 8, 5, asm_tits::dlgse, &global.addrs.dlgse_next, &global.addrs.dlgse_jmp);
     LOG("Apply at 0x%08X", unsigned(p + 8));
     LOG("dlgse_jmp = 0x%08X", (unsigned)global.addrs.dlgse_jmp);
@@ -190,7 +190,7 @@ DEFINE_PIECE_END(Dlgse)
 
 DEFINE_PIECE_BEGIN(Tits, Strpatch, ".text", PatternType::Bytes, "?? ?? ?? ?? 00")
     const startup::PatchingStrings strs_map_ = startup::LoadPatchingStrings();
-    mutable std::unordered_map<byte*, typename decltype(strs_map_.cbegin())> to_patch_;
+    mutable std::unordered_map<uint8_t*, typename decltype(strs_map_.cbegin())> to_patch_;
 DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     bool rst = false;
     for (auto it = strs_map_.cbegin(); it != strs_map_.cend(); ++it) {
@@ -229,7 +229,7 @@ DEFINE_ADDITIONAL_MATCH_BEGIN(b, e)
     if (!std::get<2>(strs_map_).empty()) {
         if (GetResults().empty()) {
             if (REF_STRING(".text", b + 1, ".rdata", std::get<1>(strs_map_))) {
-                diff = (byte*)std::get<0>(strs_map_) - *(byte**)(b + 1);
+                diff = (uint8_t*)std::get<0>(strs_map_) - *(uint8_t**)(b + 1);
                 rst = true;
             }
         } else {
@@ -248,7 +248,7 @@ DEFINE_APPLY_BEGIN()
         cnts[kv.first] = 0;
     }
 #endif
-    for (byte* b : GetResults()) {
+    for (uint8_t* b : GetResults()) {
         int offset = *(int*)(b + 1) + diff;
         const std::string& s = std::get<2>(strs_map_).find(offset)->second;
         if (Group->RefPatchString(b + 1, s)) {
