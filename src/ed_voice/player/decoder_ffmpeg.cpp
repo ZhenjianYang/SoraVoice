@@ -152,6 +152,7 @@ public:
         CLEAN_AND_SET_NULL(codec_ctx_, avcodec_free_context);
         CLEAN_AND_SET_NULL(fmt_ctx_, avformat_close_input);
         CLEAN_AND_SET_NULL(swr_ctx_, swr_free);
+        av_packet_unref(&packet_);
     }
 
     Ffmpeg() = default;
