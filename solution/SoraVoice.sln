@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ed_voice", "ed_voice\ed_voice.vcxproj", "{720642E1-0CC3-46A0-812E-6DEC5119391F}"
 EndProject
@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EF7166EA-1
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "player_test", "test\player_test.vcxproj", "{8DCF0718-20E7-4BB9-A92E-00B3AE961945}"
 	ProjectSection(ProjectDependencies) = postProject
+		{29A3AD80-2788-31D3-BDA7-76DA9B41E9AE} = {29A3AD80-2788-31D3-BDA7-76DA9B41E9AE}
 		{720642E1-0CC3-46A0-812E-6DEC5119391F} = {720642E1-0CC3-46A0-812E-6DEC5119391F}
 	EndProjectSection
 EndProject
