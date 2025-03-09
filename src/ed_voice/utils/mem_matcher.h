@@ -3,6 +3,7 @@
 
 #include <string_view>
 #include <vector>
+#include <string>
 
 namespace utils {
 class MemMatcher {
