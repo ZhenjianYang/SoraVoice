@@ -5,6 +5,7 @@
 #include <memory>
 #include <string_view>
 #include <vector>
+#include <string>
 
 #include "player/player_base.h"
 
